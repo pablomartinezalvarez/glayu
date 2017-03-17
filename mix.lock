@@ -1,0 +1,2 @@
+%{"ex_cli": {:hex, :ex_cli, "0.1.1", "ab24e60f64f101191e24089b39fdfcabb0a0a1eaec53c1ffc37ff40d5c048b39", [:mix], []},
+  "yamerl": {:hex, :yamerl, "0.4.0", "ae215b1242810a9bc07716b88062f1bfe06f6bc7cf68372091f630baa536df79", [:rebar3], []}}
