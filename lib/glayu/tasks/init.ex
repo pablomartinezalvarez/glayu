@@ -1,13 +1,13 @@
 defmodule Glayu.Tasks.Init do
 
 	@moduledoc """
-	This task initializes a glayu project.
+	This task initializes a Glayu project.
   	"""
 
 	def run(params) do
-		(List.first(params[:args]) || ".") # The directory is the first argument
+		params
 		|> create_root_dir
-		|> handle_config
+		|> create_config
 		|> create_dirs
 		# \> download_default_theme
 	end
@@ -19,21 +19,27 @@ defmodule Glayu.Tasks.Init do
 		dir
 	end
 
-	defp handle_config(dir) do
+	defp create_config(dir) do
 		config_file = Path.join(dir, "_config.yml")
 		unless File.exists? config_file do
 		   File.write! config_file, Glayu.Templates.Config.tpl
 		end
-		{dir, List.first(:yamerl_constr.file config_file)}
+		Glayu.Config.load_config(dir)
+		dir
 	end
 
-	def create_dirs({dir, config}) do
-		{_ , source_dir } = List.keyfind(config, 'source_dir', 0)
-		File.mkdir Path.join(dir, List.to_string(source_dir))
-		{_ , public_dir } = List.keyfind(config, 'public_dir', 0)
-		File.mkdir Path.join(dir, List.to_string(public_dir))
-		{dir, config}
-		File.mkdir Path.join(dir, "themes")
+	defp create_dirs(dir) do
+		create_dir Path.join(dir, Glayu.Config.get('source_dir'))
+		create_dir Path.join([dir, Glayu.Config.get('source_dir'), "_drafts"])
+		create_dir Path.join([dir, Glayu.Config.get('source_dir'), "_posts"])
+		create_dir Path.join(dir, Glayu.Config.get('public_dir'))
+		create_dir Path.join(dir, "themes")
+	end
+
+	defp create_dir(dir) do
+		unless File.exists? dir do
+			File.mkdir! dir
+		end
 	end
 
 end

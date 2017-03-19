@@ -14,15 +14,12 @@ defmodule Glayu.Templates.Config do
 		source_dir: source
 		public_dir: public
 
-		# Writing
-		default_layout: post
-
 		# Language
 		language: en-us
 
 		# Date / Time format
-		date_format: YYYY-MM-DD
-		time_format: HH:mm:ss
+		date_format: %Y-%m-%d
+		time_format: %H:%M:%S
 
 		# Pagination
 		## Set per_page to 0 to disable pagination
