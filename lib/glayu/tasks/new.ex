@@ -16,11 +16,11 @@ defmodule Glayu.Tasks.New do
   end
 
   defp get_path({:post, title}) do
-    Path.draft_source_path title
+    Path.source_draft_path_from_title(title)
   end
 
   defp get_path({:page, title}) do
-    Path.page_source_path title
+    Path.source_page_path_from_title(title)
   end
 
   defp create_file(path, {:post, title}) do

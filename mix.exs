@@ -32,8 +32,7 @@ defmodule Glayu.Mixfile do
   defp deps do
     [
       {:yamerl, "~> 0.4.0"},
-      {:slugger, "~> 0.1.0"},
-      { :chronos, "~> 1.7.0" }
+      {:slugger, "~> 0.1.0"}
     ]
   end
 

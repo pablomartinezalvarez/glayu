@@ -4,10 +4,16 @@ defmodule Glayu.Templates.Post do
 		"""
     	---
     	title: #{title}
-    	date: #{Glayu.Date.date}
+    	date: #{Glayu.Date.now}
+    	categories:
+    	- Software
+    	- Static Sites
+    	tags:
+    	- Glayu
+    	- Elixir
     	---
 
-    	New Glayu post
+    	A new Glayu post
     	"""
 	end
 

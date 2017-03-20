@@ -4,10 +4,10 @@ defmodule Glayu.Templates.Page do
 		"""
     	---
     	title: #{title}
-    	date: #{Glayu.Date.date}
+    	date: #{Glayu.Date.now}
     	---
 
-    	New Glayu page
+    	A new Glayu page
     	"""
 	end
 

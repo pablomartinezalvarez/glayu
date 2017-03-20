@@ -8,7 +8,7 @@ defmodule Glayu.Templates.Config do
 
 		# URL
 		url: yoursite.com
-		permalink: :category/:year/:month/:day/:title/
+		permalink: :category/:year/:month/:day/:title
 
 		# Directory
 		source_dir: source
@@ -16,10 +16,6 @@ defmodule Glayu.Templates.Config do
 
 		# Language
 		language: en-us
-
-		# Date / Time format
-		date_format: %Y-%m-%d
-		time_format: %H:%M:%S
 
 		# Pagination
 		## Set per_page to 0 to disable pagination
