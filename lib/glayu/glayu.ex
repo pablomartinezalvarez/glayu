@@ -5,7 +5,9 @@ defmodule Glayu do
   	import Supervisor.Spec, warn: false
 
   	children = [
-    	worker(Glayu.Config, [])
+    	worker(Glayu.Config, []),
+    	# worker(Glayu.Build.Store, []),
+      	worker(Task.Supervisor, [[name: :build_task_supervisor]])
     ]
 
     opts = [strategy: :one_for_one, name: Glayu.Supervisor]

@@ -16,7 +16,7 @@ defmodule Glayu.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
-    [applications: [:yamerl, :logger],
+    [extra_applications: [:yamerl, :logger],
     mod: {Glayu, []}]
   end
 

@@ -9,7 +9,6 @@ defmodule Glayu.Tasks.Init do
 		|> create_root_dir
 		|> create_config
 		|> create_dirs
-		# \> download_default_theme
 	end
 
 	defp create_root_dir(dir) do
