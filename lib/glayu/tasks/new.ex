@@ -1,33 +1,29 @@
 defmodule Glayu.Tasks.New do
   
-  @moduledoc """
-  This task creates a new post with the given post title.
-  """
-
-  alias Glayu.Path
+  @behaviour Glayu.Tasks.Task
 
   @doc """
   Run the new post task
   """
   def run(params) do
-    params 
-    |> get_path
-    |> create_file(params)
+    get_path(params[:title], params[:type])
+    |> create_file(params[:title], params[:type])
+    {:ok,""}
   end
 
-  defp get_path({:post, title}) do
-    Path.source_draft_path_from_title(title)
+  defp get_path(title, :post) do
+    Glayu.Path.source_from_title(title, :draft)
   end
 
-  defp get_path({:page, title}) do
-    Path.source_page_path_from_title(title)
+  defp get_path(title, :page) do
+    Glayu.Path.source_from_title(title, :page)
   end
 
-  defp create_file(path, {:post, title}) do
+  defp create_file(path, title, :post) do
     File.write(path, Glayu.Templates.Post.tpl(title))
   end
 
-  defp create_file(path, {:page, title}) do
+  defp create_file(path, title, :page) do
     File.write(path, Glayu.Templates.Page.tpl(title))
   end
 

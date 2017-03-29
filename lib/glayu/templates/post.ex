@@ -12,7 +12,6 @@ defmodule Glayu.Templates.Post do
     	- Glayu
     	- Elixir
     	---
-
     	A new Glayu post
     	"""
 	end

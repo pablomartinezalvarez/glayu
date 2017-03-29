@@ -1,33 +1,75 @@
 defmodule Glayu.Path do
 
-	@moduledoc """
-	This module provides utilities to resolve the file locations on a Glayu site
-  	"""
+    @drafts_dir "_drafts"
+    @posts_dir "_posts"
+    
+    @themes_dir "themes"
+    @layouts_dir "_layouts"
+    
+    @md_ext ".md"
+    @html_ext ".html"
+    @eex_ext ".eex"
 
-  	alias Glayu.Slugger
+
+	  alias Glayu.Slugger
   	alias Glayu.Config
 
-  	def source_draft_path_from_title(title) do
-  		Path.join([".", Config.get('source_dir'), "_drafts", Slugger.slug(title) <> ".md"])
+  	def source_from_title(title, :page) do
+  		Path.join(source_root(), Slugger.slug(title) <> @md_ext)
   	end
 
-  	def source_page_path_from_title(title) do
-  		Path.join([".", Config.get('source_dir'), Slugger.slug(title) <> ".md"])
-  	end
-
-  	def source_draft_path_from_file_name(file_name) do
-  		Path.join([".", Config.get('source_dir'), "_drafts", file_name])
-  	end
-
-  	def public_dir_from_permalink(permalink) do
-  		Path.join([".", Config.get('public_dir')] ++ Enum.drop(permalink,-1))
-  	end
-
-    def public_post_from_permalink(permalink) do
-      dir = Enum.drop(permalink,-1)
-      file_name = List.last(permalink)
-      Path.join([".", Config.get('public_dir')] ++ dir ++ [file_name <> ".md"])
+    def source_from_title(title, :draft) do
+      Path.join(source_root(:draft), Slugger.slug(title) <> @md_ext)
     end
 
+    def source_from_file_name(file_name, :page) do
+      Path.join(source_root(), file_name)
+    end
+
+    def source_from_file_name(file_name, :draft) do
+      Path.join(source_root(:draft), file_name)
+    end
+
+    def source_dir_from_permalink(permalink, :page) do
+      Path.join([source_root()] ++ Enum.drop(permalink,-1))
+    end
+
+    def source_dir_from_permalink(permalink, :post) do
+      Path.join([source_root(:post)] ++ Enum.drop(permalink,-1))
+    end
+
+    def source_from_permalink(permalink, type) do
+      file_name = List.last(permalink)
+      Path.join(source_dir_from_permalink(permalink, type), file_name <> @md_ext)
+    end
+
+    def public_dir_from_permalink(permalink) do
+      Path.join([public_root()] ++ Enum.drop(permalink,-1))
+    end
+
+    def public_from_permalink(permalink) do
+      file_name = List.last(permalink)
+      Path.join(public_dir_from_permalink(permalink), file_name <> @html_ext)
+    end
+
+    def source_root do
+      Path.join(".", to_string(Config.get('source_dir')))
+    end
+
+    def public_root do
+      Path.join(".", to_string(Config.get('public_dir')))
+    end
+
+    def source_root(:post) do
+      Path.join([".", to_string(Config.get('source_dir')), @posts_dir])
+    end
+
+    def source_root(:draft) do
+      Path.join([".", to_string(Config.get('source_dir')), @drafts_dir])
+    end
+
+    def layout(template) do
+      Path.join([".", @themes_dir, to_string(Config.get('theme')), @layouts_dir, template <> @eex_ext ])
+    end
 
 end

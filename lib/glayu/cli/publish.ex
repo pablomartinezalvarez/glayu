@@ -1,5 +1,7 @@
 defmodule Glayu.CLI.Publish do
 
+  @behaviour Glayu.CLI.Command
+
   alias Glayu.Tasks.Publish
 
   def options do
@@ -24,8 +26,8 @@ defmodule Glayu.CLI.Publish do
   end
 
   def run(params) do
-  	List.first(params[:args]) # extract the filename
-    |> Publish.run
+    [filename] = params[:args]
+  	Publish.run [filename: filename]
   end
 
 end

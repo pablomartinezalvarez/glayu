@@ -3,6 +3,7 @@ defmodule GlayuTest do
   doctest Glayu
 
   test "the truth" do
-    assert 1 + 1 == 2
+    
+    IO.puts EEx.eval_string(" <%= @content %>\n ", [assigns: [content: "<p>A new Glayu post</p>\n"]])
   end
 end

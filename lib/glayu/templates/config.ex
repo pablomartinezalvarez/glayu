@@ -8,7 +8,7 @@ defmodule Glayu.Templates.Config do
 
 		# URL
 		url: yoursite.com
-		permalink: :category/:year/:month/:day/:title
+		permalink: categories/year/month/day/title
 
 		# Directory
 		source_dir: source

@@ -1,5 +1,7 @@
 defmodule Glayu.CLI.Init do
 
+  @behaviour Glayu.CLI.Command
+
   alias Glayu.Tasks.Init
 
   def options do
@@ -19,8 +21,7 @@ defmodule Glayu.CLI.Init do
   end
 
   def run(params) do
-    (List.first(params[:args]) || ".") # The directory is the first argument
-  	|> Init.run
+  	Init.run [folder: ( List.first(params[:args]) || "." )]
   end
 
 end

@@ -1,14 +1,17 @@
 defmodule Glayu.Tasks.Init do
 
+	@behaviour Glayu.Tasks.Task
+
 	@moduledoc """
 	This task initializes a Glayu project.
   	"""
 
 	def run(params) do
-		params
+		params[:folder]
 		|> create_root_dir
 		|> create_config
 		|> create_dirs
+		{:ok,""}
 	end
 
 	defp create_root_dir(dir) do

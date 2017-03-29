@@ -6,11 +6,11 @@ defmodule Glayu do
 
   	children = [
     	worker(Glayu.Config, []),
-    	# worker(Glayu.Build.Store, []),
       	worker(Task.Supervisor, [[name: :build_task_supervisor]])
     ]
 
     opts = [strategy: :one_for_one, name: Glayu.Supervisor]
     Supervisor.start_link(children, opts)
+    
   end
 end

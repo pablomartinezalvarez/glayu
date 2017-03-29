@@ -1,66 +1,96 @@
 defmodule Glayu.Permalink do
-	
-	def permalink(document) do
-		pattern = to_string Glayu.Config.get('permalink')
-		parse_permalink(pattern, document)
+
+	alias Glayu.Utils.Yaml
+
+	def permalink(yaml_doc) do
+		type = String.to_atom(Yaml.get_string_value(yaml_doc, 'type'))
+		permalink(type, yaml_doc)
+	end	
+
+	defp permalink(:draft, yaml_doc) do
+		permalink(:post, yaml_doc)	
 	end
 
-	defp parse_permalink(pattern, document) do
-		parse(String.split(pattern, "/"), [], document)
+	defp permalink(:post, yaml_doc) do 
+		pattern = to_string Glayu.Config.get('permalink')
+		parse_permalink(pattern, yaml_doc)
+	end
+
+	defp permalink(:page, yaml_doc) do 
+		Yaml.get_string_value(yaml_doc, 'md_file')
+		|> remove_base_dir
+		|> Path.split
+		|> List.delete_at(0)
+	end
+
+	defp remove_base_dir(file) do
+		file_no_ext = String.replace_prefix(file,".md", "")
+		cond do 
+			String.starts_with?(file_no_ext, Glayu.Path.source_root()) ->
+				String.replace_prefix(file,Glayu.Path.source_root(), "")
+			String.starts_with?(file_no_ext, Glayu.Path.public_root()) ->
+				String.replace_prefix(file, Glayu.Path.public_root(), "")
+			true ->
+				file_no_ext	
+		end
+	end
+
+	defp parse_permalink(pattern, yaml_doc) do
+		parse(String.split(pattern, "/"), [], yaml_doc)
 	end
 
 	defp parse([], permalink, _) do 
 		permalink
 	end
 
-	defp parse([token|more_tokens], permalink, document) do
-		parse(more_tokens, permalink ++ eval(token,document), document)
+	defp parse([token|more_tokens], permalink, yaml_doc) do
+		parse(more_tokens, permalink ++ eval(String.to_atom(token), yaml_doc), yaml_doc)
 	end
 
-	defp eval(":category", document) do
-		 found = List.keyfind(document, 'categories', 0)
-		 case found do
+	defp eval(:categories, yaml_doc) do
+		categories = Yaml.get_value(yaml_doc, 'categories')
+		case categories do
 		 	nil -> []
-            {_key, categories} -> 
+		 	categories -> 
             	Enum.map(categories, fn(category) -> Glayu.Slugger.slug(to_string category) end)
-         end
+        end
 	end
 
-	defp eval(":year", document) do
-		found = List.keyfind(document, 'date', 0)
-		case found do
+	defp eval(:year, yaml_doc) do
+		date = Yaml.get_string_value(yaml_doc, 'date')
+		case date do
 		 	nil -> []
-            {_key, value} -> 
-            	datetime = Glayu.Date.parse(to_string value)
+            date -> 
+            	datetime = Glayu.Date.parse(date)
             	[Glayu.Date.year datetime]
         end
 	end
 
-	defp eval(":month", document) do
-		found = List.keyfind(document, 'date', 0)
-		case found do
+	defp eval(:month, yaml_doc) do
+		date = Yaml.get_string_value(yaml_doc, 'date')
+		case date do
 		 	nil -> []
-            {_key, value} -> 
-            	datetime = Glayu.Date.parse(to_string value)
+            date -> 
+            	datetime = Glayu.Date.parse(date)
             	[Glayu.Date.month datetime]
         end
 	end
 
-	defp eval(":day", document) do
-		found = List.keyfind(document, 'date', 0)
-		case found do
+	defp eval(:day, yaml_doc) do
+		date = Yaml.get_string_value(yaml_doc, 'date')
+		case date do
 		 	nil -> []
-            {_key, value} -> 
-            	datetime = Glayu.Date.parse(to_string value)
+            date -> 
+            	datetime = Glayu.Date.parse(date)
             	[Glayu.Date.day datetime]
         end
 	end
 
-	defp eval(":title", document) do
-		found = List.keyfind(document, 'title', 0)
-		case found do
+	defp eval(:title, yaml_doc) do
+		title = Yaml.get_string_value(yaml_doc, 'title')
+		case title do
 		 	nil -> []
-            {_key, value} -> [Glayu.Slugger.slug(to_string value)]
+            title -> [Glayu.Slugger.slug(title)]
         end
 	end
 

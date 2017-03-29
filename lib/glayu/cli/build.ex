@@ -1,5 +1,7 @@
 defmodule Glayu.CLI.Build do
 
+  @behaviour Glayu.CLI.Command
+
   alias Glayu.Tasks.Build
 
   def options do
@@ -36,7 +38,7 @@ defmodule Glayu.CLI.Build do
   end
 
   def run(params) do
-  	Build.run params
+  	Build.run Keyword.merge([regex: List.first(params[:args])],params[:opts]) 
   end
 
 end

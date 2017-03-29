@@ -6,7 +6,6 @@ defmodule Glayu.Templates.Page do
     	title: #{title}
     	date: #{Glayu.Date.now}
     	---
-
     	A new Glayu page
     	"""
 	end

@@ -1,5 +1,7 @@
 defmodule Glayu.CLI.New do
 
+  @behaviour Glayu.CLI.Command
+
   alias Glayu.Tasks.New
 
   def options do
@@ -29,19 +31,15 @@ defmodule Glayu.CLI.New do
   def run(params) do
   	params[:args]
     |> parse_args
-    |> run_task
+    |> New.run
   end
 
   defp parse_args([title]) do
-    {:post, title}
+    [type: :post, title: title]
   end
 
   defp parse_args([layout, title]) do
-    {String.to_atom(layout), title}
-  end
-
-  defp run_task(params) do
-    New.run params
+    [type: String.to_atom(layout), title: title]
   end
 
 end

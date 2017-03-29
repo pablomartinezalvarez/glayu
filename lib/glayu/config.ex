@@ -1,6 +1,8 @@
 defmodule Glayu.Config do
 
-  	def start_link do
+  	alias Glayu.Utils.Yaml
+
+    def start_link do
     	Agent.start_link(fn -> _load_config("./_config.yml") end, name: __MODULE__)
     end
 
@@ -20,12 +22,8 @@ defmodule Glayu.Config do
 
   	def get(key) do
     	Agent.get(__MODULE__, 
-            fn list ->
-                found = List.keyfind(list, key, 0)
-                case found do
-                    nil -> nil
-                    {_key, value} -> to_string value
-                end
+            fn yaml_doc ->
+                Yaml.get_string_value(yaml_doc, key)
             end)
 	end
 
