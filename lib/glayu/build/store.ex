@@ -10,6 +10,14 @@ defmodule Glayu.Build.Store do
         end)
     end
 
+    def update_record(node, args) do
+    	Agent.update(__MODULE__, fn map ->
+            Map.update(map, node, Map.merge(%Glayu.Build.Record{node: node}, args), fn (record) -> 
+            	Map.merge(record, args)
+            end)
+        end)
+    end
+
     def get_record(node) do
         Agent.get(__MODULE__, fn map -> map[node] end)
     end
@@ -18,8 +26,8 @@ defmodule Glayu.Build.Store do
         Agent.get(__MODULE__, fn map -> Map.keys(map) end)
     end
 
-    def get_all() do
-       Agent.get(__MODULE__, fn map -> Map.to_list(map) end) 
+    def get_values() do
+       Agent.get(__MODULE__, fn map -> Map.values(map) end) 
     end
 
 end

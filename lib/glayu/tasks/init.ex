@@ -1,5 +1,7 @@
 defmodule Glayu.Tasks.Init do
 
+	require Logger
+
 	@behaviour Glayu.Tasks.Task
 
 	@moduledoc """
@@ -11,20 +13,31 @@ defmodule Glayu.Tasks.Init do
 		|> create_root_dir
 		|> create_config
 		|> create_dirs
-		{:ok,""}
+		{:ok, %{path: Path.absname(params[:folder])}}
 	end
 
 	defp create_root_dir(dir) do
-		unless File.exists? dir do
-		   File.mkdir! dir
+		if !File.exists? dir do
+			File.mkdir! dir
+		else
+			Logger.info fn -> 
+				IO.ANSI.format(["Directory ", :bright, "#{Path.absname(dir)}", :normal, " is not empty, its content will be preserved"], true) 
+			end
 		end
 		dir
 	end
 
 	defp create_config(dir) do
 		config_file = Path.join(dir, "_config.yml")
-		unless File.exists? config_file do
-		   File.write! config_file, Glayu.Templates.Config.tpl
+		if !File.exists? config_file do
+			Logger.info fn -> 
+				IO.ANSI.format(["no ", :bright, "_config.yml", :normal, " file found, using defaults"], true)
+			end
+			File.write! config_file, Glayu.Templates.Config.tpl
+		else
+			Logger.info fn -> 
+				IO.ANSI.format(["Loading config from existing ", :bright, "_config.yml", :normal, " file"], true) 
+			end
 		end
 		Glayu.Config.load_config(dir)
 		dir

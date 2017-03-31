@@ -1,5 +1,5 @@
 defmodule Glayu.Tasks.Task do
 
-	@callback run(Keyword.t) :: {:ok, String.t} | {:error, String.t}
+	@callback run(Keyword.t) :: {:ok, any} | {:error, any}
 
 end

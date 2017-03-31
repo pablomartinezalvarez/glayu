@@ -19,7 +19,7 @@ defmodule Glayu.Build.TaskSpawner do
 		task
 		|> Task.yield(@node_build_timeout)
 		|> task_demonitor(task)
-		|> format_result(task, node)
+		|> store_result(node)
 	end
 
 	defp task_demonitor(response, task) do
@@ -27,16 +27,16 @@ defmodule Glayu.Build.TaskSpawner do
     	response
   	end
 
-  	defp format_result({:ok, state}, task, node) do
-  		%Glayu.Build.Record{node: node, status: :ok, pid: Map.get(task, :pid), message: state}
+  	defp store_result({:ok, state}, node) do
+  		Glayu.Build.Store.update_record(node, %{status: :ok, details: state})
   	end
 
-  	defp format_result({:exit, reason}, task, node) do
-  		%Glayu.Build.Record{node: node, status: :error, pid: Map.get(task, :pid), message: reason}
+  	defp store_result({:exit, reason}, node) do
+  		Glayu.Build.Store.update_record(node, %{status: :error, details: reason})
   	end
 
-  	defp format_result(nil, task, node) do
-  		%Glayu.Build.Record{node: node, status: :error, pid: Map.get(task, :pid), message: "Timeout"}
+  	defp store_result(nil, node) do
+  		Glayu.Build.Store.update_record(node, %{status: :error, details: "Timeout"})
   	end
 
 end

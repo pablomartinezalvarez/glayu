@@ -53,23 +53,23 @@ defmodule Glayu.Path do
     end
 
     def source_root do
-      Path.join(".", to_string(Config.get('source_dir')))
+      Path.absname(Path.join(".", to_string(Config.get('source_dir'))))
     end
 
     def public_root do
-      Path.join(".", to_string(Config.get('public_dir')))
+      Path.absname(Path.join(".", to_string(Config.get('public_dir'))))
     end
 
     def source_root(:post) do
-      Path.join([".", to_string(Config.get('source_dir')), @posts_dir])
+      Path.absname(Path.join([".", to_string(Config.get('source_dir')), @posts_dir]))
     end
 
     def source_root(:draft) do
-      Path.join([".", to_string(Config.get('source_dir')), @drafts_dir])
+      Path.absname(Path.join([".", to_string(Config.get('source_dir')), @drafts_dir]))
     end
 
     def layout(template) do
-      Path.join([".", @themes_dir, to_string(Config.get('theme')), @layouts_dir, template <> @eex_ext ])
+      Path.absname(Path.join([".", @themes_dir, to_string(Config.get('theme')), @layouts_dir, template <> @eex_ext ]))
     end
 
 end

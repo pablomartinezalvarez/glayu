@@ -28,3 +28,11 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 #     import_config "#{Mix.env}.exs"
+
+# Enables colorized output
+config :elixir, ansi_enabled: true
+
+# Logger config
+config :logger, :console,
+	level: :info,
+	format: "$level: $message\n"

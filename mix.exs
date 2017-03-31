@@ -33,7 +33,8 @@ defmodule Glayu.Mixfile do
     [
       {:yamerl, "~> 0.4.0"},
       {:slugger, "~> 0.1.0"},
-      {:earmark, "~> 1.2.0"}
+      {:earmark, "~> 1.2.0"},
+      {:progress_bar, "> 0.0.0"}
     ]
   end
 

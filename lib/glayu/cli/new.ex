@@ -32,6 +32,7 @@ defmodule Glayu.CLI.New do
   	params[:args]
     |> parse_args
     |> New.run
+    |> build_result
   end
 
   defp parse_args([title]) do
@@ -40,6 +41,14 @@ defmodule Glayu.CLI.New do
 
   defp parse_args([layout, title]) do
     [type: String.to_atom(layout), title: title]
+  end
+
+  defp build_result({:ok, %{status: :new, path: path, type: type}}) do
+    {:ok, IO.ANSI.format(["🐦  ", "#{String.capitalize(to_string(type))}", " created at ", :light_cyan, "#{path}"])}
+  end
+
+  defp build_result({:ok, %{status: :exists, path: path, type: type}}) do
+    {:ok, IO.ANSI.format([:yellow, "⚠️  ", "#{String.capitalize(to_string(type))}"," ", :bright, "#{path}", :normal, " already exists."])}
   end
 
 end

@@ -1,14 +1,20 @@
 defmodule Glayu.Tasks.New do
-  
+
   @behaviour Glayu.Tasks.Task
 
   @doc """
   Run the new post task
   """
   def run(params) do
-    get_path(params[:title], params[:type])
-    |> create_file(params[:title], params[:type])
-    {:ok,""}
+    type = params[:type]
+    title = params[:title]
+    path = get_path(title, type)
+    if !File.exists?(path) do
+      create_file(path, title, type)
+      {:ok, %{status: :new, path: path, type: type}}
+    else
+      {:ok, %{status: :exists, path: path, type: type}}
+    end
   end
 
   defp get_path(title, :post) do
@@ -20,7 +26,9 @@ defmodule Glayu.Tasks.New do
   end
 
   defp create_file(path, title, :post) do
-    File.write(path, Glayu.Templates.Post.tpl(title))
+    if !File.exists?(path) do
+      File.write(path, Glayu.Templates.Post.tpl(title))
+    end
   end
 
   defp create_file(path, title, :page) do

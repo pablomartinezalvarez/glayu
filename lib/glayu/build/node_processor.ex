@@ -1,5 +1,8 @@
 defmodule Glayu.Build.NodeProcessor do
 
+	alias Glayu.Build.Store;
+	alias Glayu.Build.ProgressMonitor;
+
 	def process(node) do
 		try do
 			node |> _process
@@ -11,13 +14,17 @@ defmodule Glayu.Build.NodeProcessor do
 	end
 
 	defp _process(node) do
+		Store.put_record(%Glayu.Build.Record{node: node, status: :running, pid: self()})
 		node 
 		|> list_md_files
 		|> compile_md_files
 	end
 
 	defp list_md_files(node) do
-		_list_md_files(node, File.ls!(node), [])
+		files = _list_md_files(node, File.ls!(node), [])
+		Store.update_record(node, %{total_files: length(files)})
+		ProgressMonitor.add_files(length(files))
+		files
 	end
 
 	defp _list_md_files(node, [file|more_files], md_files) do
@@ -36,7 +43,10 @@ defmodule Glayu.Build.NodeProcessor do
 
 	defp compile_md_files(files) do
 		files
-		|> Enum.each(&Glayu.Document.compile(&1))
+		|> Enum.each(fn(md_file) -> 
+			Glayu.Document.compile(md_file)
+			ProgressMonitor.inc_processed()
+		end)
 	end
 
 end

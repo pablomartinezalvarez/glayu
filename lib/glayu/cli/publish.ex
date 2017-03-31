@@ -27,7 +27,16 @@ defmodule Glayu.CLI.Publish do
 
   def run(params) do
     [filename] = params[:args]
-  	Publish.run [filename: filename]
+  	result = Publish.run [filename: filename]
+    build_result(result)
+  end
+
+  defp build_result({:ok, %{status: :ok, path: path}}) do 
+    {:ok, IO.ANSI.format(["🐦  Draft published to ", :light_cyan, "#{path}"])}
+  end
+
+  defp build_result({:ok, %{status: :canceled, path: path}}) do 
+    {:ok, IO.ANSI.format(["🐦  Previous published file ", :light_cyan, "#{path}", :reset, " has been preserved."])}
   end
 
 end

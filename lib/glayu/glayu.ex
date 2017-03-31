@@ -6,7 +6,9 @@ defmodule Glayu do
 
   	children = [
     	worker(Glayu.Config, []),
-      	worker(Task.Supervisor, [[name: :build_task_supervisor]])
+      worker(Task.Supervisor, [[name: :build_task_supervisor]]),
+      worker(Glayu.Build.Store, []),
+      worker(Glayu.Build.ProgressMonitor, [])
     ]
 
     opts = [strategy: :one_for_one, name: Glayu.Supervisor]

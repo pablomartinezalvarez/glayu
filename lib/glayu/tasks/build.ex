@@ -4,18 +4,15 @@ defmodule Glayu.Tasks.Build do
 
 	alias Glayu.Build.SiteAnalyzer
 	alias Glayu.Build.TaskSpawner
+	alias Glayu.Build.Store
 
 	def run(params) do
-		params[:regex]
-		|> root_dir
-		|> SiteAnalyzer.nodes(compile_regex(params[:regex]))
-		|> TaskSpawner.spawn
-		|> print_report
-		{:ok, ""}
-	end
-
-	defp print_report(results) do
-		IO.puts inspect results
+		root = root_dir(params[:regex])
+		nodes = ProgressBar.render_spinner([text: "Scanning site…", done: [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Site scan completed."], frames: :braille, spinner_color: IO.ANSI.light_cyan], fn -> 
+			SiteAnalyzer.nodes(root, compile_regex(params[:regex]))
+		end)
+		TaskSpawner.spawn(nodes)
+		{:ok, %{results: Store.get_values}}
 	end
 
 	defp compile_regex(nil) do
@@ -31,7 +28,7 @@ defmodule Glayu.Tasks.Build do
 	end
 
 	defp root_dir(regex) do
-		names = Regex.named_captures(~r/\/(?<path>[^.^$*+?()[{\|]*)\//, regex)
+		names = Regex.named_captures(~r/\/(?<path>^[^.^$*+?()[{\|]*$)\//, regex)
 		path = names["path"]
 		case path do
 			nil -> Glayu.Path.source_root
