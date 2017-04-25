@@ -4,14 +4,14 @@ defmodule Glayu.Build.TaskSpawner do
 
 	@node_build_timeout 300_000
 
-	def spawn(nodes) do
+	def spawn(nodes, tpls) do
 		nodes
-		|> Enum.map(&spawn_task(&1))
+		|> Enum.map(&spawn_task(&1, tpls))
 		|> Enum.map(&handle_task(&1))
 	end
 
-	defp spawn_task(node) do
-		task = Task.Supervisor.async_nolink(:build_task_supervisor, fn -> NodeProcessor.process(node) end)
+	defp spawn_task(node, tpls) do
+		task = Task.Supervisor.async_nolink(:build_task_supervisor, fn -> NodeProcessor.process(node, tpls) end)
 		{node, task}
 	end
 

@@ -3,9 +3,9 @@ defmodule Glayu.Build.NodeProcessor do
 	alias Glayu.Build.Store;
 	alias Glayu.Build.ProgressMonitor;
 
-	def process(node) do
+	def process(node, tpls) do
 		try do
-			node |> _process
+			node |> _process(tpls)
 		rescue error ->
       		exit {:shutdown, error}
     	catch key, error ->
@@ -13,11 +13,11 @@ defmodule Glayu.Build.NodeProcessor do
 		end
 	end
 
-	defp _process(node) do
+	defp _process(node, tpls) do
 		Store.put_record(%Glayu.Build.Record{node: node, status: :running, pid: self()})
 		node 
 		|> list_md_files
-		|> compile_md_files
+		|> compile_md_files(tpls)
 	end
 
 	defp list_md_files(node) do
@@ -41,10 +41,10 @@ defmodule Glayu.Build.NodeProcessor do
 		md_files
 	end
 
-	defp compile_md_files(files) do
+	defp compile_md_files(files, tpls) do
 		files
 		|> Enum.each(fn(md_file) -> 
-			Glayu.Document.compile(md_file)
+			Glayu.Document.compile(md_file, tpls)
 			ProgressMonitor.inc_processed()
 		end)
 	end

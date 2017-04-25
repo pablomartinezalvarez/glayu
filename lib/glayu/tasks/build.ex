@@ -5,13 +5,15 @@ defmodule Glayu.Tasks.Build do
 	alias Glayu.Build.SiteAnalyzer
 	alias Glayu.Build.TaskSpawner
 	alias Glayu.Build.Store
+	alias Glayu.Template
 
 	def run(params) do
+		tpls = Template.compile()
 		root = root_dir(params[:regex])
 		nodes = ProgressBar.render_spinner([text: "Scanning site…", done: [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Site scan completed."], frames: :braille, spinner_color: IO.ANSI.light_cyan], fn -> 
 			SiteAnalyzer.nodes(root, compile_regex(params[:regex]))
 		end)
-		TaskSpawner.spawn(nodes)
+		TaskSpawner.spawn(nodes, tpls)
 		{:ok, %{results: Store.get_values}}
 	end
 

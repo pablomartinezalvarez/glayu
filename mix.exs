@@ -17,7 +17,7 @@ defmodule Glayu.Mixfile do
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
     [extra_applications: [:yamerl, :logger, :eex],
-    mod: {Glayu, []}]
+    mod: {GlayuApp, []}]
   end
 
   # Dependencies can be Hex packages:

@@ -5,6 +5,7 @@ defmodule Glayu.Path do
     
     @themes_dir "themes"
     @layouts_dir "_layouts"
+    @partials_dir "_partials"
     
     @md_ext ".md"
     @html_ext ".html"
@@ -71,5 +72,14 @@ defmodule Glayu.Path do
     def layout(template) do
       Path.absname(Path.join([".", @themes_dir, to_string(Config.get('theme')), @layouts_dir, template <> @eex_ext ]))
     end
+
+    def partials_dir() do
+      Path.absname(Path.join([".", @themes_dir, to_string(Config.get('theme')), @partials_dir]))
+    end
+
+    def layouts_dir() do
+      Path.absname(Path.join([".", @themes_dir, to_string(Config.get('theme')), @layouts_dir]))
+    end
+
 
 end

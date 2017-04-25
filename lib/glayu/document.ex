@@ -4,9 +4,9 @@ defmodule Glayu.Document do
 
 	alias Glayu.Utils.Yaml
 
-	def compile(md_file) do
+	def compile(md_file, tpls) do
 		{yaml_doc, content} = parse md_file
-		html = render(yaml_doc, content)
+		html = render(yaml_doc, content, tpls)
 		create_destination_dir(yaml_doc)
 		write_file(yaml_doc, html)
 	end
@@ -17,13 +17,9 @@ defmodule Glayu.Document do
 		{Enum.concat([{'type', doc_type(md_file)}, {'md_file', md_file}] , Glayu.FrontMatter.parse frontmatter), content}
 	end
 
-	defp render(yaml_doc, content) do
-		content_layout = Yaml.get_string_value(yaml_doc, 'layout') || Yaml.get_string_value(yaml_doc, 'type')
-		content_tpl = Glayu.Layout.load(content_layout)
-		content_html = Earmark.as_html!(content)
-		content = EEx.eval_string(content_tpl, assigns: [content: content_html]) 
-		page_tpl = Glayu.Layout.load("layout")
-		EEx.eval_string(page_tpl, assigns: [title: Yaml.get_string_value(yaml_doc, 'title'), content: content])
+	defp render(yaml_doc, content, tpls) do
+		Yaml.get_string_value(yaml_doc, 'layout') || Yaml.get_string_value(yaml_doc, 'type')
+		|> Glayu.Template.render(content, [title: "Titulooooooo!!!"], tpls)
 	end
 
 	defp create_destination_dir(yaml_doc) do

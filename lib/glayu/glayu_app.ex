@@ -1,4 +1,4 @@
-defmodule Glayu do
+defmodule GlayuApp do
   use Application
 
   def start(_type, _args) do
