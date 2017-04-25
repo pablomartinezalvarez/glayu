@@ -19,7 +19,7 @@ defmodule Glayu.Document do
 
 	defp render(yaml_doc, content, tpls) do
 		Yaml.get_string_value(yaml_doc, 'layout') || Yaml.get_string_value(yaml_doc, 'type')
-		|> Glayu.Template.render(content, [title: "Titulooooooo!!!"], tpls)
+		|> Glayu.Template.render(content, [page: Yaml.to_map(yaml_doc)], tpls)
 	end
 
 	defp create_destination_dir(yaml_doc) do

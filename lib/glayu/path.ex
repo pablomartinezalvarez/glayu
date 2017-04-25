@@ -6,6 +6,7 @@ defmodule Glayu.Path do
     @themes_dir "themes"
     @layouts_dir "_layouts"
     @partials_dir "_partials"
+    @assets_dir "assets"
     
     @md_ext ".md"
     @html_ext ".html"
@@ -53,11 +54,11 @@ defmodule Glayu.Path do
       Path.join(public_dir_from_permalink(permalink), file_name <> @html_ext)
     end
 
-    def source_root do
+    def source_root() do
       Path.absname(Path.join(".", to_string(Config.get('source_dir'))))
     end
 
-    def public_root do
+    def public_root() do
       Path.absname(Path.join(".", to_string(Config.get('public_dir'))))
     end
 
@@ -81,5 +82,12 @@ defmodule Glayu.Path do
       Path.absname(Path.join([".", @themes_dir, to_string(Config.get('theme')), @layouts_dir]))
     end
 
+    def assets_source() do
+      Path.absname(Path.join([".", @themes_dir, to_string(Config.get('theme')), @assets_dir]))
+    end
+
+    def public_assets() do
+      Path.absname(Path.join([".", to_string(Config.get('public_dir')), @assets_dir]))
+    end
 
 end

@@ -1,8 +1,10 @@
 defmodule Glayu.EEx.Macros do
   
+  alias Glayu.EEx.Macros
+
   defmacro partial(tpl) do
     quote do
-    	Glayu.Template.render_partial String.to_atom(unquote(tpl)), var!(assigns), EEx.Engine.fetch_assign!(var!(assigns), :partials)
+    	Macros.Partial.render String.to_atom(unquote(tpl)), var!(assigns), EEx.Engine.fetch_assign!(var!(assigns), :partials)
     end
   end
 

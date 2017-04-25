@@ -5,6 +5,7 @@ defmodule Glayu.Templates.Post do
     	---
     	title: #{title}
     	date: #{Glayu.Date.now}
+        author:
     	categories:
     	- Software
     	- Static Sites

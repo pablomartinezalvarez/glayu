@@ -10,11 +10,16 @@ defmodule Glayu.Tasks.Build do
 	def run(params) do
 		tpls = Template.compile()
 		root = root_dir(params[:regex])
+		copy_assets()
 		nodes = ProgressBar.render_spinner([text: "Scanning site…", done: [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Site scan completed."], frames: :braille, spinner_color: IO.ANSI.light_cyan], fn -> 
 			SiteAnalyzer.nodes(root, compile_regex(params[:regex]))
 		end)
 		TaskSpawner.spawn(nodes, tpls)
 		{:ok, %{results: Store.get_values}}
+	end
+
+	defp copy_assets() do
+		File.cp_r(Glayu.Path.assets_source(), Glayu.Path.public_assets())
 	end
 
 	defp compile_regex(nil) do
