@@ -48,7 +48,7 @@ defmodule Glayu.CLI.New do
   end
 
   defp build_result({:ok, %{status: :exists, path: path, type: type}}) do
-    {:ok, IO.ANSI.format([:yellow, "⚠️  ", "#{String.capitalize(to_string(type))}"," ", :bright, "#{path}", :normal, " already exists."])}
+    {:ok, IO.ANSI.format([:yellow, "⚠️  ", "#{String.capitalize(to_string(type))}", " ", :bright, "#{path}", :normal, " already exists."])}
   end
 
 end

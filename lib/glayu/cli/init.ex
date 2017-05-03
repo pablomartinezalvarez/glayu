@@ -27,7 +27,7 @@ defmodule Glayu.CLI.Init do
   end
 
   defp build_result({:ok, %{path: path}}) do
-    {:ok, IO.ANSI.format(["🐦  Your ", :light_cyan, "Glayu", :reset ," site has been created at ", :light_cyan, "#{path}"])}
+    {:ok, IO.ANSI.format(["🐦  Your ", :light_cyan, "Glayu", :reset , " site has been created at ", :light_cyan, "#{path}"])}
   end
 
 end

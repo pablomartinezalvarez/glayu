@@ -9,11 +9,11 @@ defmodule Glayu.Tasks.New do
     type = params[:type]
     title = params[:title]
     path = get_path(title, type)
-    if !File.exists?(path) do
+    if File.exists?(path) do
+      {:ok, %{status: :exists, path: path, type: type}}
+    else
       create_file(path, title, type)
       {:ok, %{status: :new, path: path, type: type}}
-    else
-      {:ok, %{status: :exists, path: path, type: type}}
     end
   end
 
@@ -26,9 +26,7 @@ defmodule Glayu.Tasks.New do
   end
 
   defp create_file(path, title, :post) do
-    if !File.exists?(path) do
-      File.write(path, Glayu.Templates.Post.tpl(title))
-    end
+    File.write(path, Glayu.Templates.Post.tpl(title))
   end
 
   defp create_file(path, title, :page) do

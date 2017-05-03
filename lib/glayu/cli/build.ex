@@ -33,7 +33,7 @@ defmodule Glayu.CLI.Build do
   end
 
   def run(params) do
-  	results = Build.run Keyword.merge([regex: List.first(params[:args])],params[:opts]) 
+  	results = Build.run Keyword.merge([regex: List.first(params[:args])], params[:opts])
     build_result(results)
   end
 
@@ -51,12 +51,12 @@ defmodule Glayu.CLI.Build do
   end
 
   defp print_results([], num_nodes, total_gen, []) do
-    IO.ANSI.format(["🐦  Build success: ", :light_cyan, "#{num_nodes}", :reset ," nodes processed, ", :light_cyan, "#{total_gen}", :reset , " pages generated."])
+    IO.ANSI.format(["🐦  Build success: ", :light_cyan, "#{num_nodes}", :reset , " nodes processed, ", :light_cyan, "#{total_gen}", :reset , " pages generated."])
   end
 
   defp print_results([], num_nodes, total_gen, errors) do
     IO.ANSI.format([[:yellow, "\n⚠️  Build with errors: ", 
-      :light_cyan, "#{num_nodes}", :reset ," nodes processed, ", :light_cyan, "#{total_gen}", :reset , " pages generated, ", 
+      :light_cyan, "#{num_nodes}", :reset , " nodes processed, ", :light_cyan, "#{total_gen}", :reset , " pages generated, ",
       :red, :bright, "#{length(errors)}", :normal , " nodes with errors.\nDetails:"] | errors])
   end
 
