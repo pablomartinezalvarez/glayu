@@ -27,7 +27,24 @@ defmodule Glayu.Utils.Yaml do
   defp _to_map(map, [field | yaml_doc]) do
     key = String.to_atom(to_string(elem(field, 0)))
     value = elem(field, 1)
-    _to_map(Map.put(map, key, value), yaml_doc)
+    cond do
+      is_charlist(value) ->
+        _to_map(Map.put(map, key, to_string value), yaml_doc)
+      is_list_of_charlists(value) ->
+        _to_map(Map.put(map, key, Enum.map(value, &(to_string &1))), yaml_doc)
+      true ->
+        _to_map(Map.put(map, key, value), yaml_doc)
+    end
+
+  end
+
+  defp is_charlist(value) do
+    is_list(value) && (length(value) == 0 || is_integer(List.first(value))) #to string
+  end
+
+  defp is_list_of_charlists(value) do
+    is_list(value) && length(value) > 0 && is_list(List.first(value)) &&
+      (length(List.first(value)) == 0 || is_integer(List.first(List.first(value))))
   end
 
 end

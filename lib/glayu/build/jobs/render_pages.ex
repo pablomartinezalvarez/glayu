@@ -20,23 +20,23 @@ defmodule Glayu.Build.Jobs.RenderPages do
     files
   end
 
-  defp parse_pages(node, [file|more_files], yaml_docs) do
+  defp parse_pages(node, [file|more_files], docs) do
     path = Path.join(node, file)
     if File.regular?(path) && Path.extname(path) == @md_ext do
-      yaml_doc = Document.parse(path)
-      parse_pages(node, more_files, [yaml_doc|yaml_docs])
+      doc = Document.parse(path)
+      parse_pages(node, more_files, [doc|docs])
     else
-      parse_pages(node, more_files, yaml_docs)
+      parse_pages(node, more_files, docs)
     end
   end
 
-  defp parse_pages(_, [], yaml_docs) do
-    yaml_docs
+  defp parse_pages(_, [], docs) do
+    docs
   end
 
-  defp render_pages(yaml_docs, tpls) do
-    Enum.each(yaml_docs, fn(yaml_doc) ->
-      Document.write(Document.render(yaml_doc, tpls), yaml_doc)
+  defp render_pages(docs, tpls) do
+    Enum.each(docs, fn(doc_context) ->
+      Document.write(Document.render(doc_context, tpls), doc_context)
       ProgressMonitor.inc_processed()
     end)
   end

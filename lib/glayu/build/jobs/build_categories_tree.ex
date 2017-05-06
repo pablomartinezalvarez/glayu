@@ -2,22 +2,23 @@ defmodule Glayu.Build.Jobs.BuildCategoriesTree do
 
   @behaviour Glayu.Build.Jobs.Job
 
-  @doc_type 'type'
   @md_ext ".md"
 
   alias Glayu.Document
-  alias Glayu.Utils.Yaml
   alias Glayu.Build.Store
-  alias Glayu.Date
-  alias Glayu.Permalink
+  alias Glayu.URL
   alias Glayu.Build.CategoriesTree
 
   def run(node, args) do
     sort_fn = args[:sort_fn]
     num_posts =  args[:num_posts]
+
     node
     |> parse_posts
-    |> update_categories(node, sort_fn, num_posts)
+    |> Enum.sort(sort_fn)
+    |> Enum.slice(0, num_posts)
+    |> update_categories(sort_fn, num_posts)
+
   end
 
   defp parse_posts(node) do
@@ -33,9 +34,9 @@ defmodule Glayu.Build.Jobs.BuildCategoriesTree do
   defp parse_posts(node, [file | more_files], posts) do
     path = Path.join(node, file)
     if File.regular?(path) && Path.extname(path) == @md_ext do
-      yaml_doc = Document.parse(path)
-      if 'post' == Yaml.get_value(yaml_doc, @doc_type) do
-        parse_posts(node, more_files, [yaml_doc | posts])
+      doc_context = Document.parse(path)
+      if :post == doc_context[:type] do
+        parse_posts(node, more_files, [doc_context | posts])
       else
         parse_posts(node, more_files, posts)
       end
@@ -44,27 +45,23 @@ defmodule Glayu.Build.Jobs.BuildCategoriesTree do
     end
   end
 
-  defp update_categories(posts, node, sort_fn, num_posts) do
-    permalink = Permalink.parse(node_permalink(node), List.delete_at(String.split((to_string Glayu.Config.get('permalink')), "/"), -1))
-    keys = Keyword.get_values(permalink, :categories)
-    put_nodes(keys, posts, [], sort_fn, num_posts)
+  defp update_categories(posts, sort_fn, num_posts) do
+    if length(posts) > 0 do
+      put_nodes(List.first(posts).categories, posts, sort_fn, num_posts)
+    end
   end
 
-  defp put_nodes([], _, _, _, _) do
-    :ok
+  defp put_nodes([], _, _, _) do
+    []
   end
 
-  defp put_nodes([key | more_keys], posts, partial, sort_fn, num_posts) do
-    keys = partial ++ [key]
-    CategoriesTree.put_node(keys, %{keys: keys, posts: posts}, sort_fn, num_posts)
-    put_nodes(more_keys, posts, keys, sort_fn, num_posts)
-  end
-
-  defp node_permalink(node) do
-    node
-    |> String.replace_prefix(Glayu.Path.source_root(:post), "")
-    |> String.split("/")
-    |> List.delete_at(0)
+  defp put_nodes([category | children], posts, sort_fn, num_posts) do
+    if length(children) > 0 do
+      CategoriesTree.put_node(category.keys, %{keys: category.keys, name: category.name, posts: posts, path: category.path, children_keys: [List.first(children).keys]}, sort_fn, num_posts)
+    else
+      CategoriesTree.put_node(category.keys, %{keys: category.keys, name: category.name, posts: posts, path: category.path, children_keys: []}, sort_fn, num_posts)
+    end
+    put_nodes(children, posts, sort_fn, num_posts)
   end
 
 end

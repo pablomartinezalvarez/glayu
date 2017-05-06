@@ -13,7 +13,7 @@ defmodule Glayu.CLI do
     aliases = apply module, :aliases, []
     parse = OptionParser.parse opts, strict: options, aliases: aliases
     case parse do
-      {opts, args, [] } -> {:ok, command, [opts: opts, args: args]}
+      {opts, args, []} -> {:ok, command, [opts: opts, args: args]}
       {opts, args, error} -> {:error, command, [opts: opts, args: args, error: error]}
     end
   end

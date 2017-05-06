@@ -4,13 +4,11 @@ defmodule Glayu.Template do
     [layouts: compile_tpls(Glayu.Path.layouts_dir()), partials: compile_tpls(Glayu.Path.partials_dir())]
   end
 
-  def render(layout, raw, context, tpls) do
+  def render(layout, context, tpls) do
     base_layout = tpls[:layouts][:layout]
-    inner_layout = tpls[:layouts][String.to_atom(layout)]
-    # adds compiled markdown to page.content var
-    page = Map.put(context[:page], :content, Earmark.as_html!(raw))
-    # add the copiled partials templates to the context is required by the 'partial' directive
-    assigns = Enum.concat(Keyword.put(context, :page, page), [partials: tpls[:partials]])
+    inner_layout = tpls[:layouts][layout]
+    # add compiled partial templates to the context is required by the 'partial' directive
+    assigns = Enum.concat(context, [partials: tpls[:partials]])
     {inner_html, _} = Code.eval_quoted inner_layout, [assigns: assigns]
     {html, _} = Code.eval_quoted base_layout, [assigns: Enum.concat(assigns, [inner: inner_html])]
     html

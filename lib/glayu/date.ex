@@ -6,7 +6,7 @@ defmodule Glayu.Date do
   end
 
   def parse(date_time_str) do
-    [ date_str | time_str ] = String.split(date_time_str, " ")
+    [date_str | time_str] = String.split(date_time_str, " ")
     {:ok, dt, _} = DateTime.from_iso8601("#{date_str}T#{time_str}Z")
     dt
   end

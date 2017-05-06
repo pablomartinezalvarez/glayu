@@ -13,21 +13,20 @@ defmodule Glayu.Tasks.Publish do
   end
 
   defp parse_draft(filename) do
-    draft = Glayu.Path.source_from_file_name(filename, :draft)
-    Glayu.Document.parse draft
+    Glayu.Document.parse(Glayu.Path.source_from_file_name(filename, :draft))
   end
 
-  defp create_destination_dir(yaml_doc) do
-    yaml_doc
-    |> Glayu.Permalink.from_yaml_doc
+  defp create_destination_dir(doc_context) do
+    doc_context
+    |> Glayu.Permalink.from_context
     |> Glayu.Path.source_dir_from_permalink(:post)
     |> File.mkdir_p!
-    yaml_doc
+    doc_context
   end
 
-  defp mv_draft(yaml_doc, filename) do
+  defp mv_draft(doc_context, filename) do
     source = Glayu.Path.source_from_file_name(filename, :draft)
-    destination = Glayu.Path.source_from_permalink(Glayu.Permalink.from_yaml_doc(yaml_doc), :post)
+    destination = Glayu.Path.source_from_permalink(Glayu.Permalink.from_context(doc_context), :post)
     if !File.exists?(destination) || override?(destination, nil) do
       :ok = File.rename(source, destination)
       {:ok, %{status: :ok, path: destination}}

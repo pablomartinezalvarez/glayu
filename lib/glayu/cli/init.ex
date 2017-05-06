@@ -21,7 +21,7 @@ defmodule Glayu.CLI.Init do
   end
 
   def run(params) do
-    [folder: ( List.first(params[:args]) || "./" )]
+    [folder: (List.first(params[:args]) || "./")]
   	|> Init.run 
     |> build_result
   end

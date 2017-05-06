@@ -2,43 +2,79 @@ defmodule Glayu.Document do
 
   require EEx
 
-  alias Glayu.Utils.Yaml
+  alias Glayu.FrontMatter
+  alias Glayu.Permalink
+  alias Glayu.Template
+  alias Glayu.URL
+  alias Glayu.Build.CategoriesTree
 
   def parse(md_file) do
-    md = File.read! md_file
-    [frontmatter|raw] = String.split md, "\n---\n"
-    Enum.concat([{'type', doc_type(md_file)}, {'md_file', md_file}, {'raw', raw}] , Glayu.FrontMatter.parse frontmatter)
+
+    [frontmatter|[raw|_]] = String.split(File.read!(md_file), "\n---\n")
+
+    doc_type = doc_type(md_file)
+
+    context = FrontMatter.parse(frontmatter) # Parse front-matter
+      |> Map.put(:type, doc_type)
+      |> Map.put(:source, md_file)
+      |> Map.put(:raw, raw)
+      |> Map.put(:content, Earmark.as_html!(raw)) # Compile Markdown to HTML
+      |> Map.put_new(:layout, doc_type)
+
+    if doc_type == :post || doc_type == :draft do
+      context = Map.put(context, :categories, inform_categories(context[:categories])) # informed categories
+      Map.put(context, :path, URL.path(doc_type, Permalink.from_context(context))) # document relative path
+    else
+      Map.put(context, :path, URL.path(doc_type, Permalink.from_context(context))) # document relative path
+    end
+
   end
 
-  def render(yaml_doc, tpls) do
-    type = Yaml.get_string_value(yaml_doc, 'layout') || Yaml.get_string_value(yaml_doc, 'type')
-    Glayu.Template.render(type, Yaml.get_value(yaml_doc, 'raw'), [page: Yaml.to_map(yaml_doc)], tpls)
+  def render(doc_context, tpls) do
+    Template.render(doc_context[:type], build_context(doc_context), tpls)
   end
 
-  def write(html, yaml_doc) do
-    create_destination_dir(yaml_doc)
-    write_html_file(html, yaml_doc)
+  def write(html, doc_context) do
+    create_destination_dir(doc_context)
+    write_html_file(html, doc_context)
   end
 
-  defp create_destination_dir(yaml_doc) do
-    yaml_doc
-    |> Glayu.Permalink.from_yaml_doc
+  defp build_context(page_context) do
+    [page: page_context]
+  end
+
+  defp inform_categories(names) do
+    inform_categories(names, [], [])
+  end
+
+  defp inform_categories([], _, categories) do
+    categories
+  end
+
+  defp inform_categories([name | subcategory_names], parent, categories) do
+    keys = parent ++ [Glayu.Slugger.slug(name)]
+    inform_categories(subcategory_names, keys, categories ++ [%{keys: keys, name: name, path: URL.path(:category, keys)}])
+  end
+
+  defp create_destination_dir(doc_context) do
+    doc_context
+    |> Permalink.from_context
     |> Glayu.Path.public_dir_from_permalink
     |> File.mkdir_p!
   end
 
-  defp write_html_file(html, yaml_doc) do
-    yaml_doc
-    |> Glayu.Permalink.from_yaml_doc
+  defp write_html_file(html, doc_context) do
+    doc_context
+    |> Permalink.from_context
     |> Glayu.Path.public_from_permalink
     |> File.write!(html)
   end
 
   defp doc_type(md_file) do
     cond do
-      String.starts_with?(md_file, Glayu.Path.source_root(:post)) -> 'post'
-      String.starts_with?(md_file, Glayu.Path.source_root(:draft)) -> 'draft'
-      true -> 'page'
+      String.starts_with?(md_file, Glayu.Path.source_root(:post)) -> :post
+      String.starts_with?(md_file, Glayu.Path.source_root(:draft)) -> :draft
+      true -> :page
     end
   end
 

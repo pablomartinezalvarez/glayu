@@ -1,7 +1,12 @@
 defmodule Glayu.FrontMatter do
 
+  alias Glayu.Utils.Yaml
+
   def parse(frontmatter) do
-    List.flatten(:yamerl_constr.string frontmatter)
+    frontmatter
+    |> :yamerl_constr.string
+    |> List.flatten
+    |> Yaml.to_map
   end
 
 end

@@ -8,4 +8,22 @@ defmodule Glayu.EEx.Macros do
     end
   end
 
+  defmacro categories do
+    quote do
+      Glayu.Build.CategoriesTree.get_root_nodes()
+    end
+  end
+
+  defmacro subcategories(keys) do
+    quote do
+      Glayu.Build.CategoriesTree.get_children(unquote(keys))
+    end
+  end
+
+  defmacro posts(keys) do
+    quote do
+      Glayu.Build.CategoriesTree.get(unquote(keys) ++ [:posts])
+    end
+  end
+
 end
