@@ -18,6 +18,7 @@ defmodule Glayu.Tasks.Build do
     nodes = scan_site(params[:regex])
     render_pages(nodes, tpls)
     render_category_pages(tpls)
+    render_home_page(tpls)
     copy_assets()
     {:ok, %{results: Store.get_values(RenderPages.__info__(:module))}}
   end
@@ -49,6 +50,11 @@ defmodule Glayu.Tasks.Build do
 
   defp render_category_pages(tpls) do
     TaskSpawner.spawn(Glayu.Build.CategoriesTree.keys(), RenderCategoryPages, [tpls: tpls])
+  end
+
+  defp render_home_page(tpls) do
+    html = Glayu.HomePage.render(tpls)
+    Glayu.HomePage.write(html)
   end
 
   defp compile_regex(nil) do

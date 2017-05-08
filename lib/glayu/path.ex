@@ -64,6 +64,10 @@ defmodule Glayu.Path do
     Path.absname(Path.join(".", to_string(Config.get('source_dir'))))
   end
 
+  def home_page() do
+    Path.join(public_root(), @index <> @html_ext)
+  end
+
   def public_root() do
     Path.absname(Path.join(".", to_string(Config.get('public_dir'))))
   end
