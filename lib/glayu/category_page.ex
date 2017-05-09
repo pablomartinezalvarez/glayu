@@ -7,7 +7,8 @@ defmodule Glayu.CategoryPage do
 
   def render(keys, tpls) do
     category = CategoriesTree.get_node(keys)
-    page = %{title: category[:name], layout: :category, path: category.path, category: category}
+    page = %{title: category[:name], layout: :category, path: category.path,
+      category: Map.put(category, :parent, CategoriesTree.get_parent(keys))}
     Glayu.Template.render(:category, [page: page], tpls)
   end
 

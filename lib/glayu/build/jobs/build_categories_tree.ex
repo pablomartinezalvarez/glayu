@@ -3,6 +3,7 @@ defmodule Glayu.Build.Jobs.BuildCategoriesTree do
   @behaviour Glayu.Build.Jobs.Job
 
   @md_ext ".md"
+  @root "root"
 
   alias Glayu.Document
   alias Glayu.Build.Store
@@ -47,21 +48,33 @@ defmodule Glayu.Build.Jobs.BuildCategoriesTree do
 
   defp update_categories(posts, sort_fn, num_posts) do
     if length(posts) > 0 do
-      put_nodes(List.first(posts).categories, posts, sort_fn, num_posts)
+      root_node = %{keys: [@root], name: "Home", path: URL.home()}
+      categories = [root_node] ++ List.first(posts).categories
+      put_nodes(categories, [], posts, sort_fn, num_posts)
     end
   end
 
-  defp put_nodes([], _, _, _) do
+  defp put_nodes([], _, _, _, _) do
     []
   end
 
-  defp put_nodes([category | children], posts, sort_fn, num_posts) do
+  defp put_nodes([category | children], parent_keys, posts, sort_fn, num_posts) do
     if length(children) > 0 do
-      CategoriesTree.put_node(category.keys, %{keys: category.keys, name: category.name, posts: posts, path: category.path, children_keys: [List.first(children).keys]}, sort_fn, num_posts)
+      node = %{keys: category.keys, name: category.name, posts: posts, path: category.path, children_keys: [List.first(children).keys], parent_keys: parent_keys}
+      if List.first(category.keys) == @root do
+        CategoriesTree.put_node(category.keys, node, sort_fn, num_posts)
+      else
+        CategoriesTree.put_node(category.keys, node, sort_fn, num_posts)
+      end
     else
-      CategoriesTree.put_node(category.keys, %{keys: category.keys, name: category.name, posts: posts, path: category.path, children_keys: []}, sort_fn, num_posts)
+      node = %{keys: category.keys, name: category.name, posts: posts, path: category.path, children_keys: [], parent_keys: parent_keys}
+      if List.first(category.keys) == @root do
+        CategoriesTree.put_node(category.keys, node, sort_fn, num_posts)
+      else
+        CategoriesTree.put_node(category.keys, node, sort_fn, num_posts)
+      end
     end
-    put_nodes(children, posts, sort_fn, num_posts)
+    put_nodes(children, category.keys, posts, sort_fn, num_posts)
   end
 
 end

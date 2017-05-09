@@ -20,7 +20,7 @@ defmodule Glayu.Tasks.Build do
     render_category_pages(tpls)
     render_home_page(tpls)
     copy_assets()
-    {:ok, %{results: Store.get_values(RenderPages.__info__(:module))}}
+    {:ok, %{results: Store.get_values(RenderCategoryPages.__info__(:module))}}
   end
 
   defp copy_assets() do

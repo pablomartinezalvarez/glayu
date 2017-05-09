@@ -4,6 +4,10 @@ defmodule Glayu.URL do
   @index "index"
   @html_ext ".html"
 
+  def root() do
+    @root
+  end
+
   def home() do
     Path.join(@root, @index <> @html_ext)
   end

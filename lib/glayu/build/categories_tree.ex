@@ -1,55 +1,67 @@
 defmodule Glayu.Build.CategoriesTree do
 
+  @root "root"
+
   def start_link do
     Agent.start_link(fn -> %{} end, name: __MODULE__)
   end
 
   def put_node(keys, node, sort_fn, limit) do
     Agent.update(__MODULE__, fn tree ->
-      update_node(tree, keys, node, sort_fn, limit)
-    end)
-  end
-
-  def get_root_nodes do
-    Agent.get(__MODULE__, fn tree ->
-      Enum.map(Map.keys(tree), &(_get_node(tree, [&1])))
+        update_node(tree, normalize(keys), node, sort_fn, limit)
     end)
   end
 
   def get_children(keys) do
     Agent.get(__MODULE__, fn tree ->
-       children_keys = get_in(tree, keys ++ [:children_keys])
-       Enum.map(children_keys, &_get_node(tree, &1))
+      children_keys = get_in(tree, normalize(keys) ++ [:children_keys])
+      Enum.map(children_keys, &_get_node(tree, normalize(&1)))
+    end)
+  end
+
+  def get_parent(keys) do
+    Agent.get(__MODULE__, fn tree ->
+      parent_keys = get_in(tree, normalize(keys) ++ [:parent_keys])
+      if length(parent_keys) > 0 do
+        _get_node(tree, normalize(parent_keys))
+      else
+        nil
+      end
     end)
   end
 
   def get_node(keys) do
     Agent.get(__MODULE__, fn tree ->
-      _get_node(tree, keys)
+        _get_node(tree, normalize(keys))
     end)
   end
 
   def keys do
     Agent.get(__MODULE__, fn tree ->
-      _keys(tree)
+      if Map.has_key?(tree, @root) do
+        _keys(tree, [[@root]])
+      else
+        []
+      end
     end)
   end
 
   def get(keys) do
     Agent.get(__MODULE__, fn tree ->
-      get_in(tree, keys)
+      get_in(tree, normalize(keys))
     end)
+  end
+
+  defp normalize(keys) do
+    if List.first(keys) == @root do
+      keys
+    else
+      [@root] ++ keys
+    end
   end
 
   defp _get_node(tree, keys) do
     %{keys: keys, name: get_in(tree, keys ++ [:name]), path: get_in(tree, keys ++ [:path])}
-  end
-
-  defp _keys(tree) do
-    nodes = Enum.map(Map.keys(tree), fn(key) ->
-      List.wrap(key)
-    end)
-    nodes ++ _keys(tree, nodes)
   end
 
   defp _keys(_, []) do
@@ -58,7 +70,7 @@ defmodule Glayu.Build.CategoriesTree do
 
   defp _keys(tree, keys) do
     children_keys = Enum.flat_map(keys, fn(key) ->
-      get_in(tree, key ++ [:children_keys])
+      get_in(tree, normalize(key) ++ [:children_keys])
     end)
     children_keys ++ _keys(tree, children_keys)
   end
