@@ -6,14 +6,24 @@ defmodule Glayu.Tasks.Publish do
   @behaviour Glayu.Tasks.Task
 
   def run(params) do
-    params[:filename]
+    file_path = normalize_file_path(params[:filename])
+
+    file_path
     |> parse_draft
     |> create_destination_dir
-    |> mv_draft(params[:filename])
+    |> mv_draft(file_path)
+  end
+
+  defp normalize_file_path(filename) do
+    if length(Path.split(filename)) == 1 do
+      Glayu.Path.source_from_file_name(filename, :draft)
+    else
+      filename
+    end
   end
 
   defp parse_draft(filename) do
-    Glayu.Document.parse(Glayu.Path.source_from_file_name(filename, :draft))
+    Glayu.Document.parse(filename)
   end
 
   defp create_destination_dir(doc_context) do
@@ -24,8 +34,7 @@ defmodule Glayu.Tasks.Publish do
     doc_context
   end
 
-  defp mv_draft(doc_context, filename) do
-    source = Glayu.Path.source_from_file_name(filename, :draft)
+  defp mv_draft(doc_context, source) do
     destination = Glayu.Path.source_from_permalink(Glayu.Permalink.from_context(doc_context), :post)
     if !File.exists?(destination) || override?(destination, nil) do
       :ok = File.rename(source, destination)
