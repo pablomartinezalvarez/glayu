@@ -6,7 +6,6 @@ defmodule Glayu.Document do
   alias Glayu.Permalink
   alias Glayu.Template
   alias Glayu.URL
-  alias Glayu.Build.CategoriesTree
 
   def parse(md_file) do
 
@@ -40,7 +39,7 @@ defmodule Glayu.Document do
   end
 
   defp build_context(page_context) do
-    [page: page_context]
+    [page: page_context, site: Glayu.Site.context()]
   end
 
   defp inform_categories(names) do
