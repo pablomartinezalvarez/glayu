@@ -13,15 +13,18 @@ defmodule Glayu.Document do
 
     doc_type = doc_type(md_file)
 
+    html_content = Earmark.as_html!(raw)
+
     context = FrontMatter.parse(frontmatter) # Parse front-matter
       |> Map.put(:type, doc_type)
       |> Map.put(:source, md_file)
       |> Map.put(:raw, raw)
-      |> Map.put(:content, Earmark.as_html!(raw)) # Compile Markdown to HTML
+      |> Map.put(:content, html_content) # Compile Markdown to HTML
       |> Map.put_new(:layout, doc_type)
 
     if doc_type == :post || doc_type == :draft do
       context = Map.put(context, :categories, inform_categories(context[:categories])) # informed categories
+      context = Map.put(context, :summary, inform_summary(context[:summary], raw))
       Map.put(context, :path, URL.path(doc_type, Permalink.from_context(context))) # document relative path
     else
       Map.put(context, :path, URL.path(doc_type, Permalink.from_context(context))) # document relative path
@@ -40,6 +43,17 @@ defmodule Glayu.Document do
 
   defp build_context(page_context) do
     [page: page_context, site: Glayu.Site.context()]
+  end
+
+  defp inform_summary(:null, raw) do
+    raw
+    |> String.split("\n")
+    |> List.first
+    |> Earmark.as_html!
+  end
+
+  defp inform_summary(summary, _) do
+    Earmark.as_html!(summary)
   end
 
   defp inform_categories(names) do
