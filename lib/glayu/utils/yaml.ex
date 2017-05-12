@@ -28,6 +28,9 @@ defmodule Glayu.Utils.Yaml do
     key = String.to_atom(to_string(elem(field, 0)))
     value = elem(field, 1)
     cond do
+      value == :null ->
+        # skip it
+        _to_map(map, yaml_doc)
       is_charlist(value) ->
         _to_map(Map.put(map, key, to_string value), yaml_doc)
       is_list_of_charlists(value) ->
@@ -35,7 +38,6 @@ defmodule Glayu.Utils.Yaml do
       true ->
         _to_map(Map.put(map, key, value), yaml_doc)
     end
-
   end
 
   defp is_charlist(value) do

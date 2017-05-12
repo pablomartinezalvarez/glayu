@@ -45,7 +45,7 @@ defmodule Glayu.Document do
     [page: page_context, site: Glayu.Site.context()]
   end
 
-  defp inform_summary(:null, raw) do
+  defp inform_summary(nil, raw) do
     raw
     |> String.split("\n")
     |> List.first
