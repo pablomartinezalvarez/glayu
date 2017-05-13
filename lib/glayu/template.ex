@@ -1,16 +1,16 @@
 defmodule Glayu.Template do
 
+  alias Glayu.Build.TemplatesStore
+
   def compile() do
     [layouts: compile_tpls(Glayu.Path.layouts_dir()), partials: compile_tpls(Glayu.Path.partials_dir())]
   end
 
-  def render(layout, context, tpls) do
-    base_layout = tpls[:layouts][:layout]
-    inner_layout = tpls[:layouts][layout]
-    # add compiled partial templates to the context is required by the 'partial' directive
-    assigns = Enum.concat(context, [partials: tpls[:partials]])
-    {inner_html, _} = Code.eval_quoted inner_layout, [assigns: assigns]
-    {html, _} = Code.eval_quoted base_layout, [assigns: Enum.concat(assigns, [inner: inner_html])]
+  def render(layout, context) do
+    base_layout = TemplatesStore.get_layout(:layout)
+    inner_layout = TemplatesStore.get_layout(layout)
+    {inner_html, _} = Code.eval_quoted inner_layout, [assigns: context]
+    {html, _} = Code.eval_quoted base_layout, [assigns: Enum.concat(context, [inner: inner_html])]
     html
   end
 

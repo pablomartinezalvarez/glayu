@@ -33,8 +33,8 @@ defmodule Glayu.Document do
 
   end
 
-  def render(doc_context, tpls) do
-    Template.render(doc_context[:type], build_context(doc_context), tpls)
+  def render(doc_context) do
+    Template.render(doc_context[:type], build_context(doc_context))
   end
 
   def write(html, doc_context) do

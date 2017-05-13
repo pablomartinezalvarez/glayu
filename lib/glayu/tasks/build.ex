@@ -4,22 +4,20 @@ defmodule Glayu.Tasks.Build do
 
   @max_posts_per_node 100
 
-  alias Glayu.Template
   alias Glayu.Build.SiteAnalyzer.ContainMdFiles
   alias Glayu.Build.TaskSpawner
-  alias Glayu.Build.Store
+  alias Glayu.Build.JobsStore
   alias Glayu.Build.Jobs.RenderPages
-  alias Glayu.Build.Jobs.BuildCategoriesTree
+  alias Glayu.Build.Jobs.BuildSiteTree
   alias Glayu.Build.Jobs.RenderCategoryPages
 
   def run(params) do
-    tpls = Template.compile()
     nodes = scan_site(params[:regex])
-    render_pages(nodes, tpls)
-    render_category_pages(tpls)
-    render_home_page(tpls)
+    render_pages(nodes)
+    render_category_pages()
+    render_home_page()
     copy_assets()
-    {:ok, %{results: Store.get_values(RenderPages.__info__(:module))}}
+    {:ok, %{results: JobsStore.get_values(RenderPages.__info__(:module))}}
   end
 
   defp copy_assets() do
@@ -36,21 +34,21 @@ defmodule Glayu.Tasks.Build do
         comp == :gt || comp == :eq
       end
 
-      TaskSpawner.spawn(nodes, BuildCategoriesTree, [sort_fn: sort_fn, num_posts: @max_posts_per_node])
+      TaskSpawner.spawn(nodes, BuildSiteTree, [sort_fn: sort_fn, num_posts: @max_posts_per_node])
       nodes
     end)
   end
 
-  defp render_pages(nodes, tpls) do
-    TaskSpawner.spawn(nodes, RenderPages, [tpls: tpls])
+  defp render_pages(nodes) do
+    TaskSpawner.spawn(nodes, RenderPages, [])
   end
 
-  defp render_category_pages(tpls) do
-    TaskSpawner.spawn(Glayu.Build.CategoriesTree.keys(), RenderCategoryPages, [tpls: tpls])
+  defp render_category_pages do
+    TaskSpawner.spawn(Glayu.Build.SiteTree.keys(), RenderCategoryPages, [])
   end
 
-  defp render_home_page(tpls) do
-    html = Glayu.HomePage.render(tpls)
+  defp render_home_page do
+    html = Glayu.HomePage.render()
     Glayu.HomePage.write(html)
   end
 

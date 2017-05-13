@@ -4,8 +4,8 @@ defmodule Glayu.Build.Jobs.RenderCategoryPages do
 
   alias Glayu.CategoryPage
 
-  def run(node, args) do
-    html = CategoryPage.render(node, args[:tpls])
+  def run(node, _) do
+    html = CategoryPage.render(node)
     CategoryPage.write(html, node)
   end
   

@@ -3,19 +3,19 @@ defmodule Glayu.Build.Jobs.RenderPages do
   @behaviour Glayu.Build.Jobs.Job
   @md_ext ".md"
 
-  alias Glayu.Build.Store
+  alias Glayu.Build.JobsStore
   alias Glayu.Build.ProgressMonitor
   alias Glayu.Document
 
-  def run(node, args) do
+  def run(node, _) do
     node
     |> parse_pages
-    |> render_pages(args[:tpls])
+    |> render_pages
   end
 
   defp parse_pages(node) do
     files = parse_pages(node, File.ls!(node), [])
-    Store.update_record({__MODULE__, node}, %{total_files: length(files)})
+    JobsStore.update_record({__MODULE__, node}, %{total_files: length(files)})
     ProgressMonitor.add_files(length(files))
     files
   end
@@ -34,9 +34,9 @@ defmodule Glayu.Build.Jobs.RenderPages do
     docs
   end
 
-  defp render_pages(docs, tpls) do
+  defp render_pages(docs) do
     Enum.each(docs, fn(doc_context) ->
-      Document.write(Document.render(doc_context, tpls), doc_context)
+      Document.write(Document.render(doc_context), doc_context)
       ProgressMonitor.inc_processed()
     end)
   end

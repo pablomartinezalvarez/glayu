@@ -8,8 +8,9 @@ defmodule GlayuApp do
     children = [
       worker(Glayu.Config, []),
       worker(Task.Supervisor, [[name: :build_task_supervisor]]),
-      worker(Glayu.Build.Store, []),
-      worker(Glayu.Build.CategoriesTree, []),
+      worker(Glayu.Build.JobsStore, []),
+      worker(Glayu.Build.SiteTree, []),
+      worker(Glayu.Build.TemplatesStore, []),
       worker(Glayu.Build.ProgressMonitor, [])
     ]
 

@@ -1,6 +1,6 @@
 defmodule Glayu.Build.TaskSpawner do
 
-  alias Glayu.Build.Store
+  alias Glayu.Build.JobsStore
 
   @node_build_timeout 300_000
 
@@ -13,7 +13,7 @@ defmodule Glayu.Build.TaskSpawner do
   defp spawn_task(node, job, args) do
     task = Task.Supervisor.async_nolink(:build_task_supervisor, fn ->
       #try do
-        Store.put_record(%Glayu.Build.Record{job: job.__info__(:module), node: node, status: :running, pid: self()})
+        JobsStore.put_record(%Glayu.Build.Record{job: job.__info__(:module), node: node, status: :running, pid: self()})
         job.run(node, args)
       #rescue error ->
       #  exit {:shutdown, error}
@@ -35,15 +35,15 @@ defmodule Glayu.Build.TaskSpawner do
   end
 
   defp store_result({:ok, state}, key) do
-    Store.update_record(key, %{status: :ok, details: state})
+    JobsStore.update_record(key, %{status: :ok, details: state})
   end
 
   defp store_result({:exit, reason}, key) do
-    Store.update_record(key, %{status: :error, details: reason})
+    JobsStore.update_record(key, %{status: :error, details: reason})
   end
 
   defp store_result(nil, key) do
-    Store.update_record(key, %{status: :error, details: "Timeout"})
+    JobsStore.update_record(key, %{status: :error, details: "Timeout"})
   end
 
 end
