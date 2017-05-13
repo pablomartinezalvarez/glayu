@@ -16,7 +16,7 @@ defmodule Glayu.Template do
 
   defp compile_tpls(base_path) do
     Enum.map(File.ls!(base_path), fn(file) ->
-      compiled = EEx.compile_file(Path.join(base_path, file), [])
+      compiled = EEx.compile_file(Path.join(base_path, file), [engine: Glayu.EEx.GlayuEngine])
       [name|_] = String.split(file, ".")
       {String.to_atom(name), compiled}
     end)

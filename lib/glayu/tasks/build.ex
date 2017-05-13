@@ -5,7 +5,6 @@ defmodule Glayu.Tasks.Build do
   @max_posts_per_node 100
 
   alias Glayu.Template
-  alias Glayu.Date
   alias Glayu.Build.SiteAnalyzer.ContainMdFiles
   alias Glayu.Build.TaskSpawner
   alias Glayu.Build.Store
@@ -33,9 +32,7 @@ defmodule Glayu.Tasks.Build do
       nodes = ContainMdFiles.nodes(root, compile_regex(regex))
 
       sort_fn = fn doc_context1, doc_context2 ->
-        datetime1 = Date.parse(doc_context1[:date])
-        datetime2 = Date.parse(doc_context2[:date])
-        comp = DateTime.compare(datetime1, datetime2)
+        comp = DateTime.compare(doc_context1[:date], doc_context2[:date])
         comp == :gt || comp == :eq
       end
 

@@ -14,7 +14,7 @@ defmodule Glayu.Config do
 
   def load_config(dir) do
     Agent.update(__MODULE__, fn _ ->
-      _load_config(Path.join(dir, "./_config.yml"))
+      _load_config(Path.join(dir, "_config.yml"))
     end)
   end
 

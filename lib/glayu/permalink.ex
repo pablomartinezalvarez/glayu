@@ -115,8 +115,7 @@ defmodule Glayu.Permalink do
     case date do
       nil -> []
       date ->
-        datetime = Glayu.Date.parse(date)
-        [Glayu.Date.year(datetime)]
+        [Glayu.Date.year(date)]
     end
   end
 
@@ -125,8 +124,7 @@ defmodule Glayu.Permalink do
     case date do
       nil -> []
       date ->
-        datetime = Glayu.Date.parse(date)
-        [Glayu.Date.month(datetime)]
+        [Glayu.Date.month(date)]
     end
   end
 
@@ -135,8 +133,7 @@ defmodule Glayu.Permalink do
     case date do
       nil -> []
       date ->
-        datetime = Glayu.Date.parse(date)
-        [Glayu.Date.day(datetime)]
+        [Glayu.Date.day(date)]
     end
   end
 

@@ -24,7 +24,8 @@ defmodule Glayu.Document do
 
     if doc_type == :post || doc_type == :draft do
       context = Map.put(context, :categories, inform_categories(context[:categories])) # informed categories
-      context = Map.put(context, :summary, inform_summary(context[:summary], raw))
+        |> Map.put(:summary, inform_summary(context[:summary], raw))
+        |> Map.put(:date, Glayu.Date.parse(context[:date])) # date string to DateTime conversion
       Map.put(context, :path, URL.path(doc_type, Permalink.from_context(context))) # document relative path
     else
       Map.put(context, :path, URL.path(doc_type, Permalink.from_context(context))) # document relative path
