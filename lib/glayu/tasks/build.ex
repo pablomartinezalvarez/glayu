@@ -7,12 +7,14 @@ defmodule Glayu.Tasks.Build do
   alias Glayu.Build.SiteAnalyzer.ContainMdFiles
   alias Glayu.Build.TaskSpawner
   alias Glayu.Build.JobsStore
+  alias Glayu.Build.TemplatesStore
   alias Glayu.Build.Jobs.RenderPages
   alias Glayu.Build.Jobs.BuildSiteTree
   alias Glayu.Build.Jobs.RenderCategoryPages
 
   def run(params) do
     nodes = scan_site(params[:regex])
+    TemplatesStore.compile_templates()
     render_pages(nodes)
     render_category_pages()
     render_home_page()

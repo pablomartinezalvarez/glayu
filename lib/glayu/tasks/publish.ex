@@ -38,7 +38,7 @@ defmodule Glayu.Tasks.Publish do
     destination = Glayu.Path.source_from_permalink(Glayu.Permalink.from_context(doc_context), :post)
     if !File.exists?(destination) || override?(destination, nil) do
       :ok = File.rename(source, destination)
-      {:ok, %{status: :ok, path: destination}}
+      {:ok, %{status: :published, path: destination}}
     else
       {:ok, %{status: :canceled, path: destination}}
     end

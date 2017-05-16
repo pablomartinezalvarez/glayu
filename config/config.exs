@@ -34,5 +34,5 @@ config :elixir, ansi_enabled: true
 
 # Logger config
 config :logger, :console,
-	level: :info,
-	format: "$level: $message\n"
+  level: :info,
+  format: "$level: $message\n"

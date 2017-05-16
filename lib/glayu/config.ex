@@ -26,7 +26,7 @@ defmodule Glayu.Config do
 
   defp _load_config(path) do
     if File.exists? path do
-      List.flatten(:yamerl_constr.file path)
+      List.flatten(:yamerl_constr.file(path)) ++ [{'base_dir', to_charlist(Path.dirname(path))}]
     else
       []
     end

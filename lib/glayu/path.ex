@@ -61,7 +61,7 @@ defmodule Glayu.Path do
   end
 
   def source_root() do
-    Path.absname(Path.join(".", to_string(Config.get('source_dir'))))
+    Path.absname(Path.join(Config.get('base_dir'), Config.get('source_dir')))
   end
 
   def home_page() do
@@ -69,35 +69,35 @@ defmodule Glayu.Path do
   end
 
   def public_root() do
-    Path.absname(Path.join(".", to_string(Config.get('public_dir'))))
+    Path.absname(Path.join(Config.get('base_dir'), Config.get('public_dir')))
   end
 
   def source_root(:post) do
-    Path.absname(Path.join([".", to_string(Config.get('source_dir')), @posts_dir]))
+    Path.absname(Path.join([Config.get('base_dir'), Config.get('source_dir'), @posts_dir]))
   end
 
   def source_root(:draft) do
-    Path.absname(Path.join([".", to_string(Config.get('source_dir')), @drafts_dir]))
+    Path.absname(Path.join([Config.get('base_dir'), Config.get('source_dir'), @drafts_dir]))
   end
 
   def layout(template) do
-    Path.absname(Path.join([".", @themes_dir, to_string(Config.get('theme')), @layouts_dir, template <> @eex_ext]))
+    Path.absname(Path.join([Config.get('base_dir'), @themes_dir, Config.get('theme'), @layouts_dir, template <> @eex_ext]))
   end
 
   def partials_dir() do
-    Path.absname(Path.join([".", @themes_dir, to_string(Config.get('theme')), @partials_dir]))
+    Path.absname(Path.join([Config.get('base_dir'), @themes_dir, Config.get('theme'), @partials_dir]))
   end
 
   def layouts_dir() do
-    Path.absname(Path.join([".", @themes_dir, to_string(Config.get('theme')), @layouts_dir]))
+    Path.absname(Path.join([Config.get('base_dir'), @themes_dir, Config.get('theme'), @layouts_dir]))
   end
 
   def assets_source() do
-    Path.absname(Path.join([".", @themes_dir, to_string(Config.get('theme')), @assets_dir]))
+    Path.absname(Path.join([Config.get('base_dir'), @themes_dir, Config.get('theme'), @assets_dir]))
   end
 
   def public_assets() do
-    Path.absname(Path.join([".", to_string(Config.get('public_dir')), @assets_dir]))
+    Path.absname(Path.join([Config.get('base_dir'), Config.get('public_dir'), @assets_dir]))
   end
 
 end

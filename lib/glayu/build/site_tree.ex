@@ -48,14 +48,7 @@ defmodule Glayu.Build.SiteTree do
 
   def put_tags(tags) do
     Agent.update(__MODULE__, fn tree ->
-      {_, updated_tree} = get_and_update_in(tree, [:tags], fn (tags_set) ->
-        if tags_set do
-          {tags_set, MapSet.union(tags_set, MapSet.new(tags))}
-        else
-          {nil, MapSet.new(tags)}
-        end
-      end)
-      updated_tree
+      _put_tags(tree, tags)
     end)
   end
 
@@ -92,6 +85,17 @@ defmodule Glayu.Build.SiteTree do
       get_in(tree, normalize(key) ++ [:children_keys])
     end)
     children_keys ++ _keys(tree, children_keys)
+  end
+
+  defp _put_tags(tree, tags) do
+    {_, updated_tree} = get_and_update_in(tree, [:tags], fn (tags_set) ->
+      if tags_set do
+        {tags_set, MapSet.union(tags_set, MapSet.new(tags))}
+      else
+        {nil, MapSet.new(tags)}
+      end
+    end)
+    updated_tree
   end
 
   defp update_node(tree, keys, node, sort_fn, num_posts) do
