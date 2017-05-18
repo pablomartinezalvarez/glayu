@@ -13,7 +13,7 @@ defmodule Glayu.Tasks.Init do
     |> create_root_dir
     |> create_config
     |> create_dirs
-    {:ok, %{path: Path.absname(params[:folder])}}
+    {:ok, %{path: params[:folder]}}
   end
 
   defp create_root_dir(dir) do
@@ -22,7 +22,7 @@ defmodule Glayu.Tasks.Init do
         IO.ANSI.format(["Directory ", :bright, "#{Path.absname(dir)}", :normal, " is not empty, its content will be preserved"], true)
       end
     else
-      File.mkdir! dir
+      File.mkdir_p! dir
     end
     dir
   end

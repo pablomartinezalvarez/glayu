@@ -31,7 +31,7 @@ defmodule Glayu.CLI.Publish do
     build_result(result)
   end
 
-  defp build_result({:ok, %{status: :ok, path: path}}) do 
+  defp build_result({:ok, %{status: :published, path: path}}) do
     {:ok, IO.ANSI.format(["🐦  Draft published to ", :light_cyan, "#{path}"])}
   end
 

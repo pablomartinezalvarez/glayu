@@ -7,7 +7,7 @@ defmodule Glayu.HomePage do
   alias Glayu.Config
 
   def render() do
-    page = %{title: to_string(Config.get('title')), layout: :home, path: URL.home()}
+    page = %{title: to_string(Config.get('title')), layout: :home, type: :home, path: URL.home()}
     Glayu.Template.render(:home, [page: page, site: Glayu.Site.context()])
   end
 

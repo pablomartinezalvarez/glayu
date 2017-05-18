@@ -7,7 +7,7 @@ defmodule Glayu.CategoryPage do
 
   def render(keys) do
     category = SiteTree.get_node(keys)
-    page = %{title: category[:name], layout: :category, path: category.path,
+    page = %{title: category[:name], layout: :category, type: :category, path: category.path,
       category: Map.put(category, :parent, SiteTree.get_parent(keys))}
     Glayu.Template.render(:category, [page: page, site: Glayu.Site.context()])
   end

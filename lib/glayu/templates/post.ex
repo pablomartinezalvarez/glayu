@@ -8,7 +8,7 @@ defmodule Glayu.Templates.Post do
     author:
     featured_image:
     score: 10
-    summary: A new Glayu post
+    summary:
     categories:
     - Software
     - Static Sites

@@ -178,7 +178,7 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
     media_children = Glayu.Build.SiteTree.get_children(["business", "media"])
     assert length(media_children) == 0
 
-    # Latest post
+    # Latest posts
 
     # on root node
     root_posts = Glayu.Build.SiteTree.get(["root", :posts])
@@ -194,12 +194,12 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
     assert Enum.at(business_posts,1).title == "Post 21"
     assert Enum.at(business_posts,2).title == "Post 20"
 
-    # on business node
-    business_posts = Glayu.Build.SiteTree.get(["business", "media", :posts])
-    assert length(business_posts) == 3
-    assert Enum.at(business_posts,0).title == "Post 25"
-    assert Enum.at(business_posts,1).title == "Post 21"
-    assert Enum.at(business_posts,2).title == "Post 20"
+    # on media node
+    media_posts = Glayu.Build.SiteTree.get(["business", "media", :posts])
+    assert length(media_posts) == 3
+    assert Enum.at(media_posts,0).title == "Post 25"
+    assert Enum.at(media_posts,1).title == "Post 21"
+    assert Enum.at(media_posts,2).title == "Post 20"
 
   after
     File.rm_rf!("./test/fixtures/build_site_tree/source/_posts")

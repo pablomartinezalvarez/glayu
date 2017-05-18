@@ -4,17 +4,17 @@ defmodule Glayu.Templates.Config do
     # Glayu Configuration
 
     # Site
-    title: A brand new static site
+    title: A brand new static site              # Site Title
 
     # URL
-    permalink: categories/year/month/day/title
+    permalink: categories/year/month/day/title  # Permalink format
 
     # Directories
-    source_dir: source
-    public_dir: public
+    source_dir: source                          # Source folder
+    public_dir: public                          # Destination folder
 
     # Theme
-    theme: bootstrap
+    theme: glayu-times                          # Selected Theme under themes dir
     """
   end
 end
