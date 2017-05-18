@@ -24,11 +24,23 @@ Before building Glayu you need [Elixir](http://elixir-lang.org/) installed on yo
 
 Once you have installed Elixir:
 
-1. Clone the Glayu repo: `$ git clone https://github.com/pmartinezalvarez/glayu.git`
+Clone the Glayu repo: 
 
-2. Get the project dependencies: `$ mix deps.get`
+```console
+$ git clone https://github.com/pmartinezalvarez/glayu.git`
+```
 
-3. Generate the glayu Escript executable: `$ mix escript.build` 
+Get the project dependencies: 
+
+```console
+$ mix deps.get
+```
+
+Generate the glayu Escript executable: 
+
+```console
+$ mix escript.build
+```
 
 Under the glayu root directory you will find the `glayu` binary file.
 	
@@ -36,7 +48,9 @@ Under the glayu root directory you will find the `glayu` binary file.
 
 After installing Glayu, run the `init` command to generate a Glayu site in the target `<folder>`.
 
-`$ glayu init <folder>`
+```console
+$ glayu init <folder>
+```
 
 You project folder will look like:
 
@@ -54,7 +68,7 @@ You project folder will look like:
 
 Site configuration file.
 
-```
+```yml
 # Glayu Configuration
 
 # Site
@@ -85,7 +99,9 @@ The default theme is [The Glayu Times]()
 
 You can create a new post or page using the `new` command:
 
-`glayu new [layout] <title>`
+```console
+glayu new [layout] <title>
+```
 
 `new` command supported layouts are __post__ and __page__
 
@@ -93,7 +109,9 @@ You can create a new post or page using the `new` command:
 
 To create your first post run:
 
-`$ glayu new post "My First Glayu Post"`
+```console
+$ glayu new post "My First Glayu Post"
+```
 
 It will generate the Markdown file `source/_drafts/my-first-glayu-post.md`. Glayu slugifies the post title and uses it as filename.
 
@@ -103,7 +121,7 @@ All new posts are _drafts_, and will be saved into the `source/_drafts` director
 
 The new Markdown file will look like:
 
-```
+```yml
 ---
 title: My First Glayu Post
 date: 2017-05-18 06:45:22
@@ -142,11 +160,15 @@ All new variables added to the Front-matter will be processed and includes on th
 
 Once your post is ready, you can move it to the `source/_posts` folder using the `publish` command:
 
-`$ glayu publish my-first-glayu-post.md`
+```console
+$ glayu publish my-first-glayu-post.md
+```
 
 The Markdown file will be moved from `source/_drafts/my-first-glayu-post.md` to `source/_posts/software/static-sites/2017/05/18/my-first-glayu-post.md`. The destination path will be calculated using the `permalink` value defined in `_config.yml`: 
 
-`categories/year/month/day/title`.
+```yml
+permalink: categories/year/month/day/title
+```
 
 The Markdown will be rendered on next site build.
 
@@ -167,13 +189,17 @@ __`*`__ Required variables.
 
 You can generate your site using the `build` command:
 
-`$ glayu build`
+```console
+$ glayu build
+```
 
 Will generate the full site.
 
 If you want to render only part of your posts you can pass a regular expression to the `build` command. Supported regular expressions are based on PCRE (Perl Compatible Regular Expressions):
 
-`$ glayu build /software/.*2017/`
+```console
+$ glayu build /software/.*2017/
+```
 
 will render the posts under `software` published on 2017.
 
@@ -181,7 +207,9 @@ will render the posts under `software` published on 2017.
 
 ### init
 
-`galyu init [folder]`
+```console
+galyu init [folder]
+```
 
 Initializes the website.
 
@@ -196,18 +224,22 @@ Argument | Description
 
 ##### Examples
 
-```
+```console
 $ mkdir my-glayu-site
 $ cd my-glayu-site
 $ glayu init
 ```
 or
 
-`$ glayu init ./my-glayu-site`
+```console
+$ glayu init ./my-glayu-site
+```
 
 ### new
 
-`glayu new [layout] <title>`
+```console
+glayu new [layout] <title>
+```
 
 Creates a new post or page. 
 
@@ -223,11 +255,15 @@ Argument | Description
 
 ##### Examples
 
-`$ glayu new "My First Glayu Post"`
+```console
+$ glayu new "My First Glayu Post"
+```
 
 ### publish
 
-`glayu publish <filename>`
+```console
+glayu publish <filename>
+```
 
 Publishes a draft.
 
@@ -240,15 +276,21 @@ Argument | Description
 
 ##### Examples
 
-`$ glayu publish my-first-glayu-post.md`
+```console
+$ glayu publish my-first-glayu-post.md
+```
 
 or
 
-`$ glayu publish {site_dir}/source/_drafts/my-first-glayu-post.md`
+```console
+glayu publish {site_dir}/source/_drafts/my-first-glayu-post.md
+```
 
 ### build
 
-`glayu build [regex]`
+```console
+glayu build [regex]
+```
 
 Generates static files.
 
@@ -260,9 +302,16 @@ Argument | Description
 
 ##### Examples
 
-`$ glayu build` generates the full site
+```console
+$ glayu build 
+```
+generates the full site
 
-`$ glayu build /business/.*2017/` generates all 2017 business pages
+```console
+$ glayu build /business/.*2017/
+```
+
+generates all 2017 business pages
 
 ## Customization
 
@@ -351,23 +400,27 @@ Partials are a tool to share components between templates. Typical use cases are
 
 All `.eex` files placed under the `_partials` folder will be compiled and can be required inside any template using the directive:
 
-`<%= partial "<partialname>" %>`
+```html
+<%= partial "<partialname>" %>
+```
 
 Before using the `partial` directive you have to declare that you want tu use the `Glayu.EEx` module:
 
-`<% use Glayu.EEx %>`
+```html
+<% use Glayu.EEx %>
+```
 
 ##### Example
 
 `_partials/header.eex`
 
-```
+```html
 <h1 id="header"><%= @page.title%></h1>
 ```
 
 `_layouts/home.eex`
 
-```
+```html
 <% use Glayu.EEx %>
 <%= partial "header" %>
 <div>
@@ -377,7 +430,7 @@ Before using the `partial` directive you have to declare that you want tu use th
 
 Will be handled as:
 
-```
+```html
 <h1 id="header"><%= @page.title%></h1>
 <div>
 <!-- page content ->
@@ -445,7 +498,9 @@ The `Glayu.EEx` module includes a set of helpers that can be invoked in your tem
 
 #### Categories
 
-`categories()` 
+```
+categories()
+```
 
 Returns the list of first level categories of the site. Each category is a `Map` containing following fields:
 
@@ -457,7 +512,11 @@ Field | Description | Type
 
 #### Subcategories
 
-`subcategories(<category_keys>)` return the list of subcategories of a given category.
+```elixir
+subcategories(<category_keys>)
+```
+
+return the list of subcategories of a given category.
 
 ##### Arguments
 
@@ -469,7 +528,7 @@ Field | Description
 
 Rendering the sub-categories menu on a category page.
 
-```
+```html
 <nav id="mini-navigation">
   <ul class="nav navbar-nav">
   <%= for subcategory <- subcategories(@page.category.keys) do %>
@@ -481,7 +540,9 @@ Rendering the sub-categories menu on a category page.
 
 #### Latest Posts
 
-`posts([limit: <num_posts>, sort_fn: <sort_fn>])` 
+```elixir
+posts([limit: <num_posts>, sort_fn: <sort_fn>])
+```
 
 List the latest site posts.
 
@@ -496,7 +557,7 @@ Argument | Description
 
 Displaying most relevant post of the site.
 
-```
+```html
 <%= for post <- posts([limit: 10, sort_fn: &(&1.score > &2.score)]) do %>
 <div class="article">
   <%= if post[:featured_image] do %>
@@ -509,11 +570,17 @@ Displaying most relevant post of the site.
 ```
 #### Latest Category Posts
 
-`posts(<category_keys>, [limit: <num_posts>, sort_fn: <sort_fn>])` works similar but limiting the returned post to a specific category.
+```elixir
+posts(<category_keys>, [limit: <num_posts>, sort_fn: <sort_fn>])
+```
+
+works similar but limiting the returned post to a specific category.
 
 #### Date Formatter
 
-`Date.format(<date>, <strftime_format>)`
+```elixir
+Date.format(<date>, <strftime_format>)
+```
 
 Formats an article date.
 
@@ -526,13 +593,17 @@ Argument | Description
 
 ##### Examples
 
-`<%= Date.format(post.date, "%Y-%m-%d %H:%M") %>`
+```html
+<%= Date.format(post.date, "%Y-%m-%d %H:%M") %>
+```
 
 Will render a date formated like: `2017-05-18 06:45:22`
 
 #### Current Date
 
-`Date.now(<strftime_format>)`
+```elixir
+Date.now(<strftime_format>)
+```
 
 Formats current date and time.
   
