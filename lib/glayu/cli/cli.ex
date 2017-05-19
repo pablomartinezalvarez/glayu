@@ -1,5 +1,13 @@
 defmodule Glayu.CLI do
 
+  alias Glayu.CLI.Utils
+
+  @commands ["init", "new", "publish", "build", "help"]
+
+  def commands do
+    @commands
+  end
+
   def main(args) do
     args
     |> parse_args
@@ -7,20 +15,28 @@ defmodule Glayu.CLI do
     |> print_result
   end
 
+  defp parse_args([]) do
+    :unknown
+  end
+
   defp parse_args([command | opts]) do
-    module = get_module(command)
-    options = apply module, :options, []
-    aliases = apply module, :aliases, []
-    parse = OptionParser.parse(opts, strict: options, aliases: aliases)
-    case parse do
-      {opts, args, []} -> {:ok, command, [opts: opts, args: args]}
-      {opts, args, error} -> {:error, command, [opts: opts, args: args, error: error]}
+    if Enum.member?(@commands, command) do
+      module = Utils.get_command_module(command)
+      options = apply(module, :options, [])
+      aliases = apply(module, :aliases, [])
+      parse = OptionParser.parse(opts, strict: options, aliases: aliases)
+      case parse do
+        {opts, args, []} -> {:ok, command, [opts: opts, args: args]}
+        {opts, args, error} -> {:error, command, [opts: opts, args: args, error: error]}
+      end
+    else
+      :unknown
     end
   end
 
   defp run({:ok, command, params}) do
     try do
-      apply get_module(command), :run, [params]
+      apply(Utils.get_command_module(command), :run, [params])
     rescue error ->
       {:error, Exception.message(error)}
     catch error ->
@@ -28,12 +44,12 @@ defmodule Glayu.CLI do
     end
   end
 
-  defp run({:error, _, _}) do
-    {:error, "Unknown command"}
+  defp run(:unknown) do
+    Glayu.CLI.Help.run([])
   end
 
-  defp get_module(command) do
-    String.to_existing_atom("Elixir.Glayu.CLI." <> String.capitalize(command))
+  defp run({:error, _, _}) do
+    Glayu.CLI.Help.run([])
   end
 
   defp print_result({:ok, info}) do

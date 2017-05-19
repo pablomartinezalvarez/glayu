@@ -13,26 +13,39 @@ defmodule Glayu.CLI.Publish do
   end
 
   def help do
-    """
-    glayu publish <filename>
-
-    Publishes a draft.
-
-    The markdown file will be moved from the `source/_drafts` directory to a directory under `source/_posts` following the permalik definition provided in `_config.yml`.
-
-    ARGUMENTS
-
-    <filename>
-
-    Markdown source file. The file name or the file path can be provided.
-
-    """
+    IO.ANSI.format(["\n",
+      "glayu ", :reset, :light_cyan, "publish ", :reset, "<", :bright, "filename", :reset, ">\n",
+      "\n",
+      "Publishes a draft.\n",
+      "\n",
+      "The markdown file will be moved from the ", :bright,"source/_drafts", :reset," directory to a directory under ", :bright,"source/_posts", :reset," following the permalik definition provided in ", :bright, "_config.yml\n", :reset,
+      "\n",
+      :bright, "ARGUMENTS\n", :reset,
+      "\n",
+      "<", :bright, "filename", :reset, ">\n",
+      "Markdown source file. The file name or the file path can be provided.\n",
+      "\n"
+    ])
   end
 
   def run(params) do
-    [filename] = params[:args]
-  	result = Publish.run [filename: filename]
-    build_result(result)
+    {status, args} = parse_args(params[:args])
+
+    if status == :ok do
+      args
+      |> Publish.run
+      |> build_result
+    else
+      {:ok, help()}
+    end
+  end
+
+  defp parse_args([filename]) do
+    {:ok, [filename: filename]}
+  end
+
+  defp parse_args(_) do
+    {:error, "Invalid number of arguments"}
   end
 
   defp build_result({:ok, %{status: :published, path: path}}) do

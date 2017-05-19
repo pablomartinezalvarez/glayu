@@ -198,7 +198,7 @@ Will generate the full site.
 If you want to render only part of your posts you can pass a regular expression to the `build` command. Supported regular expressions are based on PCRE (Perl Compatible Regular Expressions):
 
 ```console
-$ glayu build /software/.*2017/
+$ glayu build _posts/software/.*2017/
 ```
 
 will render the posts under `software` published on 2017.
@@ -292,7 +292,7 @@ glayu publish {site_dir}/source/_drafts/my-first-glayu-post.md
 glayu build [-chp] [regex]
 ```
 
-Generates static files.
+Generates the static files.
 
 ##### Arguments
 
@@ -306,9 +306,9 @@ If one of the `-chp` options is provided the building process will consider only
 
 Option | Description
 ------------ | -------------
-`[-c, --categories]` | Add category pages to the building pipeline.
-`[-h, --home]` | Add home page to the building pipeline.
-`[-p, --pages]` | Add post and pages to the building pipeline.
+`[-c, --categories]` | Adds category pages to the building pipeline.
+`[-h, --home]` | Adds home page to the building pipeline.
+`[-p, --pages]` | Adds post and pages to the building pipeline.
 
 
 ##### Examples
