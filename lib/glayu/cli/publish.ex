@@ -18,10 +18,14 @@ defmodule Glayu.CLI.Publish do
 
     Publishes a draft.
 
-    Args:
+    The markdown file will be moved from the `source/_drafts` directory to a directory under `source/_posts` following the permalik definition provided in `_config.yml`.
+
+    ARGUMENTS
 
     <filename>
-    The draft filename
+
+    Markdown source file. The file name or the file path can be provided.
+
     """
   end
 

@@ -26,7 +26,7 @@ defmodule Glayu.Build.ProgressMonitor do
       blank_color: [IO.ANSI.light_black_background],
       bar: " ",
       blank: " ",
-      left: "Building site… |"
+      left: "Generating pages… |"
     ]
     ProgressBar.render(processed, total, format)
   end

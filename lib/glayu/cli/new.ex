@@ -18,13 +18,19 @@ defmodule Glayu.CLI.New do
 
     Creates a new post or page.
 
-    Args:
+    All new posts are considered drafts and will placed under the `source/_drafts` directory, this directory will be skipped during a site build. When a post is ready it can be published using the `publish` command.
+
+    All pages are placed under the `source` directory, and are rendered during a site build.
+
+    ARGUMENTS
 
     [layout]
-    "post" or "page". If no layout is provided, Glayu will use the "post" layout 
+
+    `post` or `page`. If no layout is provided, Glayu will use the post layout.
 
     <title>
-    Article title. If the title contains spaces, surround it with quotation marks
+
+    Article title. If the title contains spaces, surround it with quotation marks.
     """
   end
 

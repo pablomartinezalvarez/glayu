@@ -208,7 +208,7 @@ will render the posts under `software` published on 2017.
 ### init
 
 ```console
-galyu init [folder]
+glayu init [folder]
 ```
 
 Initializes the website.
@@ -251,7 +251,7 @@ All pages are placed under the `source` directory, and are rendered during a sit
 Argument | Description
 ------------ | -------------
 `[layout]` | __post__ or __page__. If no layout is provided, Glayu will use the post layout.
-`<title>` | article title. If the title contains spaces, surround it with quotation marks.
+`<title>` | Article title. If the title contains spaces, surround it with quotation marks.
 
 ##### Examples
 
@@ -272,7 +272,7 @@ The markdown file will be moved from the `source/_drafts` directory to a directo
 ##### Arguments
 Argument | Description
 ------------ | -------------
-`<filename>` | markdown source file. The file name or the file path can be provided.
+`<filename>` | Markdown source file. The file name or the file path can be provided.
 
 ##### Examples
 
@@ -289,7 +289,7 @@ glayu publish {site_dir}/source/_drafts/my-first-glayu-post.md
 ### build
 
 ```console
-glayu build [regex]
+glayu build [-chp] [regex]
 ```
 
 Generates static files.
@@ -300,6 +300,17 @@ Argument | Description
 ------------ | -------------
 `[regex]` | If provided, only the pages under the directories matching the regex will be generated. The regular expression is based on PCRE (Perl Compatible Regular Expressions)
 
+##### Options
+
+If one of the `-chp` options is provided the building process will consider only the resource types provided on the options.
+
+Option | Description
+------------ | -------------
+`[-c, --categories]` | Add category pages to the building pipeline.
+`[-h, --home]` | Add home page to the building pipeline.
+`[-p, --pages]` | Add post and pages to the building pipeline.
+
+
 ##### Examples
 
 ```console
@@ -308,7 +319,7 @@ $ glayu build
 generates the full site
 
 ```console
-$ glayu build /business/.*2017/
+$ glayu build _posts/business/.*2017/.*
 ```
 
 generates all 2017 business pages

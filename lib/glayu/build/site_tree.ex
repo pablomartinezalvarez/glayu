@@ -15,7 +15,11 @@ defmodule Glayu.Build.SiteTree do
   def get_children(keys) do
     Agent.get(__MODULE__, fn tree ->
       children_keys = get_in(tree, normalize(keys) ++ [:children_keys])
-      Enum.sort(Enum.map(children_keys, &_get_node(tree, normalize(&1))))
+      if  children_keys != nil do
+        Enum.sort(Enum.map(children_keys, &_get_node(tree, normalize(&1))))
+      else
+        []
+      end
     end)
   end
 

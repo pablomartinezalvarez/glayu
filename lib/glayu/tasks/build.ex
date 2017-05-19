@@ -3,32 +3,57 @@ defmodule Glayu.Tasks.Build do
   @behaviour Glayu.Tasks.Task
 
   @max_posts_per_node 100
+  @tasks [:scan, :pages, :categories, :home, :assets]
 
   alias Glayu.Build.SiteAnalyzer.ContainMdFiles
   alias Glayu.Build.TaskSpawner
-  alias Glayu.Build.JobsStore
   alias Glayu.Build.TemplatesStore
   alias Glayu.Build.Jobs.RenderPages
   alias Glayu.Build.Jobs.BuildSiteTree
   alias Glayu.Build.Jobs.RenderCategoryPages
+  alias Glayu.Utils.PathRegex
+  alias Glayu.Build.SiteTree
 
-  def run(params) do
-    nodes = scan_site(params[:regex])
+  # Handles $ glayu build
+  def run([regex: nil]) do
     TemplatesStore.compile_templates()
-    render_pages(nodes)
-    render_category_pages()
-    render_home_page()
-    copy_assets()
-    {:ok, %{results: JobsStore.get_values(RenderPages.__info__(:module))}}
+    build_pipeline([:scan, :pages, :categories, :home, :assets], [results: %{}])
   end
 
-  defp copy_assets() do
-    File.cp_r(Glayu.Path.assets_source(), Glayu.Path.public_assets())
+  # Handles $ glayu build regex
+  def run([regex: regex]) do
+    TemplatesStore.compile_templates()
+    build_pipeline([:scan, :pages], [regex: regex, results: %{}])
   end
 
-  defp scan_site(regex) do
-    root = root_dir(regex)
-    ProgressBar.render_spinner([text: "Scanning site…", done: [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Site scan completed."], frames: :braille, spinner_color: IO.ANSI.light_cyan], fn ->
+  # Handles $ glayu build --chp regex
+  def run(params) do
+    TemplatesStore.compile_templates()
+    build_pipeline([:scan] ++ params_to_tasks(params), params ++ [results: %{}])
+  end
+
+  defp params_to_tasks(params) do
+    Enum.filter(Keyword.keys(params), &(Enum.member?(@tasks, &1)))
+  end
+
+  defp build_pipeline([],  args) do
+    {:ok, args[:results]}
+  end
+
+  defp build_pipeline([task | tasks],  args) do
+    {status, results} = run_task(task, args)
+    if status == :ok do
+      build_pipeline(tasks, args ++ results)
+    else
+      {:error, results}
+    end
+  end
+
+  defp run_task(:scan, args) do
+    regex = args[:regex]
+    root = PathRegex.base_dir(regex)
+
+    nodes = ProgressBar.render_spinner([text: "Scanning site…", done: [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Site scan completed."], frames: :braille, spinner_color: IO.ANSI.light_cyan], fn ->
       nodes = ContainMdFiles.nodes(root, compile_regex(regex))
 
       sort_fn = fn doc_context1, doc_context2 ->
@@ -39,19 +64,63 @@ defmodule Glayu.Tasks.Build do
       TaskSpawner.spawn(nodes, BuildSiteTree, [sort_fn: sort_fn, num_posts: @max_posts_per_node])
       nodes
     end)
+
+    {status, resume} = Glayu.Build.JobResume.resume(BuildSiteTree.__info__(:module))
+
+    if status == :ok do
+      IO.puts IO.ANSI.format([:light_cyan, "└── #{length(SiteTree.keys())}", :reset , " categories and ", :light_cyan, "#{resume.files}", :reset , " posts added to the site tree."])
+      {:ok, [nodes: nodes]}
+    else
+      {:error, IO.ANSI.format([[:red, "Unable to build Site Tree: "] | resume.errors])}
+    end
+
   end
 
-  defp render_pages(nodes) do
-    TaskSpawner.spawn(nodes, RenderPages, [])
+  defp run_task(:pages, args) do
+    TaskSpawner.spawn(args[:nodes], RenderPages, [])
+
+    {status, resume} = Glayu.Build.JobResume.resume(RenderPages.__info__(:module))
+
+    if status == :ok do
+      IO.puts [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Site pages generated."]
+      IO.puts IO.ANSI.format([:light_cyan, "└── #{resume.files}", :reset , " pages generated."])
+      {:ok, []}
+    else
+      {:error, IO.ANSI.format([[:yellow, "\n⚠️  Unable to generate site pages: "] | resume.errors])}
+    end
+
   end
 
-  defp render_category_pages do
-    TaskSpawner.spawn(Glayu.Build.SiteTree.keys(), RenderCategoryPages, [])
+  defp run_task(:categories, _) do
+
+    ProgressBar.render_spinner([text: "Generating category pages…", done: [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Category pages generated."], frames: :braille, spinner_color: IO.ANSI.light_cyan], fn ->
+      TaskSpawner.spawn(SiteTree.keys(), RenderCategoryPages, [])
+    end)
+
+    {status, resume} = Glayu.Build.JobResume.resume(RenderCategoryPages.__info__(:module))
+
+    if status == :ok do
+      IO.puts IO.ANSI.format([:light_cyan, "└── #{resume.nodes}", :reset , " category pages generated."])
+      {:ok, []}
+    else
+      {:error, IO.ANSI.format([[:yellow, "\n⚠️  Unable to generate category pages: "] | resume.errors])}
+    end
+
   end
 
-  defp render_home_page do
-    html = Glayu.HomePage.render()
-    Glayu.HomePage.write(html)
+  defp run_task(:home, _) do
+    ProgressBar.render_spinner([text: "Generating home page…", done: [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Home page generated."], frames: :braille, spinner_color: IO.ANSI.light_cyan], fn ->
+      Glayu.HomePage.write(Glayu.HomePage.render())
+    end)
+    {:ok, []}
+  end
+
+  defp run_task(:assets, _) do
+    {:ok, files} = ProgressBar.render_spinner([text: "Coping site assets…", done: [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Site assets copied from theme folder to public folder."], frames: :braille, spinner_color: IO.ANSI.light_cyan], fn ->
+      File.cp_r(Glayu.Path.assets_source(), Glayu.Path.public_assets())
+    end)
+    IO.puts IO.ANSI.format([:light_cyan, "└── #{length(files)}", :reset , " files copied."])
+    {:ok, []}
   end
 
   defp compile_regex(nil) do
@@ -60,19 +129,6 @@ defmodule Glayu.Tasks.Build do
 
   defp compile_regex(regex) do
     Regex.compile!(regex)
-  end
-
-  defp root_dir(nil) do
-    Glayu.Path.source_root()
-  end
-
-  defp root_dir(regex) do
-    names = Regex.named_captures(~r/\/(?<path>^[^.^$*+?()[{\|]*$)\//, regex)
-    path = names["path"]
-    case path do
-      nil -> Glayu.Path.source_root
-      path -> Path.join(Glayu.Path.source_root, path)
-    end
   end
 
 end

@@ -11,7 +11,7 @@ defmodule Glayu.CLI do
     module = get_module(command)
     options = apply module, :options, []
     aliases = apply module, :aliases, []
-    parse = OptionParser.parse opts, strict: options, aliases: aliases
+    parse = OptionParser.parse(opts, strict: options, aliases: aliases)
     case parse do
       {opts, args, []} -> {:ok, command, [opts: opts, args: args]}
       {opts, args, error} -> {:error, command, [opts: opts, args: args, error: error]}
@@ -29,7 +29,7 @@ defmodule Glayu.CLI do
   end
 
   defp run({:error, _, _}) do
-    IO.puts "Unknown command"
+    {:error, "Unknown command"}
   end
 
   defp get_module(command) do

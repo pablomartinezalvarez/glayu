@@ -16,7 +16,18 @@ defmodule Glayu.CLI.Init do
     """
     glayu init [folder]
 
-    Initializes the web site. If no root folder is provided the current directory will be the site root folder
+    Initializes the website.
+
+    If no `folder` is provided, the website will be configured in the current directory.
+
+    If the destination folder exists and contains a `_config.yml` file, this configuration file will be used to initialize the site.
+
+    ARGUMENTS
+
+    [folder]
+
+    Website destination folder. If the destination folder doesn't exists the full path to it will be created.
+
     """
   end
 
