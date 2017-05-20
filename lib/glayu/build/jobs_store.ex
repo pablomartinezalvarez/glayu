@@ -27,7 +27,14 @@ defmodule Glayu.Build.JobsStore do
   end
 
   def get_values(job) do
-    Agent.get(__MODULE__, fn map -> Map.values(map[job]) end)
+    Agent.get(__MODULE__, fn map ->
+      job_map = map[job]
+      if job_map do
+        Map.values(job_map)
+      else
+        []
+      end
+    end)
   end
 
 end

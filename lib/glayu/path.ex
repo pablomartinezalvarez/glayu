@@ -52,6 +52,10 @@ defmodule Glayu.Path do
     Path.join(public_dir_from_permalink(permalink), file_name <> @html_ext)
   end
 
+  def category_source_dir(keys) do
+    Path.join([source_root(:post)] ++ keys)
+  end
+
   def category_dir(keys) do
     Path.join([public_root()] ++ keys)
   end
