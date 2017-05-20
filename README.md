@@ -18,7 +18,7 @@ Design Concerns:
 
 Glayu is distributed as an Escript executable, before running it, you need [Erlang](http://www.erlang.org/) installed on your computer. You can find the latest Erlang releases under the [Erlang downloads page](http://www.erlang.org/downloads).
 
-Once you have installed Erlang. Download the latest [glayu binary]() from the releases section and add it to your PATH. Now you can invoke the `glayu` command.
+Once you have installed Erlang. Download the latest [glayu binary](https://github.com/pmartinezalvarez/glayu/blob/develop/glayu) from the releases section and add it to your PATH. Now you can invoke the `glayu` command.
 
 ### Build From Source
 
