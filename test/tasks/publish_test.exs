@@ -67,7 +67,7 @@ defmodule Glayu.Tasks.PublishTest do
 
     params = [filename: "cyberattack-not-hbo-comedian-caused-website-wipeout-says-fcc.md"]
 
-    assert capture_io([input: "no"], fn ->  Glayu.Tasks.Publish.run(params) end) == "\e[33m⚠️  Destination file \e[1m/Users/pablomartinezalvarez/Documents/development/workspaces/glayu/glayu/test/fixtures/source/_posts/us/2017/05/10/cyberattack-not-hbo-comedian-caused-website-wipeout-says-fcc.md\e[22m already exists\e[0m\nWhould you like to override it? "
+    assert capture_io([input: "no"], fn ->  Glayu.Tasks.Publish.run(params) end) == "\e[33m⚠️  Destination file \e[1m" <> Path.absname("test/fixtures/source/_posts/us/2017/05/10/cyberattack-not-hbo-comedian-caused-website-wipeout-says-fcc.md") <> "\e[22m already exists\e[0m\nWhould you like to override it? "
 
   end
 

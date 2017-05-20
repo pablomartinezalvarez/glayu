@@ -40,7 +40,7 @@ defmodule Glayu.Theme do
   end
 
   defp unzip_theme(path) do
-    {ok, files} = :zip.unzip(String.to_char_list(path <> @zip_ext), [{:cwd, String.to_char_list(Glayu.Path.themes_dir())}])
+    {:ok, files} = :zip.unzip(String.to_char_list(path <> @zip_ext), [{:cwd, String.to_char_list(Glayu.Path.themes_dir())}])
     rename_theme_dir(files, path)
   end
 
