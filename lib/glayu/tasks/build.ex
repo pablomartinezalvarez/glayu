@@ -95,13 +95,16 @@ defmodule Glayu.Tasks.Build do
 
     ProgressBar.render_spinner([text: "Generating category pages…", done: [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Category pages generated."], frames: :braille, spinner_color: IO.ANSI.light_cyan], fn ->
 
-      regex = compile_regex(args[:regex])
+      if(args[:regex]) do
+        regex = compile_regex(args[:regex])
+        nodes = Enum.filter(SiteTree.keys(), fn(keys) ->
+           Regex.match?(regex, Glayu.Path.category_source_dir(keys))
+        end)
+        TaskSpawner.spawn(nodes, RenderCategoryPages, [])
+      else
+        TaskSpawner.spawn(SiteTree.keys(), RenderCategoryPages, [])
+      end
 
-      nodes = Enum.filter(SiteTree.keys(), fn(keys) ->
-         Regex.match?(regex, Glayu.Path.category_source_dir(keys))
-      end)
-
-      TaskSpawner.spawn(nodes, RenderCategoryPages, [])
     end)
 
     {status, resume} = Glayu.Build.JobResume.resume(RenderCategoryPages.__info__(:module))

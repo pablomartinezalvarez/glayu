@@ -1,4 +1,6 @@
-#Glayu
+# Glayu
+
+[![Managed with Taiga.io](https://img.shields.io/badge/managed%20with-TAIGA.io-709f14.svg)](https://tree.taiga.io/project/pablomartinez-glayu/ "Managed with Taiga.io")
 
 ## Overview
 
@@ -83,6 +85,7 @@ public_dir: public                          # Destination folder
 
 # Theme
 theme: glayu-times                          # Selected Theme under themes dir
+theme_uri: https://github.com/pmartinezalvarez/glayu-times-theme/archive/master.zip
 ```
 
 ### source
@@ -93,7 +96,7 @@ The source folder. This is were your site content resides. All Markdown files un
 
 Themes folder. Glayu will generate the final site combining the site contents with the theme selected on the configuration file.
 
-The default theme is [The Glayu Times]()
+The default theme is [The Glayu Times](https://github.com/pmartinezalvarez/glayu-times-theme)
 
 ## Writing
 
@@ -324,6 +327,23 @@ $ glayu build _posts/business/.*2017/.*
 
 generates all 2017 business pages
 
+### help
+
+```console
+glayu help [command]
+```
+
+Displays help.
+
+If `command is not specified, all of the commands supported by Glayu are listed.
+
+##### Arguments
+
+Argument | Description
+------------ | -------------
+`[command]` | Displays help information on that command.
+
+
 ## Customization
 
 ### Permalinks
@@ -348,7 +368,9 @@ title | Slugified post title.
 
 The active theme is defined by the `theme` variable on your site configuration file `_config.yml`.
 
-The default value is `glayu-times`, it enables [The Glayu Times]() theme, included on folder `themes/glayu-times`.
+The default value is `glayu-times`, it enables [The Glayu Times](https://github.com/pmartinezalvarez/glayu-times-theme) theme, downloaded to the `themes/glayu-times` folder after running `init`.
+
+If the variable `theme_uri` is defined, the `init` command will try to download the selected theme from the specified uri.
 
 To create a new theme, create a directory under the `themes` folder. The directory name is the value you will have to provide on `_config.yml` to activate your theme.
 

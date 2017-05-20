@@ -15,6 +15,7 @@ defmodule Glayu.Templates.Config do
 
     # Theme
     theme: glayu-times                          # Selected Theme under themes dir
+    theme_uri: https://github.com/pmartinezalvarez/glayu-times-theme/archive/master.zip
     """
   end
 end
