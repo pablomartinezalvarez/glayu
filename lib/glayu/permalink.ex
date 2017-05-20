@@ -88,4 +88,8 @@ defmodule Glayu.Permalink do
     end
   end
 
+  defp extract_value(_,_) do
+    raise "Invalid permalink format"
+  end
+
 end

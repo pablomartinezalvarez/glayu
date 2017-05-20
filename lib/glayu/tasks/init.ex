@@ -17,8 +17,9 @@ defmodule Glayu.Tasks.Init do
     |> create_dirs
 
     theme_uri = Glayu.Config.get('theme_uri')
-
-    Glayu.Theme.download_theme(Glayu.Config.get('theme'), theme_uri)
+    if theme_uri do
+      Glayu.Theme.download_theme(Glayu.Config.get('theme'), theme_uri)
+    end
 
     {:ok, %{path: dir}}
   end

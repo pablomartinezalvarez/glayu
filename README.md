@@ -1,6 +1,6 @@
 # Glayu
 
-[![Managed with Taiga.io](https://img.shields.io/badge/managed%20with-TAIGA.io-709f14.svg)](https://tree.taiga.io/project/pablomartinez-glayu/ "Managed with Taiga.io")
+[![Build Status](https://travis-ci.org/pmartinezalvarez/glayu.svg?branch=develop)](https://travis-ci.org/pmartinezalvarez/glayu) [![Managed with Taiga.io](https://img.shields.io/badge/managed%20with-TAIGA.io-709f14.svg)](https://tree.taiga.io/project/pablomartinez-glayu/ "Managed with Taiga.io")
 
 ## Overview
 
@@ -639,4 +639,8 @@ Date.now(<strftime_format>)
 ```
 
 Formats current date and time.
+
+## License
+
+This project is available under the MIT license.
   

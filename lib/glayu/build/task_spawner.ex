@@ -12,14 +12,14 @@ defmodule Glayu.Build.TaskSpawner do
 
   defp spawn_task(node, job, args) do
     task = Task.Supervisor.async_nolink(:build_task_supervisor, fn ->
-      #try do
+      try do
         JobsStore.put_record(%Glayu.Build.Record{job: job.__info__(:module), node: node, status: :running, pid: self()})
         job.run(node, args)
-      #rescue error ->
-      #  exit {:shutdown, error}
-      #catch key, error ->
-      #  exit {:shutdown, {key, error}}
-      #end
+      rescue error ->
+        exit {:shutdown, error}
+      catch key, error ->
+        exit {:shutdown, {key, error}}
+      end
     end)
     {{job.__info__(:module), node}, task}
   end
