@@ -5,19 +5,34 @@ defmodule Glayu.Theme do
   @user_agent [ {"User-agent", "Glayu static site generator"} ]
   @zip_ext ".zip"
 
+  @moduledoc """
+  Downloads and extracts remote themes.
+  """
+
+  @doc """
+  Downloads a theme from the provided `uri` and extracts its content under your site `themes` directory using the name provided on `theme`
+  * `theme` theme name
+  * `uri` uri where the theme is hosted
+  Returns `:ok` if successful, `{:error, reason} otherwise.
+  """
+  @spec download_theme(String.t, String.t) :: :ok | {:error, any}
   def download_theme(theme, uri) do
     path = Glayu.Path.theme_dir(theme)
-    unless File.dir?(path) do
-      uri
-      |> HTTPoison.get(@user_agent)
-      |> save_theme(path)
-      |> unzip_theme
+    if File.dir?(path) do
+      :ok
+    else
+      saved = save_theme(HTTPoison.get(uri, @user_agent), path)
+      case saved do
+        :ok ->
+          unzip_theme(path)
+        {:error, reason} ->
+          {:error, reason}
+      end
     end
   end
 
   defp save_theme({ :ok, %{status_code: 200, body: body, headers: _}}, path) do
     File.write!(path <> @zip_ext, body)
-    path
   end
 
   # Try to handle redirects
@@ -31,12 +46,12 @@ defmodule Glayu.Theme do
       |> save_theme(path)
 
     else
-      raise "Unable to download theme."
+      {:error, "Unable to download theme."}
     end
   end
 
   defp save_theme({ _, %{status_code: _, body: _, headers: _}}, _) do
-     raise "Unable to download theme."
+     {:error, "Unable to download theme."}
   end
 
   defp unzip_theme(path) do
@@ -46,14 +61,13 @@ defmodule Glayu.Theme do
 
   defp rename_theme_dir(files, path) do
     layout = Enum.find(files, fn(file) -> Path.basename(file) == "layout.eex" end)
-
     if layout do
       current_path = String.replace_suffix(to_string(layout), "/_layouts/layout.eex", "")
       if current_path != path do
         File.rename(current_path, path)
       end
     else
-      raise "Invalid theme."
+      {:error, "Invalid theme."}
     end
   end
 

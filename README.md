@@ -1,6 +1,6 @@
 # Glayu
 
-[![Build Status](https://travis-ci.org/pmartinezalvarez/glayu.svg?branch=develop)](https://travis-ci.org/pmartinezalvarez/glayu) [![Managed with Taiga.io](https://img.shields.io/badge/managed%20with-TAIGA.io-709f14.svg)](https://tree.taiga.io/project/pablomartinez-glayu/ "Managed with Taiga.io")
+[![Build Status](https://travis-ci.org/pmartinezalvarez/glayu.svg?branch=master)](https://travis-ci.org/pmartinezalvarez/glayu) [![Managed with Taiga.io](https://img.shields.io/badge/managed%20with-TAIGA.io-709f14.svg)](https://tree.taiga.io/project/pablomartinez-glayu/ "Managed with Taiga.io")
 
 ## Overview
 
@@ -18,7 +18,7 @@ Design Concerns:
 
 Glayu is distributed as an Escript executable, before running it, you need [Erlang](http://www.erlang.org/) installed on your computer. You can find the latest Erlang releases under the [Erlang downloads page](http://www.erlang.org/downloads).
 
-Once you have installed Erlang. Download the latest [glayu binary](https://github.com/pmartinezalvarez/glayu/blob/develop/glayu) from the releases section and add it to your PATH. Now you can invoke the `glayu` command.
+Once you have installed Erlang. Download the latest [glayu binary](https://github.com/pmartinezalvarez/glayu/blob/master/glayu) from the releases section and add it to your PATH. Now you can invoke the `glayu` command.
 
 ### Build From Source
 

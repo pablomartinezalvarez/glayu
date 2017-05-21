@@ -34,7 +34,7 @@ defmodule Glayu.CLI.Init do
     if status == :ok do
       args
       |> Init.run
-      |> build_result
+      |> build_result(args[:folder])
     else
       {:ok, help()}
     end
@@ -52,8 +52,12 @@ defmodule Glayu.CLI.Init do
     {:error, "Invalid number of arguments"}
   end
 
-  defp build_result({:ok, %{path: path}}) do
-    {:ok, IO.ANSI.format(["🐦  Your ", :light_cyan, "Glayu", :reset , " site has been created at ", :light_cyan, "#{path}"])}
+  defp build_result(:ok, dir) do
+    {:ok, IO.ANSI.format(["🐦  Your ", :light_cyan, "Glayu", :reset , " site has been created at ", :light_cyan, "#{Path.absname(dir)}"])}
+  end
+
+  defp build_result({:error, reason}, _) do
+    {:error, reason}
   end
 
 end
