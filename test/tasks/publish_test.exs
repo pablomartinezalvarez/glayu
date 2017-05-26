@@ -71,4 +71,12 @@ defmodule Glayu.Tasks.PublishTest do
 
   end
 
+  test "publish a draft, providing a file that doesn't exists throws an exception'" do
+
+    assert_raise File.Error, "could not read file \"" <> Path.absname("test/fixtures/source/_drafts/unknown.md") <> "\": no such file or directory", fn ->
+      Glayu.Tasks.Publish.run([filename: "unknown.md"])
+    end
+
+  end
+
 end

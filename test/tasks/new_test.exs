@@ -41,7 +41,7 @@ defmodule Glayu.Tasks.NewTest do
 
   end
 
-  test "an empty file after slugger calculation produces an error" do
+  test "new post when providing a title with special characters removed during the slug calcularion and producing an empty filename throws an exception" do
 
     params = [type: :post, title: "%¬[?¿"]
 

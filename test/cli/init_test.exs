@@ -4,7 +4,7 @@ defmodule Glayu.CLI.InitTest do
   import ExUnit.CaptureIO
 
   test "init command help is displayed when invalid arguments are provided" do
-    assert capture_io(fn ->  Glayu.CLI.main(["init", "arg1", "arg2"]) end) == help_output()
+    assert capture_io(fn ->  Glayu.CLI.main(["init", "/my-web-site-dir", "invalid-arg"]) end) == help_output()
   end
 
   def help_output do

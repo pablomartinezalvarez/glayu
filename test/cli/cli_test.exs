@@ -4,7 +4,7 @@ defmodule Glayu.CLITest do
   import ExUnit.CaptureIO
 
   test "help is displayed with an unknown command" do
-    assert capture_io(fn ->  Glayu.CLI.main(["unknown-command unknown-arg"]) end) == help_output()
+    assert capture_io(fn ->  Glayu.CLI.main(["unknown-command invalid-arg"]) end) == help_output()
   end
 
   def help_output do
