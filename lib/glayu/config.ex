@@ -4,7 +4,9 @@ defmodule Glayu.Config do
   alias Glayu.Validator
 
   def load_config do
-    load_config_file("./_config.yml")
+    if Glayu.ConfigStore.empty? do
+      load_config_file("./_config.yml")
+    end
   end
 
   def load_config(dir) do

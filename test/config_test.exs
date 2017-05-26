@@ -2,6 +2,10 @@ defmodule Glayu.ConfigTest do
 
   use ExUnit.Case
 
+  setup_all do
+    Glayu.ConfigStore.reset()
+  end
+
   test "if no _conf.yml file is present an exception is fired" do
 
     assert_raise RuntimeError, "_config.yml file not found", fn ->

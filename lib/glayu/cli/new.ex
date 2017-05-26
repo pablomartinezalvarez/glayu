@@ -35,8 +35,6 @@ defmodule Glayu.CLI.New do
 
   def run(params) do
 
-    Glayu.Config.load_config()
-
     {status, args} = parse_args(params[:args])
 
     if status == :ok do

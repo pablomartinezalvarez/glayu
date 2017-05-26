@@ -9,6 +9,7 @@ defmodule Glayu.CLI do
   end
 
   def main(args) do
+    IO.puts inspect args
     args
     |> parse_args
     |> run

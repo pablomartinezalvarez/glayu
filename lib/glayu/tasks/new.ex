@@ -7,6 +7,8 @@ defmodule Glayu.Tasks.New do
   """
   def run(params) do
 
+    Glayu.Config.load_config()
+
     type = params[:type]
     title = params[:title]
     path = get_path(title, type)

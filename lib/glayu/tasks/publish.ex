@@ -7,6 +7,8 @@ defmodule Glayu.Tasks.Publish do
 
   def run(params) do
 
+    Glayu.Config.load_config()
+
     file_path = normalize_file_path(params[:filename])
 
     file_path
