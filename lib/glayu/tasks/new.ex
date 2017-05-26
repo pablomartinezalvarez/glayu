@@ -6,9 +6,11 @@ defmodule Glayu.Tasks.New do
   Run the new post task
   """
   def run(params) do
+
     type = params[:type]
     title = params[:title]
     path = get_path(title, type)
+
     if File.exists?(path) do
       {:ok, %{status: :exists, path: path, type: type}}
     else

@@ -23,8 +23,10 @@
   "progress_bar": {:hex, :progress_bar, "1.6.1", "4a82aa4f2b04708dca7472febf5e73477f0e09c81fec98fc502c8d5e3d833172", [:mix], []},
   "providers": {:hex, :providers, "1.6.0", "db0e2f9043ae60c0155205fcd238d68516331d0e5146155e33d1e79dc452964a", [:rebar3], [{:getopt, "0.8.2", [hex: :getopt, optional: false]}]},
   "relx": {:hex, :relx, "3.22.4", "98d6ae6eeecb31f2018cd06af574579baf1c08e9a848f9184f7b95f35a480ac8", [:rebar3], [{:bbmustache, "1.0.4", [hex: :bbmustache, optional: false]}, {:cf, "0.2.2", [hex: :cf, optional: false]}, {:erlware_commons, "1.0.0", [hex: :erlware_commons, optional: false]}, {:getopt, "0.8.2", [hex: :getopt, optional: false]}, {:providers, "1.6.0", [hex: :providers, optional: false]}]},
+  "saul": {:hex, :saul, "0.1.0", "a4a52cff0531ce0bde063fa957d9929cb233f12b6815813c22de6a49e15cced0", [:mix], []},
   "slugger": {:hex, :slugger, "0.1.0", "04a0f2da7e0770d41eb15e166aa2b1f8fcd26a80f43ed96d56b1b1d4bc5075df", [:mix], []},
   "ssl_verify_fun": {:hex, :ssl_verify_fun, "1.1.1", "28a4d65b7f59893bc2c7de786dec1e1555bd742d336043fe644ae956c3497fbe", [:make, :rebar], []},
   "timex": {:hex, :timex, "3.1.13", "48b33162e3ec33e9a08fb5f98e3f3c19c3e328dded3156096c1969b77d33eef0", [:mix], [{:combine, "~> 0.7", [hex: :combine, optional: false]}, {:gettext, "~> 0.10", [hex: :gettext, optional: false]}, {:tzdata, "~> 0.1.8 or ~> 0.5", [hex: :tzdata, optional: false]}]},
   "tzdata": {:hex, :tzdata, "0.1.8", "965c504ce0b65a0fa5ad11dddfb45ad995d7abccb1fdf23247c0b2bcbbe98add", [:mix], []},
+  "vex": {:hex, :vex, "0.5.5", "d1c79c1cfba39d400df16c1653a81f1ea7d485a9983dd1a54568e35eafad17fa", [:mix], []},
   "yamerl": {:hex, :yamerl, "0.4.0", "ae215b1242810a9bc07716b88062f1bfe06f6bc7cf68372091f630baa536df79", [:rebar3], []}}

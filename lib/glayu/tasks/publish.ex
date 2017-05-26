@@ -6,12 +6,14 @@ defmodule Glayu.Tasks.Publish do
   @behaviour Glayu.Tasks.Task
 
   def run(params) do
+
     file_path = normalize_file_path(params[:filename])
 
     file_path
     |> parse_draft
     |> create_destination_dir
     |> mv_draft(file_path)
+
   end
 
   defp normalize_file_path(filename) do

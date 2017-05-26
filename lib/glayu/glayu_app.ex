@@ -6,7 +6,7 @@ defmodule GlayuApp do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(Glayu.Config, []),
+      worker(Glayu.ConfigStore, []),
       worker(Task.Supervisor, [[name: :build_task_supervisor]]),
       worker(Glayu.Build.JobsStore, []),
       worker(Glayu.Build.SiteTree, []),

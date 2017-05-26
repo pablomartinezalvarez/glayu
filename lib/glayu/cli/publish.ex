@@ -29,6 +29,9 @@ defmodule Glayu.CLI.Publish do
   end
 
   def run(params) do
+
+    Glayu.Config.load_config()
+
     {status, args} = parse_args(params[:args])
 
     if status == :ok do

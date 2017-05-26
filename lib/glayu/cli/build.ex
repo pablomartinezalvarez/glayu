@@ -48,6 +48,9 @@ defmodule Glayu.CLI.Build do
   end
 
   def run(params) do
+
+    Glayu.Config.load_config()
+
   	{status, results} = Build.run Keyword.merge([regex: List.first(params[:args])], params[:opts])
   	if status == :ok do
   	  {:ok, IO.ANSI.format(["🐦  ", :light_cyan, "Site Generated Successfully"])}

@@ -38,6 +38,7 @@ defmodule Glayu.Mixfile do
       {:earmark, "~> 1.2.0"},
       {:progress_bar, "> 0.0.0"},
       {:timex, "~> 3.0"},
+      {:saul, "~> 0.1"},
       {:httpoison, "~> 0.11.1"},
       {:tzdata, "== 0.1.8", override: true}, # forces an old tzdata version (check https://github.com/lau/tzdata/issues/24)
       {:credo, "~> 0.7", only: [:dev, :test]}
