@@ -51,7 +51,11 @@ defmodule Glayu.CLI.New do
   end
 
   defp parse_args([layout, title]) do
-    {:ok, [type: String.to_atom(layout), title: title]}
+    if Enum.member?(["post", "page"], layout) do
+      {:ok, [type: String.to_atom(layout), title: title]}
+    else
+      {:error, "Invalid layout"}
+    end
   end
 
   defp parse_args(_) do
