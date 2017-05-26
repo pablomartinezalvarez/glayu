@@ -41,6 +41,17 @@ defmodule Glayu.Tasks.NewTest do
 
   end
 
+  test "an empty file after slugger calculation produces an error" do
+
+    params = [type: :post, title: "%¬[?¿"]
+
+    {status, details} = Glayu.Tasks.New.run(params)
+
+    assert status == :error
+    assert details == "Invalid title"
+
+  end
+
   test "new page creates the markdown file" do
 
     params = [type: :page, title: "Open Source Static Site Generators"]

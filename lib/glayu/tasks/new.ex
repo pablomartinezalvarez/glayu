@@ -11,8 +11,12 @@ defmodule Glayu.Tasks.New do
 
     type = params[:type]
     title = params[:title]
-    path = get_path(title, type)
 
+    create_md_file(calculate_path(title, type), title, type)
+
+  end
+
+  defp create_md_file({:ok, path}, title, type) do
     if File.exists?(path) do
       {:ok, %{status: :exists, path: path, type: type}}
     else
@@ -21,11 +25,15 @@ defmodule Glayu.Tasks.New do
     end
   end
 
-  defp get_path(title, :post) do
+  defp create_md_file({:error, details}, _, _) do
+    {:error, details}
+  end
+
+  defp calculate_path(title, :post) do
     Glayu.Path.source_from_title(title, :draft)
   end
 
-  defp get_path(title, :page) do
+  defp calculate_path(title, :page) do
     Glayu.Path.source_from_title(title, :page)
   end
 

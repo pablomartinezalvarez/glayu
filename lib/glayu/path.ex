@@ -15,11 +15,21 @@ defmodule Glayu.Path do
   alias Glayu.Config
 
   def source_from_title(title, :page) do
-    Path.join(source_root(), Slugger.slug(title) <> @md_ext)
+    slug = Slugger.slug(title)
+    if slug != "" do
+     {:ok, Path.join(source_root(), slug <> @md_ext)}
+    else
+     {:error, "Invalid title"}
+    end
   end
 
   def source_from_title(title, :draft) do
-    Path.join(source_root(:draft), Slugger.slug(title) <> @md_ext)
+    slug = Slugger.slug(title)
+    if slug != "" do
+      {:ok, Path.join(source_root(:draft), Slugger.slug(title) <> @md_ext)}
+    else
+      {:error, "Invalid title"}
+    end
   end
 
   def source_from_file_name(file_name, :page) do

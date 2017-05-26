@@ -70,4 +70,8 @@ defmodule Glayu.CLI.New do
     {:ok, IO.ANSI.format([:yellow, "⚠️  ", "#{String.capitalize(to_string(type))}", " ", :bright, "#{path}", :normal, " already exists."])}
   end
 
+  defp build_result({:error, reason}) do
+    {:error, reason}
+  end
+
 end
