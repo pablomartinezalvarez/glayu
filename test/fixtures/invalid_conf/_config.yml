@@ -8,7 +8,7 @@ permalink: categories/categories/title
 
 # Directory
 source_dir: source
-public_dir: public
 
 # Theme
 theme: glayu-times
+theme_uri: glayu-times

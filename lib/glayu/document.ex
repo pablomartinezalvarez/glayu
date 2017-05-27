@@ -22,7 +22,7 @@ defmodule Glayu.Document do
       |> Map.put(:content, html_content) # Compile Markdown to HTML
       |> Map.put_new(:layout, doc_type)
 
-    context = Map.put(context, :date, Glayu.Date.parse(context[:date])) # date string to DateTime conversion
+    context = Map.put(context, :date, get_date(context[:date])) # date string to DateTime conversion
 
     if doc_type == :post || doc_type == :draft do
       context = Map.put(context, :categories, inform_categories(context[:categories])) # informed categories
@@ -41,6 +41,41 @@ defmodule Glayu.Document do
   def write(html, doc_context) do
     create_destination_dir(doc_context)
     write_html_file(html, doc_context)
+  end
+
+  def validate!(doc_context) do
+    validate!(doc_context[:type], doc_context)
+  end
+
+  defp validate!(:draft, doc_context) do
+    validate!(:post, doc_context)
+  end
+
+  defp validate!(:post, doc_context) do
+    validators = [
+      {:title, [Glayu.Validations.RequiredValidator.validator()]},
+      {:categories, [Glayu.Validations.RequiredValidator.validator()]}
+    ]
+    Glayu.Validations.Validator.validate!(doc_context, validators, fn (source, field) ->
+      source[field]
+    end)
+  end
+
+  defp validate!(:page, doc_context) do
+    validators = [
+      {:title, [Glayu.Validations.RequiredValidator.validator()]}
+    ]
+    Glayu.Validations.Validator.validate!(doc_context, validators, fn (source, field) ->
+      source[field]
+    end)
+  end
+
+  defp get_date(date) do
+    if date do
+      Glayu.Date.parse(date)
+    else
+      DateTime.utc_now()
+    end
   end
 
   defp build_context(page_context) do

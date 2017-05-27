@@ -16,7 +16,7 @@ defmodule Glayu.ConfigTest do
 
   test "if _conf.yml has an invalid format an exception is fired" do
 
-    assert_raise RuntimeError, "Ivalid _config.yml file, field permalink: \"invalid permalink\"", fn ->
+    assert_raise Glayu.Validations.ValidationError, "Validation Error:\n'public_dir': \"is required\"\n'permalink': \"invalid permalink format\"\n'theme_uri': \"invalid uri format\"", fn ->
       Glayu.Config.load_config("./test/fixtures/invalid_conf")
     end
 

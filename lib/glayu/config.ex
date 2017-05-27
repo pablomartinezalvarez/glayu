@@ -1,8 +1,5 @@
 defmodule Glayu.Config do
 
-  alias Glayu.Utils.Yaml
-  alias Glayu.Validator
-
   def load_config do
     if Glayu.ConfigStore.empty? do
       load_config_file("./_config.yml")
@@ -19,35 +16,29 @@ defmodule Glayu.Config do
 
   defp load_config_file(path) do
     if File.exists? path do
-      yaml_doc = List.flatten(:yamerl_constr.file(path)) ++ [{'base_dir', to_charlist(Path.dirname(path))}]
-      validate_config(yaml_doc)
-      Glayu.ConfigStore.set_config(yaml_doc)
+      List.flatten(:yamerl_constr.file(path)) ++ [{'base_dir', to_charlist(Path.dirname(path))}]
+      |> validate_config!
+      |> Glayu.ConfigStore.set_config
     else
       raise "_config.yml file not found"
     end
   end
 
-  defp validate_config(yaml_doc) do
+  defp validate_config!(yaml_doc) do
 
-    validate(yaml_doc, 'title', [Validator.yml_required])
-    validate(yaml_doc, 'permalink', [Validator.yml_required, Validator.permalink_conf])
-    validate(yaml_doc, 'source_dir', [Validator.yml_required])
-    validate(yaml_doc, 'public_dir', [Validator.yml_required])
-    validate(yaml_doc, 'theme', [Validator.yml_required])
-    validate(yaml_doc, 'theme_uri', [Validator.uri])
+   validators = [
+     {'title', [Glayu.Validations.RequiredValidator.validator()]},
+     {'source_dir', [Glayu.Validations.RequiredValidator.validator()]},
+     {'public_dir', [Glayu.Validations.RequiredValidator.validator()]},
+     {'permalink', [Glayu.Validations.RequiredValidator.validator(), Glayu.Validations.PermalinkConfValidator.validator()]},
+     {'theme', [Glayu.Validations.RequiredValidator.validator()]},
+     {'theme_uri', [Glayu.Validations.URIValidator.validator()]}
+   ]
 
-  end
+   Glayu.Validations.Validator.validate!(yaml_doc, validators, fn (source, field) ->
+     Glayu.Utils.Yaml.get_string_value(source, field)
+   end)
 
-  defp validate(yaml_doc, field, validators) do
-    value = Yaml.get_string_value(yaml_doc, field)
-    if value || Enum.member?(validators, Validator.yml_required) do
-      result = Saul.validate(value, Saul.all_of(validators))
-      case result do
-        {:error, resume} ->
-          raise "Ivalid _config.yml file, field " <> to_string(field) <> ": " <> resume.reason
-        _ -> :ok
-      end
-    end
   end
 
 end

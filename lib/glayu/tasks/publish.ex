@@ -13,6 +13,7 @@ defmodule Glayu.Tasks.Publish do
 
     file_path
     |> parse_draft
+    |> Glayu.Document.validate!
     |> create_destination_dir
     |> mv_draft(file_path)
 
