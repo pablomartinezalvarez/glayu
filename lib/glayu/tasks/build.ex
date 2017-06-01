@@ -16,23 +16,26 @@ defmodule Glayu.Tasks.Build do
 
   # Handles $ glayu build
   def run([regex: nil]) do
-    Glayu.Config.load_config()
-    TemplatesStore.compile_templates()
+    check_and_init()
     build_pipeline([:scan, :pages, :categories, :home, :assets], [results: %{}])
   end
 
   # Handles $ glayu build regex
   def run([regex: regex]) do
-    Glayu.Config.load_config()
-    TemplatesStore.compile_templates()
+    check_and_init()
     build_pipeline([:scan, :pages], [regex: regex, results: %{}])
   end
 
   # Handles $ glayu build --chp regex
   def run(params) do
-    Glayu.Config.load_config()
-    TemplatesStore.compile_templates()
+    check_and_init()
     build_pipeline([:scan] ++ params_to_tasks(params), params ++ [results: %{}])
+  end
+
+  defp check_and_init() do
+    Glayu.Config.load_config()
+    Glayu.SiteChecker.check!()
+    TemplatesStore.compile_templates()
   end
 
   defp params_to_tasks(params) do

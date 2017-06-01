@@ -6,6 +6,7 @@ defmodule Glayu.Path do
   @layouts_dir "_layouts"
   @partials_dir "_partials"
   @assets_dir "assets"
+  @config_file "_config.yml"
   @index "index"
   @md_ext ".md"
   @html_ext ".html"
@@ -72,6 +73,14 @@ defmodule Glayu.Path do
 
   def category_page(keys) do
     Path.join(category_dir(keys), @index <> @html_ext)
+  end
+
+  def base_dir() do
+    Path.absname(Config.get('base_dir'))
+  end
+
+  def site_config() do
+    Path.absname(Path.join(Config.get('base_dir'), @config_file))
   end
 
   def source_root() do

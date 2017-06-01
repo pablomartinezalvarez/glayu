@@ -1,0 +1,171 @@
+<% use Glayu.EEx %>
+<div id="wrapper">
+    <!-- Sidebar -->
+    <%= partial "sidebar" %>
+    <div id="page-content-wrapper" class="home">
+        <%= partial "mobile-head" %>
+        <div class="container">
+            <%= partial "home-head" %>
+            <div id="main">
+                <% featured = posts([limit: 5, sort_fn: &(&1.score > &2.score)])%>
+                <%= if length(featured) >= 5 do %>
+                <section class="featured">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="collection">
+                                <% post = Enum.at(featured, 1) %>
+                                <div class="article">
+                                    <%= if post[:featured_image] do %>
+                                    <img src="<%= post.featured_image %>"
+                                         alt="featured image" class="thumbnail img-responsive">
+                                    <% end %>
+                                    <ul class="categories">
+                                        <%= for category <- post.categories do %>
+                                        <li><a href="<%= category.path %>" class="category"><span><%= category.name %></span></a></li>
+                                        <% end %>
+                                    </ul>
+                                    <h2><a href="<%= post.path %>"><%= post.title %></a>
+                                    </h2>
+                                    <p class="byline"> By <%= post[:author] %> <span class="timestamp"><%= Date.format(post.date, "%Y-%m-%d %H:%M") %></span>
+                                    </p>
+                                </div>
+                                <% post = Enum.at(featured, 2) %>
+                                <div class="article">
+                                    <%= if post[:featured_image] do %>
+                                    <img src="<%= post.featured_image %>"
+                                         alt="featured image" class="thumbnail img-responsive">
+                                    <% end %>
+                                    <ul class="categories">
+                                        <%= for category <- post.categories do %>
+                                        <li><a href="<%= category.path %>" class="category"><span><%= category.name %></span></a></li>
+                                        <% end %>
+                                    </ul>
+                                    <h2><a href="<%= post.path %>"><%= post.title %></a>
+                                    </h2>
+                                    <p class="byline"> By <%= post[:author] %> <span class="timestamp"><%= Date.format(post.date, "%Y-%m-%d %H:%M") %></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="collection">
+                                <% post = Enum.at(featured, 0) %>
+                                <div class="article">
+                                    <%= if post[:featured_image] do %>
+                                    <img src="<%= post.featured_image %>"
+                                         alt="featured image" class="thumbnail img-responsive">
+                                    <% end %>
+                                    <ul class="categories">
+                                        <%= for category <- post.categories do %>
+                                        <li><a href="<%= category.path %>" class="category"><span><%= category.name %></span></a></li>
+                                        <% end %>
+                                    </ul>
+                                    <h2><a href="<%= post.path %>"><%= post.title %></a>
+                                    </h2>
+                                    <p class="byline"> By <%= post[:author] %> <span class="timestamp"><%= Date.format(post.date, "%Y-%m-%d %H:%M") %></span>
+                                    </p>
+                                    <%= post.summary %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="collection">
+                                <% post = Enum.at(featured, 3) %>
+                                <div class="article">
+                                    <%= if post[:featured_image] do %>
+                                    <img src="<%= post.featured_image %>"
+                                         alt="featured image" class="thumbnail img-responsive">
+                                    <% end %>
+                                    <ul class="categories">
+                                        <%= for category <- post.categories do %>
+                                        <li><a href="<%= category.path %>" class="category"><span><%= category.name %></span></a></li>
+                                        <% end %>
+                                    </ul>
+                                    <h2><a href="<%= post.path %>"><%= post.title %></a>
+                                    </h2>
+                                    <p class="byline"> By <%= post[:author] %> <span class="timestamp"><%= Date.format(post.date, "%Y-%m-%d %H:%M") %></span>
+                                    </p>
+                                </div>
+                                <% post = Enum.at(featured, 4) %>
+                                <div class="article">
+                                    <%= if post[:featured_image] do %>
+                                    <img src="<%= post.featured_image %>"
+                                         alt="featured image" class="thumbnail img-responsive">
+                                    <% end %>
+                                    <ul class="categories">
+                                        <%= for category <- post.categories do %>
+                                        <li><a href="<%= category.path %>" class="category"><span><%= category.name %></span></a></li>
+                                        <% end %>
+                                    </ul>
+                                    <h2><a href="<%= post.path %>"><%= post.title %></a>
+                                    </h2>
+                                    <p class="byline"> By <%= post[:author] %> <span class="timestamp"><%= Date.format(post.date, "%Y-%m-%d %H:%M") %></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <% end %>
+                <%= for category <- categories() do %>
+                <section class="subsection">
+                    <div class="row">
+                        <div class="section-header col-md-12">
+                            <h2><a href="<%= category.path %>"><%= category.name %></a></h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <%= for post <- category_posts(category.keys, [limit: 4, sort_fn: &(&1.score > &2.score)]) do %>
+                        <div class="col-md-3">
+                            <div class="collection">
+                                <div class="article">
+                                    <%= if post[:featured_image] do %>
+                                    <img src="<%= post.featured_image %>" alt="featured image"
+                                         class="thumbnail img-responsive">
+                                    <% end %>
+                                    <h2><a href="<%= post.path %>"><%= post.title %></a></h2>
+                                </div>
+                            </div>
+                        </div>
+                        <% end %>
+                    </div>
+                </section>
+                <% end %>
+                <section class="latest">
+                    <div class="row">
+                        <div class="section-header col-md-12">
+                            <h2>Latest</h2>
+                        </div>
+                    </div>
+                    <div class="collection">
+                        <%= for post <- posts([limit: 10]) do %>
+                        <div class="article">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <p><span class="timestamp"><%= Date.format(post.date, "%Y-%m-%d %H:%M") %></span></p>
+                                </div>
+                                <div class="col-md-7">
+                                    <h2><a href="<%= post.path %>"><%= post.title %></a>
+                                    </h2>
+                                    <%= post.summary %>
+                                    <p class="byline"> By <%= post[:author] %></p>
+                                </div>
+                                <div class="col-md-2">
+                                    <%= if post[:featured_image] do %>
+                                    <img src="<%= post.featured_image %>" alt="featured image"
+                                         class="thumbnail img-responsive">
+                                    <% end %>
+                                </div>
+                            </div>
+                        </div>
+                        <%= end %>
+                    </div>
+                </section>
+            </div>
+        </div> <!-- /container -->
+        <!-- Site footer -->
+        <div class="container">
+            <%= partial "footer" %>
+        </div>
+    </div> <!-- /#page-content-wrapper -->
+</div> <!-- /wrapper -->
