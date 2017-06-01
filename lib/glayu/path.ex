@@ -111,6 +111,10 @@ defmodule Glayu.Path do
     Path.absname(Path.join([Config.get('base_dir'), @themes_dir, name]))
   end
 
+  def active_theme_dir() do
+    Path.absname(Path.join([Config.get('base_dir'), @themes_dir, Config.get('theme')]))
+  end
+
   def layout(template) do
     Path.absname(Path.join([Config.get('base_dir'), @themes_dir, Config.get('theme'), @layouts_dir, template <> @eex_ext]))
   end

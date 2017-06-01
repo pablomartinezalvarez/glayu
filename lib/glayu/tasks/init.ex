@@ -18,9 +18,15 @@ defmodule Glayu.Tasks.Init do
 
     theme_uri = Glayu.Config.get('theme_uri')
     if theme_uri do
-      Glayu.Theme.download_theme(Glayu.Config.get('theme'), theme_uri)
+      result = Glayu.Theme.download_theme(Glayu.Config.get('theme'), theme_uri)
+      case result do
+        :ok ->
+          Glayu.SiteChecker.check_theme!()
+        :error ->
+          result
+      end
     else
-      :ok
+      Glayu.SiteChecker.check_theme!()
     end
 
   end

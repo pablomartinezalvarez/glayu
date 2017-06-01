@@ -34,7 +34,8 @@ defmodule Glayu.Tasks.Build do
 
   defp check_and_init() do
     Glayu.Config.load_config()
-    Glayu.SiteChecker.check!()
+    Glayu.SiteChecker.check_site!()
+    Glayu.SiteChecker.check_theme!()
     TemplatesStore.compile_templates()
   end
 

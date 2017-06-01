@@ -8,7 +8,7 @@ defmodule Glayu.Tasks.Publish do
   def run(params) do
 
     Glayu.Config.load_config()
-    Glayu.SiteChecker.check!()
+    Glayu.SiteChecker.check_site!()
 
     file_path = normalize_file_path(params[:filename])
 

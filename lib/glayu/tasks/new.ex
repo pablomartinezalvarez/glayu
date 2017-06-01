@@ -8,7 +8,7 @@ defmodule Glayu.Tasks.New do
   def run(params) do
 
     Glayu.Config.load_config()
-    Glayu.SiteChecker.check!()
+    Glayu.SiteChecker.check_site!()
 
     type = params[:type]
     title = params[:title]
