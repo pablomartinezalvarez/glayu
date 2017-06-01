@@ -36,7 +36,7 @@ defmodule Glayu.Tasks.Build do
     Glayu.Config.load_config()
     Glayu.SiteChecker.check_site!()
     Glayu.SiteChecker.check_theme!()
-    TemplatesStore.compile_templates()
+    TemplatesStore.add_templates(Glayu.Template.compile())
   end
 
   defp params_to_tasks(params) do
@@ -78,7 +78,7 @@ defmodule Glayu.Tasks.Build do
       IO.puts IO.ANSI.format([:light_cyan, "└── #{length(SiteTree.keys())}", :reset , " categories and ", :light_cyan, "#{resume.files}", :reset , " posts added to the site tree."])
       {:ok, [nodes: nodes]}
     else
-      {:error, IO.ANSI.format([[:red, "Unable to build Site Tree: "] | resume.errors])}
+      {:error, IO.ANSI.format([["Unable to build Site Tree: "] | resume.errors])}
     end
 
   end
@@ -93,7 +93,7 @@ defmodule Glayu.Tasks.Build do
       IO.puts IO.ANSI.format([:light_cyan, "└── #{resume.files}", :reset , " pages generated."])
       {:ok, []}
     else
-      {:error, IO.ANSI.format([[:yellow, "\n⚠️  Unable to generate site pages: "] | resume.errors])}
+      {:error, IO.ANSI.format([["Unable to generate site pages: "] | resume.errors])}
     end
 
   end
@@ -120,7 +120,7 @@ defmodule Glayu.Tasks.Build do
       IO.puts IO.ANSI.format([:light_cyan, "└── #{resume.nodes}", :reset , " category pages generated."])
       {:ok, []}
     else
-      {:error, IO.ANSI.format([[:yellow, "\n⚠️  Unable to generate category pages: "] | resume.errors])}
+      {:error, IO.ANSI.format([["Unable to generate category pages: "] | resume.errors])}
     end
 
   end

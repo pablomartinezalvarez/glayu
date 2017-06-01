@@ -9,7 +9,7 @@ defmodule Glayu.Build.JobResume do
   end
 
   defp extract_results([%Glayu.Build.Record{status: :error, node: node, total_files: _, details: details}|more_results], num_nodes, total_processed, errors) do
-    error = [:red, :bright, "\n#{node}", :normal,  "\n#{inspect details}"]
+    error = [:red, :bright, "\n#{inspect node}", :normal,  '\n', extract_error(details)]
     extract_results(more_results, num_nodes, total_processed, [error|errors])
   end
 
@@ -19,6 +19,26 @@ defmodule Glayu.Build.JobResume do
 
   defp extract_results([], num_nodes, total_processed, errors) do
    {:error, %{nodes: num_nodes, files: total_processed, errors: errors}}
+  end
+
+  defp extract_error({:shutdown, {_, error}}) do
+    print_error(error)
+  end
+
+  defp extract_error({:shutdown, error}) do
+    print_error(error)
+  end
+
+  defp extract_error(error) do
+    print_error(error)
+  end
+
+  defp print_error(error) do
+    if Exception.exception?(error) do
+      Exception.message(error)
+    else
+      inspect error
+    end
   end
 
 end

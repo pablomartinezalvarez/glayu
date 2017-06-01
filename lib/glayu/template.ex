@@ -1,5 +1,7 @@
 defmodule Glayu.Template do
 
+  @base_layout "layout"
+
   alias Glayu.Build.TemplatesStore
 
   def compile() do
@@ -9,8 +11,8 @@ defmodule Glayu.Template do
   def render(layout, context) do
     base_layout = TemplatesStore.get_layout(:layout)
     inner_layout = TemplatesStore.get_layout(layout)
-    {inner_html, _} = Code.eval_quoted inner_layout, [assigns: context]
-    {html, _} = Code.eval_quoted base_layout, [assigns: Enum.concat(context, [inner: inner_html])]
+    {inner_html, _} = Code.eval_quoted(inner_layout, [assigns: context], file: Glayu.Path.layout(Atom.to_string(layout)))
+    {html, _} = Code.eval_quoted(base_layout, [assigns: Enum.concat(context, [inner: inner_html])], file: Glayu.Path.layout(@base_layout))
     html
   end
 

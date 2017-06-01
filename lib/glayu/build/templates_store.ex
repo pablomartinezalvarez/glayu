@@ -4,9 +4,9 @@ defmodule Glayu.Build.TemplatesStore do
     Agent.start_link(fn -> [] end, name: __MODULE__)
   end
 
-  def compile_templates do
+  def add_templates(templates) do
     Agent.update(__MODULE__, fn _ ->
-      Glayu.Template.compile()
+      templates
     end)
   end
 
