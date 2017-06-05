@@ -1,4 +1,4 @@
-# Glayu
+![glayu](./glayu.png)
 
 [![Build Status](https://travis-ci.org/pmartinezalvarez/glayu.svg?branch=master)](https://travis-ci.org/pmartinezalvarez/glayu) [![Managed with Taiga.io](https://img.shields.io/badge/managed%20with-TAIGA.io-709f14.svg)](https://tree.taiga.io/project/pablomartinez-glayu/ "Managed with Taiga.io")
 
