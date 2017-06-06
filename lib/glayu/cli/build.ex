@@ -51,7 +51,11 @@ defmodule Glayu.CLI.Build do
 
   	{status, results} = Build.run Keyword.merge([regex: List.first(params[:args])], params[:opts])
   	if status == :ok do
-  	  {:ok, IO.ANSI.format(["🐦  ", :light_cyan, "Site Generated Successfully"])}
+  	  if results > 0 do
+  	    {:ok, IO.ANSI.format(["🐦  ", :light_cyan, "Site Generated Successfully in #{results} seconds."])}
+  	  else
+  	    {:ok, IO.ANSI.format(["🐦  ", :light_cyan, "Site Generated Successfully."])}
+  	  end
   	else
   	  {status, results}
   	end

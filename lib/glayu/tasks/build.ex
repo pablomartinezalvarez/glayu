@@ -16,20 +16,50 @@ defmodule Glayu.Tasks.Build do
 
   # Handles $ glayu build
   def run([regex: nil]) do
+    before = System.monotonic_time()
     check_and_init()
-    build_pipeline([:scan, :pages, :categories, :home, :assets], [results: %{}])
+    result = build_pipeline([:scan, :pages, :categories, :home, :assets], [results: %{}])
+    later = System.monotonic_time()
+    diff = later - before
+    seconds = System.convert_time_unit(diff, :native, :seconds)
+    case result do
+      {:ok, _} ->
+        {:ok, seconds}
+      _ ->
+        result
+    end
   end
 
   # Handles $ glayu build regex
   def run([regex: regex]) do
+    before = System.monotonic_time()
     check_and_init()
-    build_pipeline([:scan, :pages], [regex: regex, results: %{}])
+    result = build_pipeline([:scan, :pages], [regex: regex, results: %{}])
+    later = System.monotonic_time()
+    diff = later - before
+    seconds = System.convert_time_unit(diff, :native, :seconds)
+    case result do
+      {:ok, _} ->
+        {:ok, seconds}
+      _ ->
+        result
+    end
   end
 
   # Handles $ glayu build --chp regex
   def run(params) do
+    before = System.monotonic_time()
     check_and_init()
-    build_pipeline([:scan] ++ params_to_tasks(params), params ++ [results: %{}])
+    result = build_pipeline([:scan] ++ params_to_tasks(params), params ++ [results: %{}])
+    later = System.monotonic_time()
+    diff = later - before
+    seconds = System.convert_time_unit(diff, :native, :seconds)
+    case result do
+      {:ok, _} ->
+        {:ok, seconds}
+      _ ->
+        result
+    end
   end
 
   defp check_and_init() do
