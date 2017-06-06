@@ -2,7 +2,7 @@ defmodule Glayu.Build.TaskSpawner do
 
   alias Glayu.Build.JobsStore
 
-  @node_build_timeout 300_000
+  @node_build_timeout 3_600_000 # 1h
 
   def spawn(nodes, job, args) do
     nodes

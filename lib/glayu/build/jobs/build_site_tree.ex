@@ -37,7 +37,9 @@ defmodule Glayu.Build.Jobs.BuildSiteTree do
     if File.regular?(path) && Path.extname(path) == @md_ext do
       doc_context = Document.parse(path)
       if :post == doc_context[:type] do
-        SiteTree.put_tags(doc_context[:tags])
+        if doc_context[:tags] do
+          SiteTree.put_tags(doc_context[:tags])
+        end
         parse_posts(node, more_files, [doc_context | posts])
       else
         parse_posts(node, more_files, posts)

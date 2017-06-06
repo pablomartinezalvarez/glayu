@@ -102,8 +102,9 @@ defmodule Glayu.Document do
   end
 
   defp inform_categories([name | subcategory_names], parent, categories) do
-    keys = parent ++ [Glayu.Slugger.slug(name)]
-    inform_categories(subcategory_names, keys, categories ++ [%{keys: keys, name: name, path: URL.path(:category, keys)}])
+    name_as_string = to_string name
+    keys = parent ++ [Glayu.Slugger.slug(name_as_string)]
+    inform_categories(subcategory_names, keys, categories ++ [%{keys: keys, name: name_as_string, path: URL.path(:category, keys)}])
   end
 
   defp create_destination_dir(doc_context) do

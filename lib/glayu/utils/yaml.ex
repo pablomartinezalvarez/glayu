@@ -33,20 +33,22 @@ defmodule Glayu.Utils.Yaml do
         _to_map(map, yaml_doc)
       is_charlist(value) ->
         _to_map(Map.put(map, key, to_string value), yaml_doc)
-      is_list_of_charlists(value) ->
-        _to_map(Map.put(map, key, Enum.map(value, &(to_string &1))), yaml_doc)
+      is_list(value) ->
+        fn_handle_items = fn item ->
+          if is_charlist(item) do
+            to_string item
+          else
+            item
+          end
+        end
+        _to_map(Map.put(map, key, Enum.map(value, fn_handle_items)), yaml_doc)
       true ->
         _to_map(Map.put(map, key, value), yaml_doc)
     end
   end
 
   defp is_charlist(value) do
-    is_list(value) && (length(value) == 0 || is_integer(List.first(value))) #to string
-  end
-
-  defp is_list_of_charlists(value) do
-    is_list(value) && length(value) > 0 && is_list(List.first(value)) &&
-      (length(List.first(value)) == 0 || is_integer(List.first(List.first(value))))
+    is_list(value) && (length(value) == 0 || Enum.all?(value, &(is_integer(&1)))) #to string
   end
 
 end
