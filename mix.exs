@@ -18,7 +18,7 @@ defmodule Glayu.Mixfile do
     # Specify extra applications you'll use from Erlang/Elixir
     [
       mod: {GlayuApp, []},
-      extra_applications: [:yamerl, :logger, :eex, :mix, :httpoison]
+      extra_applications: [:yamerl, :logger, :eex, :poolboy, :httpoison]
     ]
   end
 
@@ -35,8 +35,9 @@ defmodule Glayu.Mixfile do
     [
       {:yamerl, "~> 0.4.0"},
       {:slugger, "~> 0.1.0"},
-      {:earmark, "~> 1.2.0"},
+      {:earmark, "~> 1.1.0"}, # 1.2.0 has concurrency problems (check https://github.com/pragdave/earmark/issues/147)
       {:progress_bar, "> 0.0.0"},
+      {:poolboy, "~> 1.5.1"},
       {:timex, "~> 3.0"},
       {:saul, "~> 0.1"},
       {:httpoison, "~> 0.11.1"},

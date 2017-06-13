@@ -11,6 +11,7 @@ defmodule Glayu.Tasks.Build do
   alias Glayu.Build.Jobs.RenderPages
   alias Glayu.Build.Jobs.BuildSiteTree
   alias Glayu.Build.Jobs.RenderCategoryPages
+  alias Glayu.Build.Jobs.BuildSiteTreeAndRenderPages
   alias Glayu.Utils.PathRegex
   alias Glayu.Build.SiteTree
 
@@ -18,7 +19,7 @@ defmodule Glayu.Tasks.Build do
   def run([regex: nil]) do
     before = System.monotonic_time()
     check_and_init()
-    result = build_pipeline([:scan, :pages, :categories, :home, :assets], [results: %{}])
+    result = build_pipeline([:scan_and_pages, :categories, :home, :assets], [results: %{}])
     later = System.monotonic_time()
     diff = later - before
     seconds = System.convert_time_unit(diff, :native, :seconds)
@@ -34,7 +35,7 @@ defmodule Glayu.Tasks.Build do
   def run([regex: regex]) do
     before = System.monotonic_time()
     check_and_init()
-    result = build_pipeline([:scan, :pages], [regex: regex, results: %{}])
+    result = build_pipeline([:scan_and_pages], [regex: regex, results: %{}])
     later = System.monotonic_time()
     diff = later - before
     seconds = System.convert_time_unit(diff, :native, :seconds)
@@ -113,13 +114,43 @@ defmodule Glayu.Tasks.Build do
 
   end
 
+  defp run_task(:scan_and_pages, args) do
+
+    regex = args[:regex]
+    root = PathRegex.base_dir(regex)
+
+    ProgressBar.render_spinner([text: "Generating site pages…", done: [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Site pages generated."], frames: :braille, spinner_color: IO.ANSI.light_cyan], fn ->
+      nodes = ContainMdFiles.nodes(root, compile_regex(regex))
+
+      sort_fn = fn doc_context1, doc_context2 ->
+        comp = DateTime.compare(doc_context1[:date], doc_context2[:date])
+        comp == :gt || comp == :eq
+      end
+
+      TaskSpawner.spawn(nodes, BuildSiteTreeAndRenderPages, [sort_fn: sort_fn, num_posts: @max_posts_per_node])
+
+    end)
+
+    {status, resume} = Glayu.Build.JobResume.resume(BuildSiteTreeAndRenderPages.__info__(:module))
+
+    if status == :ok do
+      IO.puts IO.ANSI.format([:light_cyan, "└── #{resume.files}", :reset , " pages generated."])
+      {:ok, []}
+    else
+      {:error, IO.ANSI.format([["Unable to generate site pages: "] | resume.errors])}
+    end
+
+  end
+
   defp run_task(:pages, args) do
-    TaskSpawner.spawn(args[:nodes], RenderPages, [])
+
+    ProgressBar.render_spinner([text: "Generating site pages…", done: [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Site pages generated."], frames: :braille, spinner_color: IO.ANSI.light_cyan], fn ->
+      TaskSpawner.spawn(args[:nodes], RenderPages, [])
+    end)
 
     {status, resume} = Glayu.Build.JobResume.resume(RenderPages.__info__(:module))
 
     if status == :ok do
-      IO.puts [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Site pages generated."]
       IO.puts IO.ANSI.format([:light_cyan, "└── #{resume.files}", :reset , " pages generated."])
       {:ok, []}
     else

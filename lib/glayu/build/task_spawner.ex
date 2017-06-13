@@ -2,7 +2,8 @@ defmodule Glayu.Build.TaskSpawner do
 
   alias Glayu.Build.JobsStore
 
-  @node_build_timeout 3_600_000 # 1h
+  @await_timeout 3_600_000 # 1h
+  @transaction_timeout 3_600_000 # 1h
 
   def spawn(nodes, job, args) do
     nodes
@@ -14,18 +15,25 @@ defmodule Glayu.Build.TaskSpawner do
     task = Task.Supervisor.async_nolink(:build_task_supervisor, fn ->
       try do
         JobsStore.put_record(%Glayu.Build.Record{job: job.__info__(:module), node: node, status: :running, pid: self()})
-        job.run(node, args)
+        :poolboy.transaction(:worker, &(GenServer.call(&1, {job, node, args}, @transaction_timeout)), args[:timeout] || @transaction_timeout)
       rescue error ->
-        exit {:shutdown, error}
-      catch key, error ->
-        exit {:shutdown, {key, error}}
+         exit {:shutdown, error}
+      catch _, error ->
+        case error do
+          {{:shutdown, details}, _} ->
+            exit {:shutdown, details}
+          {:timeout, _} ->
+            exit {:shutdown, "Timeout"}
+          _ ->
+            exit {:shutdown, error}
+        end
       end
     end)
     {{job.__info__(:module), node}, task}
   end
 
   defp handle_task({key, task}) do
-    response = Task.yield(task, @node_build_timeout)
+    response = Task.yield(task, @await_timeout)
     task_demonitor(task)
     store_result(response, key)
   end
