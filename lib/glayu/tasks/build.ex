@@ -168,7 +168,6 @@ defmodule Glayu.Tasks.Build do
         nodes = Enum.filter(SiteTree.keys(), fn(keys) ->
           Regex.match?(regex, Glayu.Path.category_relative_source_dir(keys))
         end)
-        IO.puts inspect nodes
         TaskSpawner.spawn(nodes, RenderCategoryPages, [])
       else
         TaskSpawner.spawn(SiteTree.keys(), RenderCategoryPages, [])
