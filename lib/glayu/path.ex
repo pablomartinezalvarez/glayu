@@ -67,6 +67,10 @@ defmodule Glayu.Path do
     Path.join([source_root(:post)] ++ keys)
   end
 
+  def category_relative_source_dir(keys) do
+    Path.join([@posts_dir] ++ keys)
+  end
+
   def category_dir(keys) do
     Path.join([public_root()] ++ keys)
   end
