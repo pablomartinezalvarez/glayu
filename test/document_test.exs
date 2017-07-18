@@ -6,7 +6,7 @@ defmodule Glayu.DocumentTest do
     Glayu.Config.load_config("./test/fixtures")
   end
 
-  test "parse a draft generates its doc context" do
+  test "parsing a draft generates its doc context" do
 
     expected_content =
     """
@@ -32,7 +32,7 @@ defmodule Glayu.DocumentTest do
 
   end
 
-  test "parse a page generates its doc context" do
+  test "parsing a page generates its doc context" do
 
     expected_content =
     """
@@ -48,6 +48,30 @@ defmodule Glayu.DocumentTest do
     assert actual.author == "Wikipedia"
     assert actual.content == expected_content
     assert actual.source == Path.absname("./test/fixtures/source/pages/elixir.md")
+    assert actual.type == :page
+
+  end
+
+  test "parsing a page with multiple `---` generates its doc context" do
+
+    expected_content =
+    """
+    <h1>Multiple Dashes</h1>
+    <hr class=\"thin\"/>
+    <p>after first dash</p>
+    <hr class=\"thin\"/>
+    <p>after second dash</p>
+    <hr class=\"thin\"/>
+    <p>after third dash</p>
+    """
+
+    actual = Glayu.Document.parse("./test/fixtures/source/pages/dashes.md")
+
+    assert actual.title == "Dashes"
+    assert actual.date == DateTime.from_naive!(~N[2017-07-18 14:55:00], "Etc/UTC")
+    assert actual.author == "Pablo Martínez"
+    assert actual.content == expected_content
+    assert actual.source == Path.absname("./test/fixtures/source/pages/dashes.md")
     assert actual.type == :page
 
   end

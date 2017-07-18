@@ -9,7 +9,7 @@ defmodule Glayu.Document do
 
   def parse(md_file) do
 
-    [frontmatter|[raw|_]] = String.split(File.read!(md_file), "\n---\n")
+    [frontmatter|[raw|_]] = String.split(File.read!(md_file), "\n---\n", parts: 2)
 
     doc_type = doc_type(md_file)
 
