@@ -3,7 +3,7 @@ defmodule Glayu.Tasks.NewTest do
   use ExUnit.Case
 
   setup_all do
-    Glayu.Config.load_config("./test/fixtures")
+    Glayu.Config.load_config_file("./test/fixtures/config/_config.yml", "./test/fixtures")
   end
 
   test "new post creates the markdown file" do

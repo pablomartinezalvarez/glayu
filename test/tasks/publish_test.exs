@@ -5,7 +5,7 @@ defmodule Glayu.Tasks.PublishTest do
   import ExUnit.CaptureIO
 
   setup_all do
-    Glayu.Config.load_config("./test/fixtures")
+    Glayu.Config.load_config_file("./test/fixtures/config/_config.yml", "./test/fixtures")
     gen_draft()
   end
 

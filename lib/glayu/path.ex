@@ -88,7 +88,12 @@ defmodule Glayu.Path do
   end
 
   def source_root() do
-    Path.absname(Path.join(Config.get('base_dir'), Config.get('source_dir')))
+    source = Config.get('source_dir')
+    if Path.type(source) == :absolute do
+      source
+    else
+      Path.absname(Path.join(Config.get('base_dir'), Config.get('source_dir')))
+    end
   end
 
   def home_page() do
@@ -96,15 +101,20 @@ defmodule Glayu.Path do
   end
 
   def public_root() do
-    Path.absname(Path.join(Config.get('base_dir'), Config.get('public_dir')))
+    public = Config.get('public_dir')
+    if Path.type(public) == :absolute do
+      public
+    else
+      Path.absname(Path.join(Config.get('base_dir'), Config.get('public_dir')))
+    end
   end
 
   def source_root(:post) do
-    Path.absname(Path.join([Config.get('base_dir'), Config.get('source_dir'), @posts_dir]))
+    Path.absname(Path.join(source_root(), @posts_dir))
   end
 
   def source_root(:draft) do
-    Path.absname(Path.join([Config.get('base_dir'), Config.get('source_dir'), @drafts_dir]))
+    Path.absname(Path.join(source_root(), @drafts_dir))
   end
 
   def themes_dir do
@@ -112,31 +122,31 @@ defmodule Glayu.Path do
   end
 
   def theme_dir(name) do
-    Path.absname(Path.join([Config.get('base_dir'), @themes_dir, name]))
+    Path.absname(Path.join([themes_dir(), name]))
   end
 
   def active_theme_dir() do
-    Path.absname(Path.join([Config.get('base_dir'), @themes_dir, Config.get('theme')]))
+    Path.join([themes_dir(), Config.get('theme')])
   end
 
   def layout(template) do
-    Path.absname(Path.join([Config.get('base_dir'), @themes_dir, Config.get('theme'), @layouts_dir, template <> @eex_ext]))
+    Path.join([themes_dir(), Config.get('theme'), @layouts_dir, template <> @eex_ext])
   end
 
   def partials_dir() do
-    Path.absname(Path.join([Config.get('base_dir'), @themes_dir, Config.get('theme'), @partials_dir]))
+    Path.join([themes_dir(), Config.get('theme'), @partials_dir])
   end
 
   def layouts_dir() do
-    Path.absname(Path.join([Config.get('base_dir'), @themes_dir, Config.get('theme'), @layouts_dir]))
+    Path.join([themes_dir(), Config.get('theme'), @layouts_dir])
   end
 
   def assets_source() do
-    Path.absname(Path.join([Config.get('base_dir'), @themes_dir, Config.get('theme'), @assets_dir]))
+    Path.join([themes_dir(), Config.get('theme'), @assets_dir])
   end
 
   def public_assets() do
-    Path.absname(Path.join([Config.get('base_dir'), Config.get('public_dir'), @assets_dir]))
+    Path.join([public_root(), @assets_dir])
   end
 
 end

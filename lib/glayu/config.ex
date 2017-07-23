@@ -2,21 +2,18 @@ defmodule Glayu.Config do
 
   def load_config do
     if Glayu.ConfigStore.empty? do
-      load_config_file("./_config.yml")
+      {:ok, working_directory} = File.cwd()
+      load_config_file("./_config.yml", working_directory)
     end
-  end
-
-  def load_config(dir) do
-    load_config_file(Path.join(dir, "_config.yml"))
   end
 
   def get(key) do
     Glayu.ConfigStore.get(key)
   end
 
-  defp load_config_file(path) do
+  def load_config_file(path, base_dir) do
     if File.exists? path do
-      List.flatten(:yamerl_constr.file(path)) ++ [{'base_dir', to_charlist(Path.dirname(path))}]
+      List.flatten(:yamerl_constr.file(path)) ++ [{'base_dir', to_charlist(base_dir)}]
       |> validate_config!
       |> Glayu.ConfigStore.set_config
     else

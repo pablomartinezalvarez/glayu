@@ -3,6 +3,7 @@ defmodule Glayu.Tasks.Init do
   require Logger
 
   @behaviour Glayu.Tasks.Task
+  @default_config_file "_config.yml"
 
   @moduledoc """
   This task initializes a Glayu project.
@@ -14,7 +15,7 @@ defmodule Glayu.Tasks.Init do
     dir
     |> create_root_dir
     |> create_config
-    |> create_dirs
+    create_dirs()
 
     theme_uri = Glayu.Config.get('theme_uri')
     if theme_uri do
@@ -37,20 +38,20 @@ defmodule Glayu.Tasks.Init do
   end
 
   defp create_config(dir) do
-    config_file = Path.join(dir, "_config.yml")
+    config_file = Path.join(dir, @default_config_file)
     unless File.exists?(config_file) do
       File.write(config_file, Glayu.Templates.Config.tpl)
     end
-    Glayu.Config.load_config(dir)
+    Glayu.Config.load_config_file(config_file, dir)
     dir
   end
 
-  defp create_dirs(dir) do
-    create_dir(Path.join(dir, Glayu.Config.get('source_dir')))
-    create_dir(Path.join([dir, Glayu.Config.get('source_dir'), "_drafts"]))
-    create_dir(Path.join([dir, Glayu.Config.get('source_dir'), "_posts"]))
-    create_dir(Path.join(dir, Glayu.Config.get('public_dir')))
-    create_dir(Path.join(dir, "themes"))
+  defp create_dirs() do
+    create_dir(Glayu.Path.source_root())
+    create_dir(Glayu.Path.source_root(:draft))
+    create_dir(Glayu.Path.source_root(:post))
+    create_dir(Glayu.Path.public_root())
+    create_dir(Glayu.Path.themes_dir())
   end
 
   defp create_dir(dir) do

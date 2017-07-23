@@ -3,7 +3,7 @@ defmodule Glayu.PermalinkTest do
   use ExUnit.Case
 
   setup_all do
-    Glayu.Config.load_config("./test/fixtures")
+    Glayu.Config.load_config_file("./test/fixtures/config/_config.yml", "./test/fixtures")
   end
 
   test "permalink is extracted from a valid draft context" do

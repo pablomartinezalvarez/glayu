@@ -4,7 +4,7 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
   use Timex
 
   setup_all do
-    Glayu.Config.load_config("./test/fixtures/build_site_tree")
+    Glayu.Config.load_config_file("./test/fixtures/build_site_tree/_config.yml", "./test/fixtures/build_site_tree")
     gen_test_site()
   end
 
