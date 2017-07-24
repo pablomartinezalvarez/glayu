@@ -1,7 +1,7 @@
 [![glayu](https://cdn.rawgit.com/pmartinezalvarez/glayu/a3626e17/glayu.svg)](http://www.glayu.com)
 
 
-[![Build Status](https://travis-ci.org/pmartinezalvarez/glayu.svg?branch=master)](https://travis-ci.org/pmartinezalvarez/glayu) [![Managed with Taiga.io](https://img.shields.io/badge/managed%20with-TAIGA.io-709f14.svg)](https://tree.taiga.io/project/pablomartinez-glayu/ "Managed with Taiga.io")
+[![Build Status](https://travis-ci.org/pmartinezalvarez/glayu.svg?branch=master)](https://travis-ci.org/pmartinezalvarez/glayu)
 
 ## What is Glayu?
 Glayu is a static site generator for mid-sized sites that generate content frequently and have to deal with multiple categories, like magazines and newspapers.
