@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/pmartinezalvarez/glayu.png?label=ready&title=Ready)](https://waffle.io/pmartinezalvarez/glayu?utm_source=badge)
 [![glayu](https://cdn.rawgit.com/pmartinezalvarez/glayu/a3626e17/glayu.svg)](http://www.glayu.com)
 
 
