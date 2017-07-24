@@ -1,0 +1,4 @@
+<% use Glayu.EEx %>
+<%= partial "head" %>
+<h2>Home Page</h2>
+<%= partial "footer" %>

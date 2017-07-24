@@ -29,6 +29,7 @@ defmodule Glayu.DocumentTest do
     assert actual.content == expected_content
     assert actual.source == Path.absname("./test/fixtures/source/_drafts/moon-jae-in-becomes-president-of-south-korea.md")
     assert actual.type == :draft
+    assert actual.layout == :post
 
   end
 
@@ -49,6 +50,7 @@ defmodule Glayu.DocumentTest do
     assert actual.content == expected_content
     assert actual.source == Path.absname("./test/fixtures/source/pages/elixir.md")
     assert actual.type == :page
+    assert actual.layout == :page
 
   end
 
@@ -73,6 +75,44 @@ defmodule Glayu.DocumentTest do
     assert actual.content == expected_content
     assert actual.source == Path.absname("./test/fixtures/source/pages/dashes.md")
     assert actual.type == :page
+    assert actual.layout == :page
+
+  end
+
+  test "rendering a post with a custom layout generates the right HTML" do
+
+    expected_html =
+    """
+    <html>
+    <head><title>Tears in Rain</title></head>
+    <body>
+    <h1>This is a Custom Layout</h1>
+    <h2>Tears in Rain</h2>
+    <p>I’ve seen things you people wouldn’t believe. Attack ships on fire off the shoulder of Orion. I watched C-beams glitter in the dark near the Tannhäuser Gate. All those moments will be lost in time, like tears in rain. Time to die.</p>
+    </body>
+    </html>
+    """
+
+    doc_context = %{
+      author: "Pablo Martinez",
+      categories: [%{keys: ["custom-layout"], name: "Custom Layout", path: "/custom-layout/index.html"}],
+      content: "<p>I’ve seen things you people wouldn’t believe. Attack ships on fire off the shoulder of Orion. I watched C-beams glitter in the dark near the Tannhäuser Gate. All those moments will be lost in time, like tears in rain. Time to die.</p>",
+      date: DateTime.from_naive!(~N[2017-07-24 18:15:20], "Etc/UTC"),
+      featured_image: "https://upload.wikimedia.org/wikipedia/en/1/1f/Tears_In_Rain.png",
+      layout: :custom,
+      path: "/custom-layout/2017/07/24/tears-in-rain.html",
+      raw: "I've seen things you people wouldn't believe. Attack ships on fire off the shoulder of Orion. I watched C-beams glitter in the dark near the Tannhäuser Gate. All those moments will be lost in time, like tears in rain. Time to die.",
+      source: "/Users/pablomartinez/Documents/development/workspaces/glayu/glayu/test/fixtures/source/_posts/custom-layout/2017/07/24/custom-layout.md",
+      summary: "<p>I’ve seen things you people wouldn’t believe. Attack ships on fire off the shoulder of Orion. I watched C-beams glitter in the dark near the Tannhäuser Gate. All those moments will be lost in time, like tears in rain. Time to die.</p>",
+      tags: ["Layouts"],
+      title: "Tears in Rain",
+      type: :post
+    }
+
+    # Precompile layouts
+    Glayu.Build.TemplatesStore.add_templates(Glayu.Template.compile())
+
+    assert Glayu.Document.render(doc_context) == expected_html
 
   end
 

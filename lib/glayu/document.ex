@@ -20,14 +20,19 @@ defmodule Glayu.Document do
       |> Map.put(:source, Path.absname(md_file))
       |> Map.put(:raw, raw)
       |> Map.put(:content, html_content) # Compile Markdown to HTML
-      |> Map.put_new(:layout, doc_type)
+      |> inform_layout(doc_type)
 
     context = Map.put(context, :date, get_date(context[:date])) # date string to DateTime conversion
 
     if doc_type == :post || doc_type == :draft do
-      context = Map.put(context, :categories, inform_categories(context[:categories])) # informed categories
-      context = Map.put(context, :summary, inform_summary(context[:summary], raw))
-      Map.put(context, :path, URL.path(doc_type, Permalink.from_context(context))) # document relative path
+
+      # TODO Think! Why context |> inform_categories doesn't work?
+      context = inform_categories(context)
+
+      context
+      |> inform_summary(raw)
+      |> Map.put(:path, URL.path(doc_type, Permalink.from_context(context)))  # document relative path
+
     else
       Map.put(context, :path, URL.path(doc_type, Permalink.from_context(context))) # document relative path
     end
@@ -35,7 +40,7 @@ defmodule Glayu.Document do
   end
 
   def render(doc_context) do
-    Template.render(doc_context[:type], build_context(doc_context))
+    Template.render(doc_context[:layout], build_context(doc_context))
   end
 
   def write(html, doc_context) do
@@ -82,29 +87,46 @@ defmodule Glayu.Document do
     [page: page_context, site: Glayu.Site.context()]
   end
 
-  defp inform_summary(nil, raw) do
-    raw
-    |> String.split("\n")
-    |> List.first
-    |> Earmark.as_html!
+  # Layout is included on front-matter
+  defp inform_layout(context = %{layout: layout}, _) do
+    Map.put(context, :layout, String.to_atom(layout))
   end
 
-  defp inform_summary(summary, _) do
-    Earmark.as_html!(summary)
+  # The layout for a drat is the post layout
+  defp inform_layout(context, :draft) do
+    Map.put(context, :layout, :post)
   end
 
-  defp inform_categories(names) do
-    inform_categories(names, [], [])
+  defp inform_layout(context, doc_type) do
+    Map.put(context, :layout, doc_type)
   end
 
-  defp inform_categories([], _, categories) do
+  # Summary is included on front-matter
+  defp inform_summary(context = %{summary: summary}, _) do
+    Map.put(context, :summary, Earmark.as_html!(summary))
+  end
+
+  defp inform_summary(context, raw) do
+    html = raw
+      |> String.split("\n")
+      |> List.first
+      |> Earmark.as_html!
+
+      Map.put(context, :summary, html)
+  end
+
+  defp inform_categories(context) do
+    Map.put(context, :categories, _inform_categories(context[:categories], [], []))
+  end
+
+  defp _inform_categories([], _, categories) do
     categories
   end
 
-  defp inform_categories([name | subcategory_names], parent, categories) do
+  defp _inform_categories([name | subcategory_names], parent, categories) do
     name_as_string = to_string name
     keys = parent ++ [Glayu.Slugger.slug(name_as_string)]
-    inform_categories(subcategory_names, keys, categories ++ [%{keys: keys, name: name_as_string, path: URL.path(:category, keys)}])
+    _inform_categories(subcategory_names, keys, categories ++ [%{keys: keys, name: name_as_string, path: URL.path(:category, keys)}])
   end
 
   defp create_destination_dir(doc_context) do

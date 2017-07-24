@@ -11,4 +11,4 @@ source_dir: /path/to/source
 public_dir: /path/to/public
 
 # Theme
-theme: glayu-times
+theme: default

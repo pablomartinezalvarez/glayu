@@ -10,5 +10,5 @@ permalink: categories/categories/title
 source_dir: source
 
 # Theme
-theme: glayu-times
-theme_uri: glayu-times
+theme: default
+theme_uri: default
