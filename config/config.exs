@@ -36,3 +36,8 @@ config :elixir, ansi_enabled: true
 config :logger, :console,
   level: :info,
   format: "$level: $message\n"
+
+# Poolboy config
+config :poolboy,
+  size: 5,
+  max_overflow: 2

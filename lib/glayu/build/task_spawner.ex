@@ -12,7 +12,7 @@ defmodule Glayu.Build.TaskSpawner do
   end
 
   defp spawn_task(node, job, args) do
-    task = Task.Supervisor.async_nolink(:build_task_supervisor, fn ->
+    task = Task.Supervisor.async_nolink(:build_tasks_sup, fn ->
       try do
         JobsStore.put_record(%Glayu.Build.Record{job: job.__info__(:module), node: node, status: :running, pid: self()})
         :poolboy.transaction(:worker, &(GenServer.call(&1, {job, node, args}, @transaction_timeout)), args[:timeout] || @transaction_timeout)

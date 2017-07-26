@@ -22,3 +22,4 @@ erl_crash.dump
 /.idea
 
 .DS_Store
+/mix.lock
