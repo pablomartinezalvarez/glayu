@@ -1,6 +1,7 @@
 defmodule Glayu.Build.Jobs.BuildSiteTreeAndRenderPages do
 
   @behaviour Glayu.Build.Jobs.Job
+
   @root "root"
   @md_ext ".md"
 
@@ -18,6 +19,8 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeAndRenderPages do
   defp buid_site_tree(docs, args) do
     sort_fn = args[:sort_fn]
     num_posts =  args[:num_posts]
+
+    SiteTree.put_pages(Enum.filter(docs, &(:page == &1[:type])))
 
     docs
     |> Enum.filter(&(:post == &1[:type]))
@@ -37,7 +40,12 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeAndRenderPages do
     Enum.flat_map(files, fn(file) ->
       path = Path.join(node, file)
       if File.regular?(path) && Path.extname(path) == @md_ext do
-        [Document.parse(path)]
+        doc_context = Document.parse(path)
+        # Updates tags
+        if doc_context[:tags] do
+          SiteTree.put_tags(doc_context[:tags])
+        end
+        [doc_context]
       else
         []
       end

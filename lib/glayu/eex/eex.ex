@@ -5,6 +5,7 @@ defmodule Glayu.EEx do
       import Glayu.EEx.Macros
       import Glayu.EEx.Posts
       import Glayu.EEx.Categories
+      import Glayu.EEx.Pages
       import Glayu.EEx.Tags
       alias Glayu.EEx.Date
     end

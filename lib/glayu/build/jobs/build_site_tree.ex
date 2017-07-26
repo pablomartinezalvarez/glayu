@@ -42,6 +42,7 @@ defmodule Glayu.Build.Jobs.BuildSiteTree do
         end
         parse_posts(node, more_files, [doc_context | posts])
       else
+        SiteTree.put_pages([doc_context])
         parse_posts(node, more_files, posts)
       end
     else

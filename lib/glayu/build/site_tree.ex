@@ -50,6 +50,25 @@ defmodule Glayu.Build.SiteTree do
     end)
   end
 
+  def pages do
+    Agent.get(__MODULE__, fn tree ->
+      (tree[:pages] || [])
+    end)
+  end
+
+  def put_pages(pages) do
+    Agent.update(__MODULE__, fn tree ->
+      {_, updated_tree} = get_and_update_in(tree, [:pages], fn (previous) ->
+        if previous do
+          {previous, previous ++ pages}
+        else
+          {nil, pages}
+        end
+      end)
+      updated_tree
+    end)
+  end
+
   def put_tags(tags) do
     Agent.update(__MODULE__, fn tree ->
       _put_tags(tree, tags)
@@ -58,7 +77,11 @@ defmodule Glayu.Build.SiteTree do
 
   def tags do
     Agent.get(__MODULE__, fn tree ->
-      Enum.sort(MapSet.to_list(tree[:tags]))
+      if tree[:tags] do
+        Enum.sort(MapSet.to_list(tree[:tags]))
+      else
+        []
+      end
     end)
   end
 

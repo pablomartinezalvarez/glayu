@@ -23,6 +23,18 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
     "Reprehenderit eum veniam voluptas architecto tempora sed veniam. Consectetur nemo et velit delectus voluptatem voluptas pariatur autem. Perspiciatis ipsam est recusandae. Ratione amet hic perferendis.\n"
   end
 
+  defp page_tpl(title,  date) do
+    "---\n" <>
+    "title: #{title}\n" <>
+    "date: #{date}\n" <>
+    "---\n" <>
+    "Nemo voluptatibus illum similique dolore. Quos cum neque et. Mollitia quis iusto cum sapiente. Vitae id omnis voluptatem dolor tenetur. Labore ut officiis accusantium eaque. Quos id eius at recusandae deleniti aperiam est.\n" <>
+    "Vel aut blanditiis ipsum aut eum ab praesentium voluptatibus. Ullam quo quis numquam et explicabo ipsum est. Ducimus facilis odio quia nostrum.\n" <>
+    "Sed et laboriosam ea atque nihil qui temporibus. Illo fugiat animi ut aut vel dignissimos animi quo. Ea numquam aut rem debitis. Culpa sint voluptatem qui. Iusto necessitatibus illo facilis commodi explicabo ut.\n" <>
+    "A mollitia eum et voluptatem nemo. Suscipit esse repudiandae amet aliquid alias sit omnis itaque. Dolores molestiae vitae sit. Veniam hic doloremque qui tempore ducimus qui. Incidunt optio optio dolorem molestias dolor voluptas vitae. Ut omnis est omnis nulla quia quidem iusto.\n" <>
+    "Reprehenderit eum veniam voluptas architecto tempora sed veniam. Consectetur nemo et velit delectus voluptatem voluptas pariatur autem. Perspiciatis ipsam est recusandae. Ratione amet hic perferendis.\n"
+  end
+
   defp string_list_to_yaml(categories) do
     Enum.reduce(categories, "", fn (category, buff) -> buff <> "- #{category}\n" end)
   end
@@ -32,8 +44,17 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
     File.write!(path, post_tpl(title,  date, categories, tags))
   end
 
+  defp create_page(path, title,  date) do
+    File.mkdir_p!(Path.dirname(path))
+    File.write!(path, page_tpl(title,  date))
+  end
+
   # Generated the test Site:
-  #
+  # sitemap.md
+  # help.md
+  # contact.md
+  # terms-of-service.md
+  # privacy-policy.md
   # _posts
   #   business
   #     markets
@@ -85,6 +106,12 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
   #             post-24.md
   defp gen_test_site do
 
+    create_page("./test/fixtures/build_site_tree/source/sitemap.md", "Site Map", "2017-01-01 00:01:00")
+    create_page("./test/fixtures/build_site_tree/source/help.md", "Help", "2017-01-01 00:01:00")
+    create_page("./test/fixtures/build_site_tree/source/contact.md", "Contact", "2017-01-01 00:01:00")
+    create_page("./test/fixtures/build_site_tree/source/terms-of-service.md", "Terms of Service", "2017-01-01 00:01:00")
+    create_page("./test/fixtures/build_site_tree/source/privacy-policy.md", "Privacy Policy", "2017-01-01 00:01:00")
+
     create_post("./test/fixtures/build_site_tree/source/_posts/world/europe/2017/01/01/post-01.md", "Post 01", "2017-01-01 00:01:00", ["World", "Europe"], ["Spain", "Madrid"])
     create_post("./test/fixtures/build_site_tree/source/_posts/world/americas/2017/01/01/post-02.md", "Post 02", "2017-01-01 00:02:00", ["World", "Americas"], ["US", "L.A."])
     create_post("./test/fixtures/build_site_tree/source/_posts/world/europe/2017/01/01/post-03.md", "Post 03", "2017-01-01 00:03:00", ["World", "Europe"], ["Germany", "Berlin"])
@@ -116,6 +143,7 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
   test "site tree generation" do
 
     nodes = [
+      "./test/fixtures/build_site_tree/source/",
       "./test/fixtures/build_site_tree/source/_posts/business/markets/2017/01/02",
       "./test/fixtures/build_site_tree/source/_posts/business/markets/2017/01/03",
       "./test/fixtures/build_site_tree/source/_posts/business/markets/2017/01/05",
@@ -137,6 +165,14 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
 
     # categories
     assert Glayu.Build.SiteTree.keys() == [["business"], ["business", "markets"], ["business", "media"], ["world"], ["world", "americas"], ["world", "europe"]]
+
+    pages = Enum.sort(Glayu.Build.SiteTree.pages(), &(&1[:title] <= &2[:title]))
+    assert length(pages) == 5
+    assert Enum.at(pages,0).title == "Contact"
+    assert Enum.at(pages,1).title == "Help"
+    assert Enum.at(pages,2).title == "Privacy Policy"
+    assert Enum.at(pages,3).title == "Site Map"
+    assert Enum.at(pages,4).title == "Terms of Service"
 
     # tags
     assert Glayu.Build.SiteTree.tags() == ["21 Century Fox", "BIFFEX", "Barcelona", "Barranquilla", "Berlin", "Bertelsmann", "Bilbao", "Bordeaux", "Colombia", "Dow Jones", "Dublin", "France", "Germany", "Grupo Globo", "IBEX 35", "Ireland", "Italy", "Japan", "L.A.", "Lima", "London", "Madrid", "NY", "NYSE Arca", "Nasdaq", "National Amusements", "Nikkey 225", "PRISA", "Paris", "Peru", "Rome", "Sony", "Spain", "Televisa", "US", "Walt Disney"]
@@ -202,7 +238,7 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
     assert Enum.at(media_posts,2).title == "Post 20"
 
   after
-    File.rm_rf!("./test/fixtures/build_site_tree/source/_posts")
+    File.rm_rf!("./test/fixtures/build_site_tree/source/")
   end
 
 end
