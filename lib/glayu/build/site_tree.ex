@@ -6,6 +6,10 @@ defmodule Glayu.Build.SiteTree do
     Agent.start_link(fn -> %{} end, name: __MODULE__)
   end
 
+  def reset do
+    Agent.update(__MODULE__, fn _ -> %{} end)
+  end
+
   def put_node(keys, node, sort_fn, limit) do
     Agent.update(__MODULE__, fn tree ->
         update_node(tree, normalize(keys), node, sort_fn, limit)

@@ -1,4 +1,4 @@
-defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
+defmodule Glayu.Build.Jobs.BuildSiteTreeAndRenderPagesTest do
 
   use ExUnit.Case
   use Timex
@@ -9,7 +9,7 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
     Glayu.Build.SiteTree.reset()
   end
 
-  test "site tree generation" do
+  test "site tree and render pages " do
 
     nodes = [
       "./test/fixtures/build_site_tree/source/",
