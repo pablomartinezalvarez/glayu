@@ -1,6 +1,7 @@
 defmodule Glayu.Template do
 
   @base_layout "layout"
+  @template_extension ".eex"
 
   alias Glayu.Build.TemplatesStore
 
@@ -17,7 +18,10 @@ defmodule Glayu.Template do
   end
 
   defp compile_tpls(base_path) do
-    Enum.map(File.ls!(base_path), fn(file) ->
+    base_path
+    |> File.ls!
+    |> Enum.filter(fn(file) -> Path.extname(file) == @template_extension end)
+    |> Enum.map(fn(file) ->
       compiled = EEx.compile_file(Path.join(base_path, file), [engine: Glayu.EEx.GlayuEngine])
       [name|_] = String.split(file, ".")
       {String.to_atom(name), compiled}
