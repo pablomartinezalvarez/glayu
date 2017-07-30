@@ -87,7 +87,7 @@ defmodule Glayu.Document do
     [page: page_context, site: Glayu.Site.context()]
   end
 
-  # Layout is included on front-matter
+  # Layout is included in front-matter
   defp inform_layout(context = %{layout: layout}, _) do
     Map.put(context, :layout, String.to_atom(layout))
   end
@@ -101,7 +101,7 @@ defmodule Glayu.Document do
     Map.put(context, :layout, doc_type)
   end
 
-  # Summary is included on front-matter
+  # Summary is included in front-matter
   defp inform_summary(context = %{summary: summary}, _) do
     Map.put(context, :summary, Earmark.as_html!(summary))
   end
