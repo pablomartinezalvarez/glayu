@@ -8,6 +8,12 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeAndRenderPagesTest do
     Glayu.Build.Supervisor.start_link()
     Glayu.Build.TemplatesStore.add_templates(Glayu.Template.compile())
     SiteHelper.gen_test_site("build_site_tree_and_render_pages")
+
+    on_exit fn ->
+      File.rm_rf!("./test/fixtures/build_site_tree_and_render_pages/source/")
+      File.rm_rf!("./test/fixtures/build_site_tree_and_render_pages/public/")
+    end
+
   end
 
   test "site tree and render pages " do
@@ -143,9 +149,6 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeAndRenderPagesTest do
     assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/world/europe/2017/01/21/post-23.html")
     assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/world/europe/2017/01/21/post-24.html")
 
-  after
-    File.rm_rf!("./test/fixtures/build_site_tree_and_render_pages/source/")
-    File.rm_rf!("./test/fixtures/build_site_tree_and_render_pages/public/")
   end
 
 end

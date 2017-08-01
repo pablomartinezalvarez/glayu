@@ -17,6 +17,11 @@ defmodule Glayu.PreviewServer.Plug.ServerTest do
     Glayu.Build.TemplatesStore.add_templates(Glayu.Template.compile())
     SiteHelper.gen_test_site("preview_server")
     SiteHelper.build_site_tree()
+
+    on_exit fn ->
+      File.rm_rf!("./test/fixtures/preview_server/source/")
+    end
+
   end
 
   test "/ returns the home page" do

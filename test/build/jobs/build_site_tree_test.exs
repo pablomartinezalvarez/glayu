@@ -7,6 +7,11 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
     Glayu.Config.load_config_file("./test/fixtures/build_site_tree/_config.yml", "./test/fixtures/build_site_tree")
     Glayu.Build.Supervisor.start_link()
     SiteHelper.gen_test_site("build_site_tree")
+
+    on_exit fn ->
+      File.rm_rf!("./test/fixtures/build_site_tree/source/")
+    end
+    
   end
 
   test "site tree generation" do
@@ -106,8 +111,6 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
     assert Enum.at(media_posts,1).title == "Post 21"
     assert Enum.at(media_posts,2).title == "Post 20"
 
-  after
-    File.rm_rf!("./test/fixtures/build_site_tree/source/")
   end
 
 end
