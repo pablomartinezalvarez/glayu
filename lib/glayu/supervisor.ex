@@ -7,7 +7,6 @@ defmodule Glayu.Supervisor do
 
   def init(:ok) do
     children = [
-      supervisor(Glayu.Build.Supervisor, []),
       worker(Glayu.ConfigStore, [])
     ]
 

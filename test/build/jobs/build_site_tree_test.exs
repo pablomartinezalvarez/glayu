@@ -5,8 +5,8 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
 
   setup_all do
     Glayu.Config.load_config_file("./test/fixtures/build_site_tree/_config.yml", "./test/fixtures/build_site_tree")
+    Glayu.Build.Supervisor.start_link()
     SiteHelper.gen_test_site("build_site_tree")
-    Glayu.Build.SiteTree.reset()
   end
 
   test "site tree generation" do

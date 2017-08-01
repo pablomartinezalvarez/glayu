@@ -109,7 +109,7 @@ defmodule Glayu.DocumentTest do
       type: :post
     }
 
-    # Precompile layouts
+    Glayu.Build.TemplatesStore.start_link()
     Glayu.Build.TemplatesStore.add_templates(Glayu.Template.compile())
 
     assert Glayu.Document.render(doc_context) == expected_html

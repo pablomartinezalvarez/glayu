@@ -64,8 +64,11 @@ defmodule Glayu.Tasks.Build do
   end
 
   defp check_and_init() do
+    Application.start(:poolboy)
+    Application.start(:httpoison)
     Glayu.Config.load_config()
     Glayu.SiteChecker.check_site!()
+    Glayu.Build.Supervisor.start_link
     Glayu.SiteChecker.check_theme!()
     TemplatesStore.add_templates(Glayu.Template.compile())
   end

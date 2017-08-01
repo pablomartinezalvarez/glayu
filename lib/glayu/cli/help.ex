@@ -54,6 +54,8 @@ defmodule Glayu.CLI.Help do
       "\n",
       "glayu ", :reset, :light_cyan, "build ", :reset, "[", :bright, "-chp", :reset, "] [", :bright, "regex", :reset, "]        Generates the static files.\n",
       "\n",
+      "glayu ", :reset, :light_cyan, "serve ", :reset, "[", :bright, "port", :reset, "]                Starts the preview server.\n",
+      "\n",
       "glayu ", :reset, :light_cyan, "help ", :reset, "[", :bright, "command", :reset, "]              Displays help.\n",
       "\n"
     ])

@@ -4,27 +4,25 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeAndRenderPagesTest do
   use Timex
 
   setup_all do
-    Glayu.Config.load_config_file("./test/fixtures/build_site_tree/_config.yml", "./test/fixtures/build_site_tree")
-    SiteHelper.gen_test_site("build_site_tree")
-    # Precompile layouts
+    Glayu.Config.load_config_file("./test/fixtures/build_site_tree_and_render_pages/_config.yml", "./test/fixtures/build_site_tree_and_render_pages")
+    Glayu.Build.Supervisor.start_link()
     Glayu.Build.TemplatesStore.add_templates(Glayu.Template.compile())
-    # Reset site tree
-    Glayu.Build.SiteTree.reset()
+    SiteHelper.gen_test_site("build_site_tree_and_render_pages")
   end
 
   test "site tree and render pages " do
 
     nodes = [
-      "./test/fixtures/build_site_tree/source/",
-      "./test/fixtures/build_site_tree/source/_posts/business/markets/2017/01/02",
-      "./test/fixtures/build_site_tree/source/_posts/business/markets/2017/01/03",
-      "./test/fixtures/build_site_tree/source/_posts/business/markets/2017/01/05",
-      "./test/fixtures/build_site_tree/source/_posts/business/media/2017/01/01",
-      "./test/fixtures/build_site_tree/source/_posts/business/media/2017/01/21",
-      "./test/fixtures/build_site_tree/source/_posts/world/americas/2017/01/01",
-      "./test/fixtures/build_site_tree/source/_posts/world/americas/2017/01/06",
-      "./test/fixtures/build_site_tree/source/_posts/world/europe/2017/01/01",
-      "./test/fixtures/build_site_tree/source/_posts/world/europe/2017/01/21"
+      "./test/fixtures/build_site_tree_and_render_pages/source/",
+      "./test/fixtures/build_site_tree_and_render_pages/source/_posts/business/markets/2017/01/02",
+      "./test/fixtures/build_site_tree_and_render_pages/source/_posts/business/markets/2017/01/03",
+      "./test/fixtures/build_site_tree_and_render_pages/source/_posts/business/markets/2017/01/05",
+      "./test/fixtures/build_site_tree_and_render_pages/source/_posts/business/media/2017/01/01",
+      "./test/fixtures/build_site_tree_and_render_pages/source/_posts/business/media/2017/01/21",
+      "./test/fixtures/build_site_tree_and_render_pages/source/_posts/world/americas/2017/01/01",
+      "./test/fixtures/build_site_tree_and_render_pages/source/_posts/world/americas/2017/01/06",
+      "./test/fixtures/build_site_tree_and_render_pages/source/_posts/world/europe/2017/01/01",
+      "./test/fixtures/build_site_tree_and_render_pages/source/_posts/world/europe/2017/01/21"
     ]
 
     # sort by date desc
@@ -110,44 +108,44 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeAndRenderPagesTest do
     assert Enum.at(media_posts,2).title == "Post 20"
 
     # Pages HTML files
-    assert File.exists?("./test/fixtures/build_site_tree/public/contact.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/help.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/privacy-policy.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/sitemap.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/terms-of-service.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/contact.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/help.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/privacy-policy.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/sitemap.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/terms-of-service.html")
 
     # Posts HTML files
-    assert File.exists?("./test/fixtures/build_site_tree/public/business/markets/2017/01/02/post-10.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/business/markets/2017/01/03/post-11.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/business/markets/2017/01/05/post-12.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/business/markets/2017/01/05/post-13.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/business/markets/2017/01/05/post-14.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/business/markets/2017/01/05/post-15.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/business/markets/2017/01/02/post-10.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/business/markets/2017/01/03/post-11.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/business/markets/2017/01/05/post-12.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/business/markets/2017/01/05/post-13.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/business/markets/2017/01/05/post-14.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/business/markets/2017/01/05/post-15.html")
 
-    assert File.exists?("./test/fixtures/build_site_tree/public/business/media/2017/01/01/post-04.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/business/media/2017/01/01/post-08.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/business/media/2017/01/21/post-18.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/business/media/2017/01/21/post-19.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/business/media/2017/01/21/post-20.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/business/media/2017/01/21/post-21.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/business/media/2017/01/21/post-25.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/business/media/2017/01/01/post-04.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/business/media/2017/01/01/post-08.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/business/media/2017/01/21/post-18.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/business/media/2017/01/21/post-19.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/business/media/2017/01/21/post-20.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/business/media/2017/01/21/post-21.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/business/media/2017/01/21/post-25.html")
 
-    assert File.exists?("./test/fixtures/build_site_tree/public/world/americas/2017/01/01/post-02.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/world/americas/2017/01/01/post-07.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/world/americas/2017/01/06/post-16.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/world/americas/2017/01/01/post-02.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/world/americas/2017/01/01/post-07.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/world/americas/2017/01/06/post-16.html")
 
-    assert File.exists?("./test/fixtures/build_site_tree/public/world/europe/2017/01/01/post-01.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/world/europe/2017/01/01/post-03.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/world/europe/2017/01/01/post-06.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/world/europe/2017/01/01/post-09.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/world/europe/2017/01/21/post-17.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/world/europe/2017/01/21/post-22.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/world/europe/2017/01/21/post-23.html")
-    assert File.exists?("./test/fixtures/build_site_tree/public/world/europe/2017/01/21/post-24.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/world/europe/2017/01/01/post-01.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/world/europe/2017/01/01/post-03.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/world/europe/2017/01/01/post-06.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/world/europe/2017/01/01/post-09.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/world/europe/2017/01/21/post-17.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/world/europe/2017/01/21/post-22.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/world/europe/2017/01/21/post-23.html")
+    assert File.exists?("./test/fixtures/build_site_tree_and_render_pages/public/world/europe/2017/01/21/post-24.html")
 
   after
-    File.rm_rf!("./test/fixtures/build_site_tree/source/")
-    File.rm_rf!("./test/fixtures/build_site_tree/public/")
+    File.rm_rf!("./test/fixtures/build_site_tree_and_render_pages/source/")
+    File.rm_rf!("./test/fixtures/build_site_tree_and_render_pages/public/")
   end
 
 end

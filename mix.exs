@@ -18,7 +18,7 @@ defmodule Glayu.Mixfile do
     # Specify extra applications you'll use from Erlang/Elixir
     [
       mod: {GlayuApp, []},
-      extra_applications: [:yamerl, :logger, :eex, :poolboy, :httpoison]
+      extra_applications: [:yamerl, :logger, :eex]
     ]
   end
 
@@ -42,6 +42,8 @@ defmodule Glayu.Mixfile do
       {:saul, "~> 0.1"},
       {:httpoison, "~> 0.11.1"},
       {:tzdata, "== 0.1.8", override: true}, # forces an old tzdata version (check https://github.com/lau/tzdata/issues/24)
+      {:cowboy, "~> 1.0.0"},
+      {:plug, "~> 1.0"},
       {:credo, "~> 0.7", only: [:dev, :test]}
     ]
   end

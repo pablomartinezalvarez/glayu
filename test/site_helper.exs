@@ -1,5 +1,7 @@
 defmodule SiteHelper do
 
+  @max_posts_per_node 100
+
   defp post_tpl(title,  date, categories, tags) do
     "---\n" <>
     "title: #{title}\n" <>
@@ -47,6 +49,10 @@ defmodule SiteHelper do
   # contact.md
   # terms-of-service.md
   # privacy-policy.md
+  # _drafts
+  #   draft-01.md
+  #   draft-02.md
+  #   draft-03.md
   # _posts
   #   business
   #     markets
@@ -129,6 +135,26 @@ defmodule SiteHelper do
     create_post("./test/fixtures/#{dir}/source/_posts/world/europe/2017/01/21/post-23.md", "Post 23", "2017-01-21 00:23:00", ["World", "Europe"], ["Ireland", "Dublin"])
     create_post("./test/fixtures/#{dir}/source/_posts/world/europe/2017/01/21/post-24.md", "Post 24", "2017-01-21 00:24:00", ["World", "Europe"], ["France", "Bordeaux"])
     create_post("./test/fixtures/#{dir}/source/_posts/business/media/2017/01/21/post-25.md", "Post 25", "2017-01-21 01:00:00", ["Business", "Media"], ["21 Century Fox"])
+
+    # Drafts
+    create_post("./test/fixtures/#{dir}/source/_drafts/draft-01.md", "Draft 01", "2017-01-01 00:01:00", ["drafts"], ["test"])
+    create_post("./test/fixtures/#{dir}/source/_drafts/draft-02.md", "Draft 02", "2017-01-01 00:02:00", ["drafts"], ["test"])
+    create_post("./test/fixtures/#{dir}/source/_drafts/draft-03.md", "Draft 03", "2017-01-01 00:03:00", ["drafts"], ["test"])
+
+  end
+
+  def build_site_tree() do
+
+    nodes = Glayu.Build.SiteAnalyzer.ContainMdFiles.nodes(Glayu.Path.source_root(), nil)
+
+    sort_fn = fn doc_context1, doc_context2 ->
+      comp = DateTime.compare(doc_context1[:date], doc_context2[:date])
+      comp == :gt || comp == :eq
+    end
+
+    Glayu.Build.TaskSpawner.spawn(nodes, Glayu.Build.Jobs.BuildSiteTree, [sort_fn: sort_fn, num_posts: @max_posts_per_node])
+
+    :ok
 
   end
 

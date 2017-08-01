@@ -2,7 +2,7 @@ defmodule Glayu.CLI do
 
   alias Glayu.CLI.Utils
 
-  @commands ["init", "new", "publish", "build", "help"]
+  @commands ["init", "new", "publish", "build", "serve", "help"]
 
   def commands do
     @commands

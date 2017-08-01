@@ -8,7 +8,7 @@ defmodule Glayu.CLITest do
   end
 
   def help_output do
-    "\n\e[1mGLAYU COMMANDS\n\e[0m\nglayu \e[0m\e[96minit \e[0m[\e[1mfolder\e[0m]               Initializes the website.\n\nglayu \e[0m\e[96mnew \e[0m[\e[1mfolder\e[0m] <\e[1mtitle\e[0m>        Creates a new post or page.\n\nglayu \e[0m\e[96mpublish \e[0m<\e[1mfilename\e[0m>          Publishes a draft.\n\nglayu \e[0m\e[96mbuild \e[0m[\e[1m-chp\e[0m] [\e[1mregex\e[0m]        Generates the static files.\n\nglayu \e[0m\e[96mhelp \e[0m[\e[1mcommand\e[0m]              Displays help.\n\n\e[0m\n"
+    "\n\e[1mGLAYU COMMANDS\n\e[0m\nglayu \e[0m\e[96minit \e[0m[\e[1mfolder\e[0m]               Initializes the website.\n\nglayu \e[0m\e[96mnew \e[0m[\e[1mfolder\e[0m] <\e[1mtitle\e[0m>        Creates a new post or page.\n\nglayu \e[0m\e[96mpublish \e[0m<\e[1mfilename\e[0m>          Publishes a draft.\n\nglayu \e[0m\e[96mbuild \e[0m[\e[1m-chp\e[0m] [\e[1mregex\e[0m]        Generates the static files.\n\nglayu \e[0m\e[96mserve \e[0m[\e[1mport\e[0m]                Starts the preview server.\n\nglayu \e[0m\e[96mhelp \e[0m[\e[1mcommand\e[0m]              Displays help.\n\n\e[0m\n"
   end
 
 end
