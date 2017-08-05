@@ -11,7 +11,7 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
     on_exit fn ->
       File.rm_rf!("./test/fixtures/build_site_tree/source/")
     end
-    
+
   end
 
   test "site tree generation" do

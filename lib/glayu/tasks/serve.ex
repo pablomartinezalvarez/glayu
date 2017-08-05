@@ -8,6 +8,7 @@ defmodule Glayu.Tasks.Serve do
 
     Application.start(:cowboy)
     Application.start(:plug)
+
     Glayu.Config.load_config()
     Glayu.SiteChecker.check_site!()
     {:ok, _} = Glayu.PreviewServer.Supervisor.start_link(params)

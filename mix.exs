@@ -43,8 +43,7 @@ defmodule Glayu.Mixfile do
       {:httpoison, "~> 0.11.1"},
       {:tzdata, "== 0.1.8", override: true}, # forces an old tzdata version (check https://github.com/lau/tzdata/issues/24)
       {:cowboy, "~> 1.0.0"},
-      {:plug, "~> 1.0"},
-      {:credo, "~> 0.7", only: [:dev, :test]}
+      {:plug, "~> 1.0"}
     ]
   end
 

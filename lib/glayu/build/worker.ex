@@ -10,13 +10,13 @@ defmodule Glayu.Build.Worker do
   end
 
   def handle_call({job, node, args}, _from, state) do
-    #try do
+    try do
       {:reply, job.run(node, args), state}
-    #rescue error ->
-    #  exit {:shutdown, error}
-    #catch _, error ->
-    #  exit {:shutdown, error}
-    #end
+    rescue error ->
+      exit {:shutdown, error}
+    catch _, error ->
+      exit {:shutdown, error}
+    end
   end
 
 end
