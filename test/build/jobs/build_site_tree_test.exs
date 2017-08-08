@@ -85,6 +85,13 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
     media_parent = Glayu.Build.SiteTree.get_parent(["business", "media"])
     assert media_parent.name == "Business"
     assert media_parent.path == "/business/index.html"
+    media_parents = Glayu.Build.SiteTree.get_parents(["business", "media"])
+    assert length(media_parents) == 2
+    assert Enum.at(media_parents, 0).name == "Home"
+    assert Enum.at(media_parents, 0).path == "/index.html"
+    assert Enum.at(media_parents, 1).name == "Business"
+    assert Enum.at(media_parents, 1).path == "/business/index.html"
+
     media_children = Glayu.Build.SiteTree.get_children(["business", "media"])
     assert length(media_children) == 0
 
