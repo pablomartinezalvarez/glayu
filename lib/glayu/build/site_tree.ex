@@ -38,6 +38,18 @@ defmodule Glayu.Build.SiteTree do
     end)
   end
 
+  def get_parents(keys) do
+    _get_parents(get_parent(keys), [])
+  end
+
+  defp _get_parents(nil, parents) do
+    parents
+  end
+
+  defp _get_parents(parent, parents) do
+    _get_parents(get_parent(parent.keys), [parent | parents])
+  end
+
   def get_node(keys) do
     Agent.get(__MODULE__, fn tree ->
         _get_node(tree, normalize(keys))
