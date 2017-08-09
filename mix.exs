@@ -43,7 +43,8 @@ defmodule Glayu.Mixfile do
       {:httpoison, "~> 0.11.1"},
       {:tzdata, "== 0.1.8", override: true}, # forces an old tzdata version (check https://github.com/lau/tzdata/issues/24)
       {:cowboy, "~> 1.0.0"},
-      {:plug, "~> 1.0"}
+      {:plug, "~> 1.0"},
+      {:file_system, git: "https://github.com/pmartinezalvarez/file_system.git"} # :file_system escript support (https://github.com/falood/file_system/issues/34)
     ]
   end
 

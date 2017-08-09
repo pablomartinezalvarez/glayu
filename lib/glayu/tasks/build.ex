@@ -77,11 +77,11 @@ defmodule Glayu.Tasks.Build do
     Enum.filter(Keyword.keys(params), &(Enum.member?(@tasks, &1)))
   end
 
-  defp build_pipeline([],  args) do
+  def build_pipeline([],  args) do
     {:ok, args[:results]}
   end
 
-  defp build_pipeline([task | tasks],  args) do
+  def build_pipeline([task | tasks],  args) do
     {status, results} = run_task(task, args)
     if status == :ok do
       build_pipeline(tasks, args ++ results)
@@ -90,7 +90,7 @@ defmodule Glayu.Tasks.Build do
     end
   end
 
-  defp run_task(:scan, args) do
+  def run_task(:scan, args) do
     regex = args[:regex]
     root = PathRegex.base_dir(regex)
 
@@ -117,7 +117,7 @@ defmodule Glayu.Tasks.Build do
 
   end
 
-  defp run_task(:scan_and_pages, args) do
+  def run_task(:scan_and_pages, args) do
 
     regex = args[:regex]
     root = PathRegex.base_dir(regex)
@@ -145,7 +145,7 @@ defmodule Glayu.Tasks.Build do
 
   end
 
-  defp run_task(:pages, args) do
+  def run_task(:pages, args) do
 
     ProgressBar.render_spinner([text: "Generating site pages…", done: [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Site pages generated."], frames: :braille, spinner_color: IO.ANSI.light_cyan], fn ->
       TaskSpawner.spawn(args[:nodes], RenderPages, [])
@@ -162,7 +162,7 @@ defmodule Glayu.Tasks.Build do
 
   end
 
-  defp run_task(:categories, args) do
+  def run_task(:categories, args) do
 
     ProgressBar.render_spinner([text: "Generating category pages…", done: [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Category pages generated."], frames: :braille, spinner_color: IO.ANSI.light_cyan], fn ->
 
@@ -189,14 +189,14 @@ defmodule Glayu.Tasks.Build do
 
   end
 
-  defp run_task(:home, _) do
+  def run_task(:home, _) do
     ProgressBar.render_spinner([text: "Generating home page…", done: [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Home page generated."], frames: :braille, spinner_color: IO.ANSI.light_cyan], fn ->
       Glayu.HomePage.write(Glayu.HomePage.render())
     end)
     {:ok, []}
   end
 
-  defp run_task(:assets, _) do
+  def run_task(:assets, _) do
     {:ok, files} = ProgressBar.render_spinner([text: "Coping site assets…", done: [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Site assets copied from theme folder to public folder."], frames: :braille, spinner_color: IO.ANSI.light_cyan], fn ->
       File.cp_r(Glayu.Path.assets_source(), Glayu.Path.public_assets())
     end)
