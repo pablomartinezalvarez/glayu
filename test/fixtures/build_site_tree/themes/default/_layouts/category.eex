@@ -1,4 +1,0 @@
-<% use Glayu.EEx %>
-<%= partial "head" %>
-<h2>Categories Page</h2>
-<%= partial "footer" %>

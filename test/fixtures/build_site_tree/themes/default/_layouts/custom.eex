@@ -1,3 +1,0 @@
-<h1>This is a Custom Layout</h1>
-<h2><%= @page.title %></h2>
-<%= @page.content %>

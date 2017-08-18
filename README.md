@@ -34,7 +34,7 @@ $ glayu build _posts/world*
 
 Pre-requisites: [Erlang](http://www.erlang.org/downloads) installed on your machine.
 
-Get the latest [Glayu binary](https://github.com/pmartinezalvarez/glayu/raw/master/glayu), grant execution permissions if needed, and add it to your `PATH`
+Get the latest [Glayu binary](https://github.com/pmartinezalvarez/glayu/raw/master/apps/glayu_cli/glayu), grant execution permissions if needed, and add it to your `PATH`
 
 Init the site.
 
@@ -76,6 +76,14 @@ The site pages are generated under `../glayu_site/public`
 ## Documentation Site
 
 Check the [docs](http://www.glayu.com/overview).
+
+## Themes
+
+[Glayu Times] (https://github.com/pmartinezalvarez/glayu-times-theme)
+
+[Glayu Bootswatch] (https://github.com/gnucifer/glayu-bootswatch) by [David Gustafsson](https://github.com/gnucifer)
+
+
 
 ## License
 

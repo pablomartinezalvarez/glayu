@@ -1,0 +1,14 @@
+# Glayu Configuration
+
+# Site
+title: The Glayu Times
+
+# URL
+permalink: categories/year/month/day/title
+
+# Directory
+source_dir: source
+public_dir: public
+
+# Theme
+theme: default

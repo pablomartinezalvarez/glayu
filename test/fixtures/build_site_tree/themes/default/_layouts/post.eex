@@ -1,4 +1,0 @@
-<% use Glayu.EEx %>
-<%= partial "head" %>
-<%= @page.content %>
-<%= partial "footer" %>
