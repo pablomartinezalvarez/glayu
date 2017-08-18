@@ -79,9 +79,9 @@ Check the [docs](http://www.glayu.com/overview).
 
 ## Themes
 
-[Glayu Times] (https://github.com/pmartinezalvarez/glayu-times-theme)
+[Glayu Times](https://github.com/pmartinezalvarez/glayu-times-theme)
 
-[Glayu Bootswatch] (https://github.com/gnucifer/glayu-bootswatch) by [David Gustafsson](https://github.com/gnucifer)
+[Glayu Bootswatch](https://github.com/gnucifer/glayu-bootswatch) by [David Gustafsson](https://github.com/gnucifer)
 
 
 
