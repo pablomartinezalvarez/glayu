@@ -34,7 +34,7 @@ $ glayu build _posts/world*
 
 Pre-requisites: [Erlang](http://www.erlang.org/downloads) installed on your machine.
 
-Get the latest [Glayu binary](https://github.com/pmartinezalvarez/glayu/raw/master/apps/glayu_cli/glayu), grant execution permissions if needed, and add it to your `PATH`
+Get the latest [Glayu binary](https://github.com/pmartinezalvarez/glayu/raw/master/apps/glayu/glayu), grant execution permissions if needed, and add it to your `PATH`
 
 Init the site.
 
@@ -79,11 +79,20 @@ Check the [docs](http://www.glayu.com/overview).
 
 ## Themes
 
-[Glayu Times] (https://github.com/pmartinezalvarez/glayu-times-theme)
+[Glayu Times](https://github.com/pmartinezalvarez/glayu-times-theme)
 
-[Glayu Bootswatch] (https://github.com/gnucifer/glayu-bootswatch) by [David Gustafsson](https://github.com/gnucifer)
+[Glayu Bootswatch](https://github.com/gnucifer/glayu-bootswatch) by [David Gustafsson](https://github.com/gnucifer)
 
+## Source Code Organization
 
+Glayu is an Elixir umbrella project including following applications:
+
+Application | Description
+------------ | -------------
+`glayu` | `glayu` escript binary generation
+`glayu_core` | main Glayu logic
+`glayu_build` | `SiteTree` and site pages rendering logic
+`glayu_preview_server` | preview server
 
 ## License
 
