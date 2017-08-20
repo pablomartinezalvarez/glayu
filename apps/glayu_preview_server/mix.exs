@@ -20,7 +20,7 @@ defmodule PreviewServer.Mixfile do
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
     [
-      extra_applications: [:logger, :yamerl, :eex, :cowboy, :plug, :glayu_core, :glayu_build]
+      applications: [:logger, :yamerl, :eex, :cowboy, :plug, :glayu_core, :glayu_build]
     ]
   end
 
