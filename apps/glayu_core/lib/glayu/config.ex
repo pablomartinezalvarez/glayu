@@ -1,5 +1,9 @@
 defmodule Glayu.Config do
 
+  def loaded? do
+    !Glayu.ConfigStore.empty?
+  end
+
   def load_config do
     if Glayu.ConfigStore.empty? do
       {:ok, working_directory} = File.cwd()

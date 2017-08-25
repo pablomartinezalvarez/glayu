@@ -3,6 +3,8 @@ defmodule Glayu.Utils.PathRegexTest do
   use ExUnit.Case
 
   setup_all do
+    Application.start(:yamerl)
+    Glayu.Supervisor.start_link
     Glayu.Config.load_config_file("./test/fixtures/config/_config.yml", "./test/fixtures")
   end
 

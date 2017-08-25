@@ -4,8 +4,12 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeAndRenderPagesTest do
   use Timex
 
   setup_all do
+
+    Application.start(:yamerl)
+    Glayu.Supervisor.start_link
+    Glayu.Build.Supervisor.start_link
+
     Glayu.Config.load_config_file("./test/fixtures/build_site_tree_and_render_pages/_config.yml", "./test/fixtures/build_site_tree_and_render_pages")
-    Glayu.Build.SiteTree.reset()
     Glayu.Build.TemplatesStore.add_templates(Glayu.Template.compile())
     SiteHelper.gen_test_site("build_site_tree_and_render_pages")
 

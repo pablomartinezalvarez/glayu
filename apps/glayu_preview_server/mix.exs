@@ -2,16 +2,19 @@ defmodule PreviewServer.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :glayu_preview_server,
-     version: "0.1.0",
-     build_path: "../../_build",
-     config_path: "../../config/config.exs",
-     deps_path: "../../deps",
-     lockfile: "../../mix.lock",
-     elixir: "~> 1.4",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps()]
+    [
+      app: :glayu_preview_server,
+      version: "0.1.0",
+      build_path: "../../_build",
+      config_path: "../../config/config.exs",
+      deps_path: "../../deps",
+      lockfile: "../../mix.lock",
+      elixir: "~> 1.4",
+      aliases: [test: "test --no-start"],
+      build_embedded: Mix.env == :prod,
+      start_permanent: Mix.env == :prod,
+      deps: deps()
+    ]
   end
 
   # Configuration for the OTP application
@@ -20,7 +23,8 @@ defmodule PreviewServer.Mixfile do
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
     [
-      applications: [:logger, :yamerl, :eex, :cowboy, :plug, :glayu_core, :glayu_build]
+      applications: [:logger, :yamerl, :eex, :cowboy, :plug, :glayu_core, :glayu_build],
+      mod: {Glayu.PreviewServer, []}
     ]
   end
 

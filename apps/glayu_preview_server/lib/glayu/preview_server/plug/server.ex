@@ -2,6 +2,8 @@ defmodule Glayu.PreviewServer.Plug.Server do
 
   use Plug.Builder
 
+  require Logger
+
   @root "/"
   @index_page "/index.html"
   @assets_prefix "/assets/"
@@ -14,6 +16,15 @@ defmodule Glayu.PreviewServer.Plug.Server do
   plug :render_category
   plug :render_home
   plug :not_found
+
+  def init(args) do
+
+    ["🐦  Preview server started at ", IO.ANSI.light_cyan, "http://localhost:#{args[:port]}/", IO.ANSI.reset]
+    |> IO.ANSI.format
+    |> IO.puts
+
+    args
+  end
 
   def static_file(%Plug.Conn{request_path: path} = conn, _) do
     if String.starts_with?(path, @assets_prefix) do

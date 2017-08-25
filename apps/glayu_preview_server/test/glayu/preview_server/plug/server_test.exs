@@ -12,6 +12,11 @@ defmodule Glayu.PreviewServer.Plug.ServerTest do
   @sitemap_page_html "<html>\n<head><title>Site Map</title></head>\n<body>\n\n<h1>The Glayu Times</h1>\n<p>Nemo voluptatibus illum similique dolore. Quos cum neque et. Mollitia quis iusto cum sapiente. Vitae id omnis voluptatem dolor tenetur. Labore ut officiis accusantium eaque. Quos id eius at recusandae deleniti aperiam est.\nVel aut blanditiis ipsum aut eum ab praesentium voluptatibus. Ullam quo quis numquam et explicabo ipsum est. Ducimus facilis odio quia nostrum.\nSed et laboriosam ea atque nihil qui temporibus. Illo fugiat animi ut aut vel dignissimos animi quo. Ea numquam aut rem debitis. Culpa sint voluptatem qui. Iusto necessitatibus illo facilis commodi explicabo ut.\nA mollitia eum et voluptatem nemo. Suscipit esse repudiandae amet aliquid alias sit omnis itaque. Dolores molestiae vitae sit. Veniam hic doloremque qui tempore ducimus qui. Incidunt optio optio dolorem molestias dolor voluptas vitae. Ut omnis est omnis nulla quia quidem iusto.\nReprehenderit eum veniam voluptas architecto tempora sed veniam. Consectetur nemo et velit delectus voluptatem voluptas pariatur autem. Perspiciatis ipsam est recusandae. Ratione amet hic perferendis.</p>\n\n🐦 <a class=\"fechu-cun-glayu\" href=\"https://github.com/pmartinezalvarez/glayu\"> fechu con glayu</a>\n\n</body>\n</html>\n"
 
   setup_all do
+
+    Application.start(:yamerl)
+    Glayu.Supervisor.start_link
+    Glayu.Build.Supervisor.start_link
+
     Glayu.Config.load_config_file("./test/fixtures/preview_server/_config.yml", "./test/fixtures/preview_server")
     Glayu.Build.TemplatesStore.add_templates(Glayu.Template.compile())
     SiteHelper.gen_test_site("preview_server")

@@ -4,8 +4,12 @@ defmodule Glayu.Build.Jobs.BuildSiteTreeTest do
   use Timex
 
   setup_all do
+
+    Application.start(:yamerl)
+    Glayu.Supervisor.start_link
+    Glayu.Build.Supervisor.start_link
+
     Glayu.Config.load_config_file("./test/fixtures/build_site_tree/_config.yml", "./test/fixtures/build_site_tree")
-    Glayu.Build.SiteTree.reset()
     SiteHelper.gen_test_site("build_site_tree")
 
     on_exit fn ->

@@ -67,6 +67,8 @@ defmodule Glayu.Tasks.Build do
     Glayu.Config.load_config()
     Glayu.SiteChecker.check_site!()
     Glayu.SiteChecker.check_theme!()
+
+    Application.start(:glayu_build)
     TemplatesStore.add_templates(Glayu.Template.compile())
   end
 
@@ -106,7 +108,7 @@ defmodule Glayu.Tasks.Build do
     {status, resume} = Glayu.Build.JobResume.resume(BuildSiteTree.__info__(:module))
 
     if status == :ok do
-      IO.puts IO.ANSI.format([IO.ANSI.light_cyan, "└── #{length(SiteTree.keys())}", IO.ANSI.reset , " categories and ", IO.ANSI.light_cyan, "#{resume.files}", IO.ANSI.reset , " posts added to the site tree."])
+      IO.puts IO.ANSI.format([IO.ANSI.light_cyan, "└── #{length(SiteTree.keys())}", IO.ANSI.reset , " categories, ", IO.ANSI.light_cyan, "#{resume.files}", IO.ANSI.reset , " posts and ", IO.ANSI.light_cyan, "#{length(SiteTree.pages())}", IO.ANSI.reset ," pages added to the site tree."])
       {:ok, [nodes: nodes]}
     else
       {:error, IO.ANSI.format([["Unable to build Site Tree: "] | resume.errors])}
@@ -197,7 +199,7 @@ defmodule Glayu.Tasks.Build do
     {:ok, files} = ProgressBar.render_spinner([text: "Coping site assets…", done: [IO.ANSI.light_cyan, "✓", IO.ANSI.reset, " Site assets copied from theme folder to public folder."], frames: :braille, spinner_color: IO.ANSI.light_cyan], fn ->
       File.cp_r(Glayu.Path.assets_source(), Glayu.Path.public_assets())
     end)
-    IO.puts IO.ANSI.format([IO.ANSI.light_cyan, "└── #{length(files)}", IO.ANSI.reset , " files copied."])
+    IO.puts IO.ANSI.format([:light_cyan, "└── #{length(files)}", :reset , " files copied."])
     {:ok, []}
   end
 

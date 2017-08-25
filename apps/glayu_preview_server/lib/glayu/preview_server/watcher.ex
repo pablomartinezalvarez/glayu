@@ -7,6 +7,8 @@ defmodule Glayu.PreviewServer.Watcher do
     GenServer.start_link(__MODULE__, args)
   end
 
+  ## Server Callbacks
+
   def init(args) do
     {:ok, watcher_pid} = FileSystem.start_link(args)
     FileSystem.subscribe(watcher_pid)
@@ -37,6 +39,8 @@ defmodule Glayu.PreviewServer.Watcher do
     Logger.info("Stopping preview server life reloader.")
     {:noreply, state}
   end
+
+  ## Private Methods
 
   defp print_events(events) do
     Enum.map(events, fn(event) -> [" ", :bright, to_string(event), :reset] end)

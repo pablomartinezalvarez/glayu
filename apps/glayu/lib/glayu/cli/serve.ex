@@ -31,9 +31,6 @@ defmodule Glayu.CLI.Serve do
   {status, args} = parse_args(params[:args])
 
   if status == :ok do
-    Application.start(:glayu_build)
-    Application.start(:glayu_preview_server)
-
     Serve.run(args)
   else
     {:ok, help()}
@@ -42,7 +39,7 @@ defmodule Glayu.CLI.Serve do
   end
 
   defp parse_args([]) do
-    {:ok, [port: 4000]}
+    {:ok, []}
   end
 
   defp parse_args([port]) do

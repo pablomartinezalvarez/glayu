@@ -3,6 +3,8 @@ defmodule Glayu.ConfigTest do
   use ExUnit.Case
 
   setup_all do
+    Application.start(:yamerl)
+    Glayu.Supervisor.start_link
     Glayu.ConfigStore.reset()
   end
 

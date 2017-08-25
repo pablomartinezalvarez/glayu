@@ -48,9 +48,6 @@ defmodule Glayu.CLI.Build do
   end
 
   def run(params) do
-
-    Application.start(:glayu_build)
-
     Keyword.merge([regex: List.first(params[:args])], params[:opts])
     |> Build.run
     |> handle_result
